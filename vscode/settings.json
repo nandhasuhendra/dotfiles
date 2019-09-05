@@ -1,0 +1,66 @@
+{
+    "workbench.startupEditor": "welcomePage",
+    "window.zoomLevel": -2,
+    "workbench.sideBar.location": "left",
+    "workbench.activityBar.visible": true,
+    "window.menuBarVisibility": "toggle",
+    "editor.fontFamily": "'Fira Code', 'monospace'",
+    "editor.fontLigatures": true,
+    "editor.fontSize": 14,
+    "editor.tabSize": 2,
+    "editor.wordWrap": "on",
+    "editor.fontWeight": "bold",
+    "editor.renderControlCharacters": true,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "breadcrumbs.enabled": false,
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[markdown]": {
+        "editor.wordWrap": "on",
+        "editor.quickSuggestions": false
+    },
+    "[json]": {
+        "editor.quickSuggestions": {
+            "strings": true
+        }
+    },
+    "[yaml]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.quickSuggestions": {
+            "other": true,
+            "comments": false,
+            "strings": true
+        },
+        "editor.autoIndent": false
+    },
+    "ruby.lint": {
+        "rubocop": true
+    },
+    "[ruby]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "rebornix.ruby"
+    },
+    "ruby.format": "rubocop",
+    "editor.formatOnSaveTimeout": 1500,
+    "ruby.rubocop.executePath": "/home/nandha/.rbenv/shims/",
+    "ruby.rubocop.onSave": true,
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "/bower.json"
+            ],
+            "url": "http://json.schemastore.org/bower"
+        }
+    ],
+    "terminal.integrated.shell.linux": "zsh",
+    "terminal.integrated.shellArgs.linux": ["-l"],
+    "terminal.integrated.cursorBlinking": true,
+    "editor.minimap.enabled": true,
+    "explorer.confirmDelete": false,
+    "workbench.colorTheme": "Popping and Locking",
+    "workbench.iconTheme": "vscode-simpler-icons",
+    "ruby.codeCompletion": "rcodetools",
+    "editor.renderWhitespace": "all"
+}
