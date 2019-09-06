@@ -5,7 +5,7 @@
  
  [![my vim](https://github.com/nandhasuhendra/dotfiles "my vim")](https://raw.githubusercontent.com/nandhasuhendra/dotfiles/master/screenshot.png "my vim")
  
-The dependency that I use on the operating system:
+The dependencies that I use on the operating system:
 - rbenv: [rbenv](https://github.com/rbenv/rbenv "rbenv")
 - nvm: [nvm](https://github.com/nvm-sh/nvm "nvm")
 - Font: [FiraCode](https://github.com/tonsky/FiraCode "FiraCode")
