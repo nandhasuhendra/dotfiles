@@ -21,6 +21,10 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 " Utilities --------------------------------------------------------------------
+set rtp+=/usr/bin/fzf
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+
 Plugin 'w0rp/ale'
 Plugin 'rking/ag.vim'
 Plugin 'mattn/emmet-vim'
@@ -28,7 +32,6 @@ Plugin 'majutsushi/tagbar'
 Plugin 'ervandew/supertab'
 Plugin 'cohama/lexima.vim'
 Plugin 'qpkorr/vim-bufkill'
-Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'Yggdroot/indentLine'
 Plugin 'scrooloose/nerdtree'
@@ -52,7 +55,11 @@ Plugin 'vim-ruby/vim-ruby'
 Plugin 'slim-template/vim-slim'
 Plugin 'mustache/vim-mustache-handlebars'
 
+" Javascript -------------------------------------------------------------------
+Plugin 'pangloss/vim-javascript'
+
 " Themes / Interfaces ----------------------------------------------------------
+Plugin 'mhartington/oceanic-next'
 Plugin 'srcery-colors/srcery-vim'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'vim-airline/vim-airline'
@@ -123,7 +130,6 @@ colorscheme srcery
 
 "------------ Airline Theme
 let g:airline_theme = 'simple'
-"let g:airline_powerline_fonts = 1
 let g:airline_highlighting_cache = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
@@ -138,16 +144,16 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 
 "------------- ALE
-let g:ale_sign_error = '❌'
-let g:ale_sign_warning = '⚠️'
+let g:ale_sign_error = '=>'
+let g:ale_sign_warning = '->'
 let g:ale_echo_msg_error_str = 'ERROR'
 let g:ale_echo_msg_warning_str = 'WARNING'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let b:ale_fixers = { 'javascript': ['prettier', 'eslint'], 'ruby': ['rubocop'] }
+let b:ale_fixers = { 'javascript': ['prettier', 'eslint'], 'ruby': ['rubocop'], 'python': ['pylint'] }
 
 "------------- IndentLine
 let g:indentLine_enabled = 1
-let g:indentLine_char = '¦'
+let g:indentLine_char = '|'
 
 "------------- Ag
 let g:ag_working_path_mode="r"
@@ -164,6 +170,7 @@ nnoremap <Leader>s :<C-u>call gitblame#echo()<CR>
 
 "-----------  NERDTree
 map <C-n> :NERDTreeToggle<CR>
+map <C-f> :NERDTreeFind<CR>
 let g:NERDTreeShowHidden=1
 let g:NERDTreeCaseSensitiveSort = 1
 let g:NERDTreeGitStatusNodeColorization = 1
@@ -218,11 +225,7 @@ let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
 " Key Mapping --------------------------------------------------------------------
-" Shortcuts
-nnoremap <Leader>w :w<CR>
-nnoremap <Leader>q :q<CR>
-nnoremap <Leader>a :qa<CR>
-nnoremap <Leader>! :qa!<CR>
+" Copy text from current cursor to end
 nnoremap Y y$
 
 " Open TagBar
@@ -239,6 +242,12 @@ nnoremap _ G
 map <F1> :bp<cr>
 map <F2> :bn<cr>
 map <F3> :BD<cr>
+
+" Switch buffer with specific buffer
+nnoremap <F4> :buffers<CR>:buffer<Space>
+
+" Find files using fzf
+nnoremap <C-p> :Files<CR>
 
 " Disable Arrow
 inoremap <left> <nop>

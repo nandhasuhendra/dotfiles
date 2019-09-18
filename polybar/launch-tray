@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+# Get polybar tray pid
+ pid=`ps -eo pid,args --cols=10000 | awk '/polybar tray/ && $1 != PROCINFO["pid"] { print $1 }'`
+
+ if [[ -z $pid ]]; then
+   polybar tray -r &
+ else
+   kill -9 $pid
+ fi

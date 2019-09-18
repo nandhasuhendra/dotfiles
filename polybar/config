@@ -1,0 +1,36 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+[section/base]
+include-file = $HOME/.config/polybar/master.conf
+include-file = $HOME/.config/polybar/modules.conf
+
+[bar/main]
+inherit = bar/master
+monitor = ${env:MONITOR:}
+modules-left = search i3 sparator term files browser musics games settings
+modules-center = date
+modules-right = xkeyboard netspdwlan netspdeth wlan eth memory cpu xbacklight pulseaudio battery powermenu
+
+[bar/tray]
+inherit = bar/system-tray
+monitor = ${env:MONITOR:}
+modules-right = sparator
+modules-left= sparator
+
+; vim:ft=dosini
