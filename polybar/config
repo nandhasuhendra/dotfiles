@@ -30,7 +30,7 @@ modules-right = xkeyboard netspdwlan netspdeth wlan eth memory cpu xbacklight pu
 [bar/tray]
 inherit = bar/system-tray
 monitor = ${env:MONITOR:}
-modules-right = sparator
-modules-left= sparator
+modules-right = separator
+modules-left= separator
 
 ; vim:ft=dosini
