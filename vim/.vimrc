@@ -88,6 +88,9 @@ augroup numbertoggle
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
 
+" Remove trailing whitespace
+autocmd BufWritePre * :%s/\s\+$//e
+
 " Set Proper Tabs -------------------------------------------------------------
 set list
 set smartindent
@@ -128,13 +131,13 @@ set background=dark
 let g:srcery_italic = 1
 colorscheme srcery
 
+" Transparent background
+highlight Normal ctermbg=NONE guibg=NONE
+highlight SignColumn ctermbg=NONE guibg=NONE
+highlight LineNr ctermbg=NONE guibg=NONE
+
 "------------ Airline Theme
 let g:airline_theme = 'simple'
-let g:airline_highlighting_cache = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#fnamemod = ':t'
-let g:airline#extensions#tabline#left_alt_sep = '|'
 
 "------------ DevIcons
 let g:webdevicons_enable = 1
