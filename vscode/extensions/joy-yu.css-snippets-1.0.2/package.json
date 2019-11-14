@@ -1,0 +1,37 @@
+{
+	"name": "css-snippets",
+	"displayName": "css-snippets",
+	"description": "Shorthand snippets for css.",
+	"repository": "https://github.com/joy-yu/vsc-css-snippets",
+	"bugs": "https://github.com/joy-yu/vsc-css-snippets/issue",
+	"version": "1.0.2",
+	"publisher": "joy-yu",
+	"icon": "images/icon.png",
+	"engines": {
+		"vscode": "^1.0.0"
+	},
+	"categories": [
+		"Snippets"
+	],
+	"contributes": {
+		"snippets": [
+			{
+				"language": "css",
+				"path": "./snippets/css.json"
+			},
+			{
+				"language": "scss",
+				"path": "./snippets/css.json"
+			},
+			{
+				"language": "less",
+				"path": "./snippets/css.json"
+			}
+		]
+	},
+	"__metadata": {
+		"id": "7de5ad1d-3863-436b-96b3-ed6855756bb3",
+		"publisherId": "d6f076e9-7470-49c8-929a-f68299b738e7",
+		"publisherDisplayName": "joy-yu"
+	}
+}
