@@ -28,17 +28,19 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'w0rp/ale'
 Plugin 'rking/ag.vim'
 Plugin 'mattn/emmet-vim'
-Plugin 'majutsushi/tagbar'
-Plugin 'ervandew/supertab'
 Plugin 'cohama/lexima.vim'
+Plugin 'ervandew/supertab'
+Plugin 'majutsushi/tagbar'
 Plugin 'qpkorr/vim-bufkill'
 Plugin 'tpope/vim-surround'
 Plugin 'Yggdroot/indentLine'
 Plugin 'scrooloose/nerdtree'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'Shougo/neocomplete.vim'
+Plugin 'scrooloose/nerdcommenter'
 Plugin 'christoomey/vim-system-copy'
 Plugin 'terryma/vim-multiple-cursors'
+Plugin 'https://github.com/gorodinskiy/vim-coloresque.git'
 
 " Git --------------------------------------------------------------------------
 Plugin 'mhinz/vim-signify'
@@ -57,16 +59,17 @@ Plugin 'mustache/vim-mustache-handlebars'
 
 " Javascript -------------------------------------------------------------------
 Plugin 'pangloss/vim-javascript'
+Plugin 'jelera/vim-javascript-syntax'
 
 " Themes / Interfaces ----------------------------------------------------------
-Plugin 'mhartington/oceanic-next'
+Plugin 'mcmartelle/vim-monokai-bold'
 Plugin 'srcery-colors/srcery-vim'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
 call vundle#end()
-filetype plugin indent on 
+filetype plugin indent on
 
 "-------------------------------------------------------------------------------
 " Configurations
@@ -128,16 +131,21 @@ set hidden
 set termguicolors
 set t_Co=256
 set background=dark
-let g:srcery_italic = 1
-colorscheme srcery
-
-" Transparent background
-highlight Normal ctermbg=NONE guibg=NONE
-highlight SignColumn ctermbg=NONE guibg=NONE
-highlight LineNr ctermbg=NONE guibg=NONE
+" let g:srcery_bold=1
+" let g:srcery_italic=1
+" let g:srcery_inverse_match_paren=1
+let g:monokai_term_italic = 1
+colorscheme monokai-bold
 
 "------------ Airline Theme
-let g:airline_theme = 'simple'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline_theme='dark'
+
+"------------ javascript
+let g:javascript_plugin_flow = 1
 
 "------------ DevIcons
 let g:webdevicons_enable = 1
@@ -156,7 +164,7 @@ let b:ale_fixers = { 'javascript': ['prettier', 'eslint'], 'ruby': ['rubocop'], 
 
 "------------- IndentLine
 let g:indentLine_enabled = 1
-let g:indentLine_char = '|'
+let g:indentLine_char = '¦'
 
 "------------- Ag
 let g:ag_working_path_mode="r"
@@ -184,6 +192,13 @@ let g:NERDTreeWinSize=45
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+
+"------------ nerdcommenter
+let g:NERDSpaceDelims = 1
+let g:NERDCompactSexyComs = 1
+let g:NERDDefaultAlign = 'left'
+let g:NERDTrimTrailingWhitespace = 1
+let g:NERDToggleCheckAllLines = 1
 
 "------------ Neocomplete Settings
 let g:acp_enableAtStartup = 1
@@ -238,8 +253,6 @@ nmap <F12> :TagbarToggle<CR>
 nnoremap { ^
 nnoremap + 0
 nnoremap } $
-nnoremap - gg
-nnoremap _ G
 
 " Switch buffer
 map <F1> :bp<cr>
