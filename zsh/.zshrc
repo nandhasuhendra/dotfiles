@@ -1,4 +1,5 @@
-screenfetch
+ll=$(last -1 -R  $USER | head -1 | cut -c 23-)
+echo "Last login: $ll"
 
 export DEFAULT_USER="on10n"
 export TERM="xterm-256color"
@@ -109,12 +110,17 @@ compinit
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 git config --global alias.nccommit 'commit -a --allow-empty-message -m ""'
 
+# rbenv
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
+# nvm
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
+# golang
 export GOPATH="$HOME/go"; export GOROOT="$HOME/.go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
-
 unalias g
+
+# composer
+export PATH=$PATH:$HOME/.config/composer/vendor/bin

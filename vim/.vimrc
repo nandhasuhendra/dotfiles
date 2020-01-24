@@ -51,15 +51,20 @@ Plugin 'Xuyuanp/nerdtree-git-plugin'
 " YAML -------------------------------------------------------------------------
 Plugin 'chase/vim-ansible-yaml'
 
+" Javascript -------------------------------------------------------------------
+Plugin 'pangloss/vim-javascript'
+Plugin 'jelera/vim-javascript-syntax'
+
+" PHP --------------------------------------------------------------------------
+Plugin 'StanAngeloff/php.vim'
+Plugin 'stephpy/vim-php-cs-fixer'
+Plugin 'shawncplus/phpcomplete.vim'
+
 " Ruby -------------------------------------------------------------------------
 Plugin 'tpope/vim-rails'
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'slim-template/vim-slim'
 Plugin 'mustache/vim-mustache-handlebars'
-
-" Javascript -------------------------------------------------------------------
-Plugin 'pangloss/vim-javascript'
-Plugin 'jelera/vim-javascript-syntax'
 
 " Themes / Interfaces ----------------------------------------------------------
 Plugin 'mcmartelle/vim-monokai-bold'
@@ -131,11 +136,16 @@ set hidden
 set termguicolors
 set t_Co=256
 set background=dark
-" let g:srcery_bold=1
-" let g:srcery_italic=1
-" let g:srcery_inverse_match_paren=1
-let g:monokai_term_italic = 1
-colorscheme monokai-bold
+
+" Srcery
+let g:srcery_bold=1
+let g:srcery_italic=1
+let g:srcery_inverse_match_paren=1
+colorscheme srcery
+
+" Monokai
+" let g:monokai_term_italic = 1
+" colorscheme monokai-bold
 
 "------------ Airline Theme
 let g:airline#extensions#tabline#enabled = 1
@@ -241,6 +251,9 @@ let g:multi_cursor_next_key            = '<C-c>'
 let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
+
+" php-cs-fixer
+autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
 
 " Key Mapping --------------------------------------------------------------------
 " Copy text from current cursor to end
