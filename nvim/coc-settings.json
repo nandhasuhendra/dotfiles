@@ -1,0 +1,15 @@
+{
+  "coc.preferences.formatOnSaveFiletypes": ["css", "Markdown"],
+  "solargraph.formatting": true,
+  "solargraph.completion": true,
+  "solargraph.rename": true,
+  "solargraph.references": true,
+  "prettier.trailingComma": "none",
+  "languageserver": {
+    "golang": {
+      "command": "gopls",
+      "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["go"]
+    }
+  }
+}
