@@ -8,8 +8,6 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 
-Plug 'honza/vim-snippets'
-
 Plug 'rking/ag.vim'
 Plug 'mattn/emmet-vim'
 Plug 'cohama/lexima.vim'
@@ -21,7 +19,7 @@ Plug 'terryma/vim-multiple-cursors'
 
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
-Plug 'zivyangll/git-blame.vim'
+Plug 'APZelos/blamer.nvim'
 
 Plug 'mhinz/vim-startify'
 Plug 'scrooloose/nerdtree'
@@ -44,7 +42,7 @@ Plug 'slim-template/vim-slim'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 Plug 'srcery-colors/srcery-vim'
-Plug 'phanviet/vim-monokai-pro'
+Plug 'drewtempelmeyer/palenight.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -115,6 +113,9 @@ set listchars=eol:¬,tab:--
 set so=7
 set title
 set shortmess+=c
+
+set clipboard=unnamedplus
+set pastetoggle=<F12>
 
 " Copy text from current cursor to end
 nnoremap Y y$
@@ -192,18 +193,21 @@ endif
 set t_Co=256
 set background=dark
 
-let g:srcery_bold=1
-let g:srcery_italic=1
-let g:srcery_dim_lisp_paren=1
-let g:srcery_inverse_matches=1
-let g:srcery_inverse_match_paren=1
-colorscheme srcery
+" let g:srcery_bold=1
+" let g:srcery_italic=1
+" let g:srcery_dim_lisp_paren=1
+" let g:srcery_inverse_matches=1
+" let g:srcery_inverse_match_paren=1
+" colorscheme srcery
+
+let g:palenight_terminal_italics=1
+colorscheme palenight
 
 "Airline Theme
-let g:airline_powerline_fonts = 1
+" let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline_theme = 'luna'
+let g:airline_theme = 'dark'
 
 "DevIcons
 let g:webdevicons_enable = 1
@@ -213,10 +217,10 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 
 " CoC extensions
-let g:coc_global_extensions = ['coc-tslint-plugin', 'coc-tsserver',  'coc-css', 'coc-html', 'coc-json', 'coc-yaml', 'coc-prettier', 'coc-solargraph', 'coc-python', 'coc-go', 'coc-eslint']
+let g:coc_global_extensions = ['coc-tslint-plugin', 'coc-tsserver',  'coc-css', 'coc-html', 'coc-json', 'coc-yaml', 'coc-prettier', 'coc-solargraph', 'coc-python', 'coc-go', 'coc-eslint', 'coc-snippets']
 
 "Git-Blame
-nnoremap <Leader>s :<C-u>call gitblame#echo()<CR>
+let g:blamer_enabled = 1
 
 "NERDTree
 map <C-n> :NERDTreeToggle<CR>
@@ -301,9 +305,17 @@ let g:multi_cursor_quit_key            = '<Esc>'
 let g:user_emmet_expandabbr_key = '<c-e>'
 let g:use_emmet_complete_tag = 1
 
-"Autoformat
-let g:formatterpath = ['/home/nandha/.rbenv/shims/rubocop']
-noremap <F5> :Autoformat<CR>
+"Autoformat nad Prettier
+autocmd FileType ruby :call Rubocop()
+function! Rubocop()
+  let g:formatterpath = ['/home/nandha/.rbenv/shims/rubocop']
+  noremap <F5> :Autoformat<CR>
+endfunction
+
+autocmd FileType javascript :call Prettier()
+function! Prettier()
+  noremap <F5> :Prettier<CR>
+endfunction
 
 "Neomake
 call neomake#configure#automake('rw')
@@ -316,3 +328,11 @@ let g:syntastic_mode_map = {
 
 let g:neomake_serialize = 1
 let g:neomake_serialize_abort_on_error = 1
+
+
+if system("uname -r") =~ "microsoft"
+  augroup Yank
+    autocmd!
+    autocmd TextYankPost * :call system('clip.exe ',@")
+  augroup END
+endif

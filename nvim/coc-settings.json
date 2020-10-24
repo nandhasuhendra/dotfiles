@@ -1,10 +1,13 @@
 {
   "coc.preferences.formatOnSaveFiletypes": ["css", "Markdown"],
+  "codeLens.enable": true,
   "solargraph.formatting": true,
   "solargraph.completion": true,
   "solargraph.rename": true,
   "solargraph.references": true,
-  "prettier.trailingComma": "none",
+  "prettier.trailingComma": "es5",
+  "prettier.semi": false,
+  "prettier.singleQuote": false,
   "languageserver": {
     "golang": {
       "command": "gopls",
