@@ -27,7 +27,6 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 Plug 'neomake/neomake'
-Plug 'Chiel92/vim-autoformat'
 
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
@@ -42,7 +41,6 @@ Plug 'slim-template/vim-slim'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 Plug 'srcery-colors/srcery-vim'
-Plug 'drewtempelmeyer/palenight.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -193,21 +191,18 @@ endif
 set t_Co=256
 set background=dark
 
-" let g:srcery_bold=1
-" let g:srcery_italic=1
-" let g:srcery_dim_lisp_paren=1
-" let g:srcery_inverse_matches=1
-" let g:srcery_inverse_match_paren=1
-" colorscheme srcery
-
-let g:palenight_terminal_italics=1
-colorscheme palenight
+let g:srcery_bold=1
+let g:srcery_italic=1
+let g:srcery_dim_lisp_paren=1
+let g:srcery_inverse_matches=1
+let g:srcery_inverse_match_paren=1
+colorscheme srcery
 
 "Airline Theme
 " let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline_theme = 'dark'
+let g:airline_theme = 'simple'
 
 "DevIcons
 let g:webdevicons_enable = 1
@@ -217,7 +212,7 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 
 " CoC extensions
-let g:coc_global_extensions = ['coc-tslint-plugin', 'coc-tsserver',  'coc-css', 'coc-html', 'coc-json', 'coc-yaml', 'coc-prettier', 'coc-solargraph', 'coc-python', 'coc-go', 'coc-eslint', 'coc-snippets']
+let g:coc_global_extensions = ['coc-tsserver',  'coc-css', 'coc-html', 'coc-json', 'coc-yaml', 'coc-prettier', 'coc-solargraph', 'coc-eslint', 'coc-python', 'coc-go', 'coc-snippets']
 
 "Git-Blame
 let g:blamer_enabled = 1
@@ -307,12 +302,12 @@ let g:use_emmet_complete_tag = 1
 
 "Autoformat nad Prettier
 autocmd FileType ruby :call Rubocop()
+autocmd FileType javascript :call Prettier()
+
 function! Rubocop()
-  let g:formatterpath = ['/home/nandha/.rbenv/shims/rubocop']
-  noremap <F5> :Autoformat<CR>
+  noremap <F5> :! rubocop --auto-correct % &>/dev/null<CR>
 endfunction
 
-autocmd FileType javascript :call Prettier()
 function! Prettier()
   noremap <F5> :Prettier<CR>
 endfunction

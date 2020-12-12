@@ -1,6 +1,5 @@
 {
   "coc.preferences.formatOnSaveFiletypes": ["css", "Markdown"],
-  "codeLens.enable": true,
   "solargraph.formatting": true,
   "solargraph.completion": true,
   "solargraph.rename": true,
