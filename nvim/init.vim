@@ -40,6 +40,8 @@ Plug 'slim-template/vim-slim'
 
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
+Plug 'rafalbromirski/vim-aurora'
+Plug 'liuchengxu/space-vim-theme'
 Plug 'srcery-colors/srcery-vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'vim-airline/vim-airline'
@@ -53,7 +55,8 @@ syntax on
 
 set nocompatible
 set nowrap
-set encoding=utf8
+scriptencoding utf-8
+set encoding=utf-8
 
 " vim hardcodes background color erase even if the terminfo file does
 " not contain bce (not to mention that libvte based terminals
@@ -62,7 +65,7 @@ set encoding=utf8
 " background color.
 let &t_ut=''
 
-let g:python_host_prog = "/usr/bin/python2.7"
+let g:python_host_prog = "/usr/bin/python"
 let g:python3_host_prog = "/usr/bin/python3.8"
 
 " Text Wrapper
@@ -106,7 +109,10 @@ set softtabstop=2
 set shiftwidth=2
 set smarttab
 set expandtab
-set listchars=eol:¬,tab:--
+set listchars=eol:¬,tab:»-,space:.,trail:~
+
+autocmd BufRead,BufWritePre *.go setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+autocmd BufRead,BufWritePre *.py setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
 
 set so=7
 set title
@@ -116,7 +122,11 @@ set clipboard=unnamedplus
 set pastetoggle=<F12>
 
 " Copy text from current cursor to end
-nnoremap Y y$
+nnoremap <Leader>y "*y
+nnoremap <Leader>p "*p
+nnoremap <Leader>Y "+y
+nnoremap <Leader>P "+p
+
 
 " Switch buffer
 map <F1> :bp<cr>
@@ -143,7 +153,7 @@ if get(g:, 'elite_mode')
   nnoremap <Right> :vertical resize +2<CR>
 endif
 
-nnoremap <c-s> :w<CR>
+noremap <c-s> :w<CR>
 inoremap <c-s> <Esc>:w<CR>l
 vnoremap <c-s> <Esc>:w<CR>
 
@@ -191,15 +201,18 @@ endif
 set t_Co=256
 set background=dark
 
-let g:srcery_bold=1
-let g:srcery_italic=1
-let g:srcery_dim_lisp_paren=1
-let g:srcery_inverse_matches=1
-let g:srcery_inverse_match_paren=1
-colorscheme srcery
+colorscheme aurora
+" colorscheme space_vim_theme
+
+" let g:srcery_bold=1
+" let g:srcery_italic=1
+" let g:srcery_dim_lisp_paren=1
+" let g:srcery_inverse_matches=1
+" let g:srcery_inverse_match_paren=1
+" colorscheme srcery
 
 "Airline Theme
-" let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline_theme = 'simple'
