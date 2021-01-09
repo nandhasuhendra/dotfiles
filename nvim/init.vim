@@ -246,6 +246,8 @@ let g:NERDCompactSexyComs = 1
 let g:NERDDefaultAlign = 'left'
 let g:NERDTrimTrailingWhitespace = 1
 let g:NERDToggleCheckAllLines = 1
+ nmap <C-_> <leader>c<Space>
+ vmap <C-_> <leader>c<Space>
 
 "CoC
 inoremap <silent><expr> <TAB>
