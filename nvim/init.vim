@@ -133,11 +133,13 @@ map <F1> :bp<cr>
 map <F2> :bn<cr>
 map <F3> :BD<cr>
 
-" Switch buffer with specific buffer
-nnoremap <F4> :buffers<CR>:buffer<Space>
-
 " Find files using fzf
-nnoremap <C-p> :Files<CR>
+nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>f :Rg<CR>
+nnoremap <silent> <Leader>/ :BLines<CR>
+nnoremap <silent> <Leader>' :Marks<CR>
+nnoremap <silent> <Leader>g :Commits<CR>
 
 " Disable Arrow
 inoremap <left> <nop>
