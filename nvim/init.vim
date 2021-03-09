@@ -65,8 +65,8 @@ set encoding=utf-8
 " background color.
 let &t_ut=''
 
-let g:python_host_prog = "/usr/bin/python"
-let g:python3_host_prog = "/usr/bin/python3.8"
+let g:python_host_prog = "/usr/bin/python2.7"
+let g:python3_host_prog = "/usr/bin/python3.9"
 
 " Text Wrapper
 set wrap
@@ -91,6 +91,7 @@ set mouse=a
 
 " Enable history and fix bug backspace
 set backspace=indent,eol,start
+inoremap <C-BS> <C-\><C-o>dB
 
 " Turn off swapfile
 set noswapfile
@@ -111,9 +112,6 @@ set smarttab
 set expandtab
 set listchars=eol:¬,tab:»-,space:.,trail:~
 
-autocmd BufRead,BufWritePre *.go setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
-autocmd BufRead,BufWritePre *.py setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
-
 set so=7
 set title
 set shortmess+=c
@@ -127,15 +125,14 @@ nnoremap <Leader>p "*p
 nnoremap <Leader>Y "+y
 nnoremap <Leader>P "+p
 
-
 " Switch buffer
 map <F1> :bp<cr>
 map <F2> :bn<cr>
 map <F3> :BD<cr>
 
 " Find files using fzf
-nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> <Leader>f :Rg<CR>
 nnoremap <silent> <Leader>/ :BLines<CR>
 nnoremap <silent> <Leader>' :Marks<CR>
@@ -183,13 +180,20 @@ autocmd FileType *.slim setlocal filetype=slim
 autocmd FileType *.ts setlocal filetype=typescript
 autocmd FileType *.tsx setlocal filetype=typescript.tsx
 autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
-
-autocmd BufNewFile, BufRead *.py
-      \ set tabstop=4
-      \ set softtabstop=4
-      \ set shiftwidth=4
+autocmd FileType ruby :call Rubocop()
+autocmd FileType javascript :call Prettier()
+autocmd BufNewFile,BufRead *.py setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+autocmd BufNewFile,BufRead *.go setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+function! Rubocop()
+  noremap <F5> :! rubocop --auto-correct % &>/dev/null<CR>
+endfunction
+
+function! Prettier()
+  noremap <F5> :Prettier<CR>
+endfunction
 
 " Colorscheme
 if (has("nvim"))
@@ -227,7 +231,7 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 
 " CoC extensions
-let g:coc_global_extensions = ['coc-tsserver',  'coc-css', 'coc-html', 'coc-json', 'coc-yaml', 'coc-prettier', 'coc-solargraph', 'coc-eslint', 'coc-python', 'coc-go', 'coc-snippets']
+let g:coc_global_extensions = ['coc-tsserver',  'coc-css', 'coc-html', 'coc-json', 'coc-yaml', 'coc-prettier', 'coc-solargraph', 'coc-python', 'coc-go', 'coc-snippets']
 
 "Git-Blame
 let g:blamer_enabled = 1
@@ -317,18 +321,6 @@ let g:multi_cursor_quit_key            = '<Esc>'
 let g:user_emmet_expandabbr_key = '<c-e>'
 let g:use_emmet_complete_tag = 1
 
-"Autoformat nad Prettier
-autocmd FileType ruby :call Rubocop()
-autocmd FileType javascript :call Prettier()
-
-function! Rubocop()
-  noremap <F5> :! rubocop --auto-correct % &>/dev/null<CR>
-endfunction
-
-function! Prettier()
-  noremap <F5> :Prettier<CR>
-endfunction
-
 "Neomake
 call neomake#configure#automake('rw')
 
@@ -340,7 +332,6 @@ let g:syntastic_mode_map = {
 
 let g:neomake_serialize = 1
 let g:neomake_serialize_abort_on_error = 1
-
 
 if system("uname -r") =~ "microsoft"
   augroup Yank
