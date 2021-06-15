@@ -13,9 +13,9 @@ Plug 'mattn/emmet-vim'
 Plug 'cohama/lexima.vim'
 Plug 'qpkorr/vim-bufkill'
 Plug 'tpope/vim-surround'
-Plug 'Yggdroot/indentLine'
 Plug 'christoomey/vim-system-copy'
 Plug 'terryma/vim-multiple-cursors'
+Plug 'nathanaelkane/vim-indent-guides'
 
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
@@ -40,9 +40,9 @@ Plug 'slim-template/vim-slim'
 
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
+Plug 'morhetz/gruvbox'
 Plug 'rafalbromirski/vim-aurora'
-Plug 'liuchengxu/space-vim-theme'
-Plug 'srcery-colors/srcery-vim'
+Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'ryanoasis/vim-devicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -118,6 +118,7 @@ set shortmess+=c
 
 set clipboard=unnamedplus
 set pastetoggle=<F12>
+set guicursor=a:Cursor-blinkwait700-blinkon400-blinkoff250
 
 " Copy text from current cursor to end
 nnoremap <Leader>y "*y
@@ -126,13 +127,13 @@ nnoremap <Leader>Y "+y
 nnoremap <Leader>P "+p
 
 " Switch buffer
-map <F1> :bp<cr>
-map <F2> :bn<cr>
-map <F3> :BD<cr>
+map <PageUp> :bp<cr>
+map <PageDown> :bn<cr>
+map <C-x> :BD<cr>
 
 " Find files using fzf
-nnoremap <silent> <Leader>b :Buffers<CR>
 nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <Leader>f :Rg<CR>
 nnoremap <silent> <Leader>/ :BLines<CR>
 nnoremap <silent> <Leader>' :Marks<CR>
@@ -152,9 +153,10 @@ if get(g:, 'elite_mode')
   nnoremap <Right> :vertical resize +2<CR>
 endif
 
-noremap <c-s> :w<CR>
-inoremap <c-s> <Esc>:w<CR>l
-vnoremap <c-s> <Esc>:w<CR>
+" Remap CTRL-S for saving file instead
+noremap <C-S> :w<CR>
+inoremap <C-S> <Esc>:w<CR>
+vnoremap <C-S> <Esc>:w<CR>
 
 " Command
 " Relative number
@@ -179,53 +181,43 @@ augroup END
 autocmd FileType *.slim setlocal filetype=slim
 autocmd FileType *.ts setlocal filetype=typescript
 autocmd FileType *.tsx setlocal filetype=typescript.tsx
-autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
-autocmd FileType ruby :call Rubocop()
-autocmd FileType javascript :call Prettier()
 autocmd BufNewFile,BufRead *.py setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
 autocmd BufNewFile,BufRead *.go setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+autocmd BufRead,BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+autocmd BufNewFile,BufRead *.rb nnoremap <buffer> <F5> :! rubocop --auto-correct % &>/dev/null<CR>
+autocmd BufNewFile,BufRead *.ts,*.tsx,*js,*.jsx,*.css,*.scss nnoremap <buffer> <F5> :Prettier<CR>
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
-function! Rubocop()
-  noremap <F5> :! rubocop --auto-correct % &>/dev/null<CR>
-endfunction
-
-function! Prettier()
-  noremap <F5> :Prettier<CR>
-endfunction
-
 " Colorscheme
-if (has("nvim"))
-  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-endif
-
 if (has("termguicolors"))
   set termguicolors
+endif
+
+if (has("nvim"))
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 
 set t_Co=256
 set background=dark
 
+" let g:gruvbox_italic = 1
+" let g:gruvbox_contrast_dark = 'hard'
+" let g:gruvbox_italicize_strings = 1
+" colorscheme gruvbox
 colorscheme aurora
-" colorscheme space_vim_theme
-
-" let g:srcery_bold=1
-" let g:srcery_italic=1
-" let g:srcery_dim_lisp_paren=1
-" let g:srcery_inverse_matches=1
-" let g:srcery_inverse_match_paren=1
-" colorscheme srcery
+" colorscheme dracula
 
 "Airline Theme
-let g:airline_powerline_fonts = 1
+let g:airline_symbols_ascii = 1
+" let g:airline_powerline_fonts = 1
+let g:airline_stl_path_style = 'long'
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline_theme = 'simple'
 
 "DevIcons
 let g:webdevicons_enable = 1
-let g:webdevicons_enable_ctrlp = 1
 let g:webdevicons_enable_nerdtree = 1
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
@@ -239,12 +231,12 @@ let g:blamer_enabled = 1
 "NERDTree
 map <C-n> :NERDTreeToggle<CR>
 map <C-f> :NERDTreeFind<CR>
-let g:NERDTreeShowHidden=1
+let g:NERDTreeShowHidden = 1
 let g:NERDTreeCaseSensitiveSort = 1
 let g:NERDTreeGitStatusNodeColorization = 1
-let g:NERDTreeDirArrowExpandable = '+'
-let g:NERDTreeDirArrowCollapsible = '-'
-let g:NERDTreeWinSize=45
+let g:NERDTreeDirArrowExpandable = "\u00a0"
+let g:NERDTreeDirArrowCollapsible = "\u00a0"
+let g:NERDTreeWinSize = 45
 
 "Nerdcommenter
 let g:NERDSpaceDelims = 1
@@ -252,8 +244,8 @@ let g:NERDCompactSexyComs = 1
 let g:NERDDefaultAlign = 'left'
 let g:NERDTrimTrailingWhitespace = 1
 let g:NERDToggleCheckAllLines = 1
- nmap <C-_> <leader>c<Space>
- vmap <C-_> <leader>c<Space>
+nmap <C-_> <leader>c<Space>
+vmap <C-_> <leader>c<Space>
 
 "CoC
 inoremap <silent><expr> <TAB>
@@ -286,8 +278,6 @@ function! s:show_documentation()
   endif
 endfunction
 
-autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
-
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
@@ -300,14 +290,11 @@ nmap <leader>rn <Plug>(coc-rename)
 "Ag
 let g:ag_working_path_mode="r"
 
-"IndentLine
-let g:indentLine_enabled = 1
-let g:indentLine_char = '┆'
-let g:indentLine_setColors = 1
+"Vim-Indent-Guide
+let g:indent_guides_enable_on_vim_startup = 1
 
 "Multiple Cursor
-let g:multi_cursor_use_default_mapping=0
-
+let g:multi_cursor_use_default_mapping = 0
 let g:multi_cursor_start_word_key      = '<C-c>'
 let g:multi_cursor_select_all_word_key = '<A-c>'
 let g:multi_cursor_start_key           = 'g<C-c>'

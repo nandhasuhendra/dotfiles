@@ -1,12 +1,14 @@
 {
-  "coc.preferences.formatOnSaveFiletypes": ["css", "Markdown"],
+  "coc.preferences.formatOnSaveFiletypes": ["css", "Markdown", "eruby"],
   "solargraph.formatting": true,
   "solargraph.completion": true,
   "solargraph.rename": true,
   "solargraph.references": true,
-  "prettier.trailingComma": "es5",
-  "prettier.semi": false,
+  "prettier.semi": true,
+  "prettier.printWidth": 120,
   "prettier.singleQuote": false,
+  "prettier.trailingComma": "es5",
+  "prettier.jsxBracketSameLine": true,
   "languageserver": {
     "golang": {
       "command": "gopls",
