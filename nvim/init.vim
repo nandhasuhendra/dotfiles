@@ -13,18 +13,18 @@ Plug 'mattn/emmet-vim'
 Plug 'cohama/lexima.vim'
 Plug 'qpkorr/vim-bufkill'
 Plug 'tpope/vim-surround'
+Plug 'liuchengxu/vista.vim'
 Plug 'christoomey/vim-system-copy'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'nathanaelkane/vim-indent-guides'
+Plug 'lukas-reineke/indent-blankline.nvim'
 
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
 Plug 'APZelos/blamer.nvim'
 
-Plug 'mhinz/vim-startify'
-Plug 'scrooloose/nerdtree'
+Plug 'glepnir/dashboard-nvim'
 Plug 'scrooloose/nerdcommenter'
-Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'kyazdani42/nvim-tree.lua'
 
 Plug 'neomake/neomake'
 
@@ -40,11 +40,9 @@ Plug 'slim-template/vim-slim'
 
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
-Plug 'morhetz/gruvbox'
 Plug 'rafalbromirski/vim-aurora'
-Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'ryanoasis/vim-devicons'
 Plug 'vim-airline/vim-airline'
+Plug 'kyazdani42/nvim-web-devicons'
 Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
@@ -117,7 +115,6 @@ set title
 set shortmess+=c
 
 set clipboard=unnamedplus
-set pastetoggle=<F12>
 set guicursor=a:Cursor-blinkwait700-blinkon400-blinkoff250
 
 " Copy text from current cursor to end
@@ -132,6 +129,7 @@ map <PageDown> :bn<cr>
 map <C-x> :BD<cr>
 
 " Find files using fzf
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'highlight': 'Comment' } }
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <Leader>f :Rg<CR>
@@ -201,42 +199,73 @@ endif
 set t_Co=256
 set background=dark
 
-" let g:gruvbox_italic = 1
-" let g:gruvbox_contrast_dark = 'hard'
-" let g:gruvbox_italicize_strings = 1
-" colorscheme gruvbox
 colorscheme aurora
-" colorscheme dracula
 
 "Airline Theme
+let g:airline_theme = 'simple'
 let g:airline_symbols_ascii = 1
-" let g:airline_powerline_fonts = 1
 let g:airline_stl_path_style = 'long'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-let g:airline_theme = 'simple'
-
-"DevIcons
-let g:webdevicons_enable = 1
-let g:webdevicons_enable_nerdtree = 1
-let g:WebDevIconsUnicodeDecorateFolderNodes = 1
-let g:DevIconsEnableFoldersOpenClose = 1
 
 " CoC extensions
 let g:coc_global_extensions = ['coc-tsserver',  'coc-css', 'coc-html', 'coc-json', 'coc-yaml', 'coc-prettier', 'coc-solargraph', 'coc-python', 'coc-go', 'coc-snippets']
 
-"Git-Blame
+" Git-Blame
 let g:blamer_enabled = 1
 
-"NERDTree
-map <C-n> :NERDTreeToggle<CR>
-map <C-f> :NERDTreeFind<CR>
-let g:NERDTreeShowHidden = 1
-let g:NERDTreeCaseSensitiveSort = 1
-let g:NERDTreeGitStatusNodeColorization = 1
-let g:NERDTreeDirArrowExpandable = "\u00a0"
-let g:NERDTreeDirArrowCollapsible = "\u00a0"
-let g:NERDTreeWinSize = 45
+" Dashboard
+let g:dashboard_default_executive = 'fzf'
+
+" NvimTree
+let g:nvim_tree_width = 40
+let g:nvim_tree_ignore = [ '.git', 'node_modules', '.cache' ]
+let g:nvim_tree_gitignore = 1
+let g:nvim_tree_auto_open = 1
+let g:nvim_tree_auto_ignore_ft = [ 'startify', 'dashboard' ]
+let g:nvim_tree_indent_markers = 1
+let g:nvim_tree_git_hl = 1
+let g:nvim_tree_highlight_opened_files = 1
+let g:nvim_tree_root_folder_modifier = ':~'
+let g:nvim_tree_tab_open = 1
+let g:nvim_tree_add_trailing = 1
+let g:nvim_tree_group_empty = 1
+let g:nvim_tree_disable_window_picker = 1
+let g:nvim_tree_hijack_cursor = 0
+let g:nvim_tree_icon_padding = ' '
+let g:nvim_tree_update_cwd = 1
+let g:nvim_tree_icons = {
+    \ 'default': '',
+    \ 'symlink': '',
+    \ 'git': {
+    \   'unstaged': "✗",
+    \   'staged': "✓",
+    \   'unmerged': "",
+    \   'renamed': "➜",
+    \   'untracked': "★",
+    \   'deleted': "",
+    \   'ignored': "◌"
+    \   },
+    \ 'folder': {
+    \   'arrow_open': "",
+    \   'arrow_closed': "",
+    \   'default': "",
+    \   'open': "",
+    \   'empty': "",
+    \   'empty_open': "",
+    \   'symlink': "",
+    \   'symlink_open': "",
+    \   },
+    \   'lsp': {
+    \     'hint': "",
+    \     'info': "",
+    \     'warning': "",
+    \     'error': "",
+    \   }
+    \ }
+
+nnoremap <C-n> :NvimTreeToggle<CR>
+nnoremap <C-f> :NvimTreeFindFile<CR>
 
 "Nerdcommenter
 let g:NERDSpaceDelims = 1
@@ -287,11 +316,21 @@ nmap <silent> gr <Plug>(coc-references)
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
 
+" Vista toggle
+nmap <F12> :Vista!!<CR>
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+let g:vista#renderer#enable_icon = 1
+let g:vista#renderer#icons = {
+\   "function": "\uf794",
+\   "variable": "\uf71b",
+\  }
+
 "Ag
 let g:ag_working_path_mode="r"
 
-"Vim-Indent-Guide
-let g:indent_guides_enable_on_vim_startup = 1
+"Indent Blankline
+let g:indent_blankline_use_treesitter = v:true
+let g:indent_blankline_char_highlight_list = ['Special', 'PreProc', 'Structure', 'Function', 'Statement']
 
 "Multiple Cursor
 let g:multi_cursor_use_default_mapping = 0
