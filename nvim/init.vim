@@ -6,7 +6,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'rking/ag.vim'
 Plug 'mattn/emmet-vim'
@@ -17,6 +17,7 @@ Plug 'liuchengxu/vista.vim'
 Plug 'christoomey/vim-system-copy'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
@@ -24,14 +25,13 @@ Plug 'APZelos/blamer.nvim'
 
 Plug 'glepnir/dashboard-nvim'
 Plug 'scrooloose/nerdcommenter'
-Plug 'kyazdani42/nvim-tree.lua'
+Plug 'kyazdani42/nvim-tree.lua', { 'tag': '1.2.8' }
 
 Plug 'neomake/neomake'
 
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'ianks/vim-tsx'
-Plug 'leafgarland/typescript-vim'
 Plug 'jelera/vim-javascript-syntax'
 
 Plug 'tpope/vim-rails'
@@ -64,7 +64,7 @@ set encoding=utf-8
 let &t_ut=''
 
 let g:python_host_prog = "/usr/bin/python2.7"
-let g:python3_host_prog = "/usr/bin/python3.9"
+let g:python3_host_prog = "/usr/local/bin/python3.9"
 
 " Text Wrapper
 set wrap
@@ -116,6 +116,7 @@ set shortmess+=c
 
 set clipboard=unnamedplus
 set guicursor=a:Cursor-blinkwait700-blinkon400-blinkoff250
+set rtp+=/usr/local/opt/fzf
 
 " Copy text from current cursor to end
 nnoremap <Leader>y "*y
@@ -234,6 +235,7 @@ let g:nvim_tree_disable_window_picker = 1
 let g:nvim_tree_hijack_cursor = 0
 let g:nvim_tree_icon_padding = ' '
 let g:nvim_tree_update_cwd = 1
+let g:nvim_tree_special_files = { 'README.md': 1, 'Makefile': 1, 'MAKEFILE': 1 }
 let g:nvim_tree_icons = {
     \ 'default': '',
     \ 'symlink': '',
@@ -255,17 +257,12 @@ let g:nvim_tree_icons = {
     \   'empty_open': "",
     \   'symlink': "",
     \   'symlink_open': "",
-    \   },
-    \   'lsp': {
-    \     'hint': "",
-    \     'info': "",
-    \     'warning': "",
-    \     'error': "",
     \   }
     \ }
 
 nnoremap <C-n> :NvimTreeToggle<CR>
 nnoremap <C-f> :NvimTreeFindFile<CR>
+highlight NvimTreeFolderIcon guibg=blue
 
 "Nerdcommenter
 let g:NERDSpaceDelims = 1
