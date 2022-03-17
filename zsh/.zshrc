@@ -87,11 +87,33 @@ export ARCHFLAGS="-arch x86_64"
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+alias zshconfig="nvim ~/.zshrc"
+alias nvimconfig="nvim ~/.config/nvim/init.vim"
 
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# kubernetes
+alias kb="kubectl"
+
+# Rbenv
+alias rblist="rbenv versions"
+alias rbinstall="rbenv install"
+alias rbglobal="rbenv global"
+alias rblocal="rbenv local"
+alias rbrehash="rbenv rehash"
+
+# Bundle
+alias bi="bundle install"
+alias be="bundle exec"
+alias bl="bundle list"
+
+# Git log human readable
+git config --global alias.lg "log --color --tags --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+git config --global alias.nco 'commit -a --allow-empty-message -m ""'
+git config --global alias.co 'commit -m '
+git config --global alias.pu 'pull'
+git config --global alias.ps 'push -u'
+
+source ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Lines configured by zsh-newuser-install
 # End of lines configured by zsh-newuser-install
@@ -101,10 +123,6 @@ zstyle :compinstall filename $HOME/.zshrc
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
-
-# Git log human readable
-git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-git config --global alias.nccommit 'commit -a --allow-empty-message -m ""'
 
 # rbenv
 export PATH="$HOME/.rbenv/bin:$PATH"
@@ -118,3 +136,10 @@ eval "$(nodenv init -)"
 export GOENV_ROOT="$HOME/.goenv"
 export PATH="$GOENV_ROOT/bin:$PATH"
 eval "$(goenv init -)"
+export PATH="$GOROOT/bin:$PATH"
+export PATH="$GOPATH/bin:$PATH"
+
+export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl@1.1/lib/
+export PATH="/usr/local/opt/mysql-client/bin:$PATH"
+export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
+export PATH="/usr/local/opt/mysql-client@5.7/bin:$PATH"
