@@ -13,17 +13,19 @@ Plug 'mattn/emmet-vim'
 Plug 'cohama/lexima.vim'
 Plug 'qpkorr/vim-bufkill'
 Plug 'tpope/vim-surround'
+Plug 'hsanson/vim-openapi'
 Plug 'liuchengxu/vista.vim'
 Plug 'christoomey/vim-system-copy'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+Plug 'SergioRibera/vim-screenshot', { 'do': 'npm install --prefix Renderizer' }
 
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
 Plug 'APZelos/blamer.nvim'
 
-Plug 'glepnir/dashboard-nvim'
+Plug 'mhinz/vim-startify'
 Plug 'scrooloose/nerdcommenter'
 Plug 'kyazdani42/nvim-tree.lua', { 'tag': '1.2.8' }
 
@@ -40,7 +42,8 @@ Plug 'slim-template/vim-slim'
 
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
-Plug 'rafalbromirski/vim-aurora'
+Plug 'nandhasuhendra/vim-aurora'
+Plug 'tanvirtin/monokai.nvim'
 Plug 'vim-airline/vim-airline'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'vim-airline/vim-airline-themes'
@@ -132,11 +135,9 @@ map <C-x> :BD<cr>
 " Find files using fzf
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'highlight': 'Comment' } }
 nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <Leader>f :Rg<CR>
-nnoremap <silent> <Leader>/ :BLines<CR>
-nnoremap <silent> <Leader>' :Marks<CR>
-nnoremap <silent> <Leader>g :Commits<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>s :BLines<CR>
+nnoremap <silent> <Leader>c :Commits<CR>
 
 " Disable Arrow
 inoremap <left> <nop>
@@ -182,7 +183,7 @@ autocmd FileType *.ts setlocal filetype=typescript
 autocmd FileType *.tsx setlocal filetype=typescript.tsx
 autocmd BufNewFile,BufRead *.py setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
 autocmd BufNewFile,BufRead *.go setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
-autocmd BufRead,BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+autocmd BufRead,BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
 autocmd BufNewFile,BufRead *.rb nnoremap <buffer> <F5> :! rubocop --auto-correct % &>/dev/null<CR>
 autocmd BufNewFile,BufRead *.ts,*.tsx,*js,*.jsx,*.css,*.scss nnoremap <buffer> <F5> :Prettier<CR>
 
@@ -201,25 +202,36 @@ set t_Co=256
 set background=dark
 
 colorscheme aurora
+" colorscheme monokai_soda
 
 "Airline Theme
 let g:airline_theme = 'simple'
 let g:airline_symbols_ascii = 1
 let g:airline_stl_path_style = 'long'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+" let g:airline_powerline_fonts = 1
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 
 " CoC extensions
-let g:coc_global_extensions = ['coc-tsserver',  'coc-css', 'coc-html', 'coc-json', 'coc-yaml', 'coc-prettier', 'coc-solargraph', 'coc-python', 'coc-go', 'coc-snippets']
+let g:coc_global_extensions = [
+      \ 'coc-tsserver',
+      \ 'coc-css',
+      \ 'coc-html',
+      \ 'coc-json',
+      \ 'coc-yaml',
+      \ 'coc-prettier',
+      \ 'coc-solargraph',
+      \ 'coc-python',
+      \ 'coc-go',
+      \ 'coc-snippets',
+      \ 'coc-vetur',
+      \ 'coc-swagger']
 
 " Git-Blame
 let g:blamer_enabled = 1
 
-" Dashboard
-let g:dashboard_default_executive = 'fzf'
-
 " NvimTree
-let g:nvim_tree_width = 40
+let g:nvim_tree_width = 35
 let g:nvim_tree_ignore = [ '.git', 'node_modules', '.cache' ]
 let g:nvim_tree_gitignore = 1
 let g:nvim_tree_auto_open = 1
@@ -316,6 +328,8 @@ nmap <leader>rn <Plug>(coc-rename)
 " Vista toggle
 nmap <F12> :Vista!!<CR>
 let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+let g:vista_default_executive = 'coc'
+let g:vista_fzf_preview = ['right:50%']
 let g:vista#renderer#enable_icon = 1
 let g:vista#renderer#icons = {
 \   "function": "\uf794",
@@ -327,7 +341,7 @@ let g:ag_working_path_mode="r"
 
 "Indent Blankline
 let g:indent_blankline_use_treesitter = v:true
-let g:indent_blankline_char_highlight_list = ['Special', 'PreProc', 'Structure', 'Function', 'Statement']
+" let g:indent_blankline_char_highlight_list = ['Special', 'PreProc', 'Structure', 'Function', 'Statement']
 
 "Multiple Cursor
 let g:multi_cursor_use_default_mapping = 0
