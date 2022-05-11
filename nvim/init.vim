@@ -27,7 +27,8 @@ Plug 'APZelos/blamer.nvim'
 
 Plug 'mhinz/vim-startify'
 Plug 'scrooloose/nerdcommenter'
-Plug 'kyazdani42/nvim-tree.lua', { 'tag': '1.2.8' }
+Plug 'francoiscabrol/ranger.vim'
+Plug 'rbgrouleff/bclose.vim'
 
 Plug 'neomake/neomake'
 
@@ -45,7 +46,6 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'nandhasuhendra/vim-aurora'
 Plug 'tanvirtin/monokai.nvim'
 Plug 'vim-airline/vim-airline'
-Plug 'kyazdani42/nvim-web-devicons'
 Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
@@ -230,51 +230,10 @@ let g:coc_global_extensions = [
 " Git-Blame
 let g:blamer_enabled = 1
 
-" NvimTree
-let g:nvim_tree_width = 35
-let g:nvim_tree_ignore = [ '.git', 'node_modules', '.cache' ]
-let g:nvim_tree_gitignore = 1
-let g:nvim_tree_auto_open = 1
-let g:nvim_tree_auto_ignore_ft = [ 'startify', 'dashboard' ]
-let g:nvim_tree_indent_markers = 1
-let g:nvim_tree_git_hl = 1
-let g:nvim_tree_highlight_opened_files = 1
-let g:nvim_tree_root_folder_modifier = ':~'
-let g:nvim_tree_tab_open = 1
-let g:nvim_tree_add_trailing = 1
-let g:nvim_tree_group_empty = 1
-let g:nvim_tree_disable_window_picker = 1
-let g:nvim_tree_hijack_cursor = 0
-let g:nvim_tree_icon_padding = ' '
-let g:nvim_tree_update_cwd = 1
-let g:nvim_tree_special_files = { 'README.md': 1, 'Makefile': 1, 'MAKEFILE': 1 }
-let g:nvim_tree_icons = {
-    \ 'default': '',
-    \ 'symlink': '',
-    \ 'git': {
-    \   'unstaged': "✗",
-    \   'staged': "✓",
-    \   'unmerged': "",
-    \   'renamed': "➜",
-    \   'untracked': "★",
-    \   'deleted': "",
-    \   'ignored': "◌"
-    \   },
-    \ 'folder': {
-    \   'arrow_open': "",
-    \   'arrow_closed': "",
-    \   'default': "",
-    \   'open': "",
-    \   'empty': "",
-    \   'empty_open': "",
-    \   'symlink': "",
-    \   'symlink_open': "",
-    \   }
-    \ }
-
-nnoremap <C-n> :NvimTreeToggle<CR>
-nnoremap <C-f> :NvimTreeFindFile<CR>
-highlight NvimTreeFolderIcon guibg=blue
+" Ranger
+let g:ranger_replace_netrw = 1
+let g:ranger_map_keys = 0
+map <C-n> :Ranger<CR>
 
 "Nerdcommenter
 let g:NERDSpaceDelims = 1
