@@ -2,9 +2,9 @@
 
 ### Requirements
  Im a [Arch Linux ](https://www.archlinux.org/download/ "Arch Linux ")user. So if you want to using my dotfiles maybe some depedencies will be has different name. You can search for it on the official website.
- 
+
  [![my vim](https://github.com/nandhasuhendra/dotfiles "my vim")](https://raw.githubusercontent.com/nandhasuhendra/dotfiles/master/screenshot.png "my vim")
- 
+
 The dependencies that I use on the operating system:
 - rbenv: [rbenv](https://github.com/rbenv/rbenv "rbenv")
 - nvm: [nvm](https://github.com/nvm-sh/nvm "nvm")
@@ -47,4 +47,9 @@ For newer Ruby version 2.5.x +
 6. Install zsh-autosuggestions & zsh-syntax-highlighting[]()
 ```bash
 :$ sudo pacman -S zsh-autosuggestions zsh-syntax-highlighting
+```
+
+7. Install Ranger as file manager for terminal
+```bash
+:$ sudo pacman -S ranger
 ```
