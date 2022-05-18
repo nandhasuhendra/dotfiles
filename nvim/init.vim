@@ -16,8 +16,8 @@ Plug 'tpope/vim-surround'
 Plug 'hsanson/vim-openapi'
 Plug 'liuchengxu/vista.vim'
 Plug 'christoomey/vim-system-copy'
-Plug 'terryma/vim-multiple-cursors'
 Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 Plug 'SergioRibera/vim-screenshot', { 'do': 'npm install --prefix Renderizer' }
 
@@ -233,7 +233,7 @@ let g:blamer_enabled = 1
 " Ranger
 let g:ranger_replace_netrw = 1
 let g:ranger_map_keys = 0
-map <C-n> :Ranger<CR>
+map <C-e> :Ranger<CR>
 
 "Nerdcommenter
 let g:NERDSpaceDelims = 1
@@ -301,17 +301,6 @@ let g:ag_working_path_mode="r"
 "Indent Blankline
 let g:indent_blankline_use_treesitter = v:true
 " let g:indent_blankline_char_highlight_list = ['Special', 'PreProc', 'Structure', 'Function', 'Statement']
-
-"Multiple Cursor
-let g:multi_cursor_use_default_mapping = 0
-let g:multi_cursor_start_word_key      = '<C-c>'
-let g:multi_cursor_select_all_word_key = '<A-c>'
-let g:multi_cursor_start_key           = 'g<C-c>'
-let g:multi_cursor_select_all_key      = 'g<A-c>'
-let g:multi_cursor_next_key            = '<C-c>'
-let g:multi_cursor_prev_key            = '<C-p>'
-let g:multi_cursor_skip_key            = '<C-x>'
-let g:multi_cursor_quit_key            = '<Esc>'
 
 "Emmet
 let g:user_emmet_expandabbr_key = '<c-e>'
