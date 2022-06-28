@@ -132,11 +132,16 @@ map <PageUp> :bp<cr>
 map <PageDown> :bn<cr>
 map <C-x> :BD<cr>
 
+" Ranger
+let g:ranger_replace_netrw = 1
+let g:ranger_map_keys = 0
+map <C-e> :Ranger<CR>
+
 " Find files using fzf
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'highlight': 'Comment' } }
 nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <C-f> :BLines<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
-nnoremap <silent> <Leader>s :BLines<CR>
 nnoremap <silent> <Leader>c :Commits<CR>
 
 " Disable Arrow
@@ -201,16 +206,17 @@ endif
 set t_Co=256
 set background=dark
 
-colorscheme aurora
-" colorscheme monokai_soda
+" colorscheme aurora
+colorscheme monokai_soda
+" colorscheme andromeda
+let g:airline_theme = 'dark'
 
 "Airline Theme
-let g:airline_theme = 'simple'
 let g:airline_symbols_ascii = 1
 let g:airline_stl_path_style = 'long'
-" let g:airline_powerline_fonts = 1
-" let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 " CoC extensions
 let g:coc_global_extensions = [
@@ -229,11 +235,6 @@ let g:coc_global_extensions = [
 
 " Git-Blame
 let g:blamer_enabled = 1
-
-" Ranger
-let g:ranger_replace_netrw = 1
-let g:ranger_map_keys = 0
-map <C-e> :Ranger<CR>
 
 "Nerdcommenter
 let g:NERDSpaceDelims = 1
