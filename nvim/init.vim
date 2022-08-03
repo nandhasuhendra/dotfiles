@@ -121,6 +121,11 @@ set clipboard=unnamedplus
 set guicursor=a:Cursor-blinkwait700-blinkon400-blinkoff250
 set rtp+=/usr/local/opt/fzf
 
+" Folding
+autocmd FileType * setlocal foldmethod=indent
+set foldlevel=99
+highlight Folded ctermfg=14 ctermbg=242 guifg=Cyan guibg=DarkGrey
+
 " Copy text from current cursor to end
 nnoremap <Leader>y "*y
 nnoremap <Leader>p "*p
