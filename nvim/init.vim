@@ -124,6 +124,17 @@ set rtp+=/usr/local/opt/fzf
 " Folding
 autocmd FileType * setlocal foldmethod=indent
 set foldlevel=99
+set fillchars=fold:\ "The backslash escapes a space
+set foldtext=CustomFoldText()
+function! CustomFoldText()
+  let indentation = indent(v:foldstart - 1)
+  let foldSize = 1 + v:foldend - v:foldstart
+  let foldSizeStr = " " . foldSize . " lines "
+  let foldLevelStr = repeat("+--", v:foldlevel)
+  let expansionString = repeat(" ", indentation)
+  return expansionString . foldLevelStr . foldSizeStr
+endfunction
+
 highlight Folded ctermfg=14 ctermbg=242 guifg=Cyan guibg=DarkGrey
 
 " Copy text from current cursor to end
@@ -213,15 +224,14 @@ set background=dark
 
 " colorscheme aurora
 colorscheme monokai_soda
-" colorscheme andromeda
-let g:airline_theme = 'dark'
+" let g:airline_theme = 'dark'
 
 "Airline Theme
 let g:airline_symbols_ascii = 1
 let g:airline_stl_path_style = 'long'
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
+" let g:airline_powerline_fonts = 1
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 " CoC extensions
 let g:coc_global_extensions = [
