@@ -6,7 +6,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release' }
 
 Plug 'rking/ag.vim'
 Plug 'mattn/emmet-vim'
@@ -18,6 +18,7 @@ Plug 'liuchengxu/vista.vim'
 Plug 'christoomey/vim-system-copy'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 Plug 'SergioRibera/vim-screenshot', { 'do': 'npm install --prefix Renderizer' }
 
@@ -67,7 +68,7 @@ set encoding=utf-8
 let &t_ut=''
 
 let g:python_host_prog = "/usr/bin/python2.7"
-let g:python3_host_prog = "/usr/local/bin/python3.9"
+let g:python3_host_prog = "/usr/bin/python3.8"
 
 " Text Wrapper
 set wrap
@@ -229,7 +230,7 @@ colorscheme monokai_soda
 "Airline Theme
 let g:airline_symbols_ascii = 1
 let g:airline_stl_path_style = 'long'
-" let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 1
 " let g:airline#extensions#tabline#enabled = 1
 " let g:airline#extensions#tabline#formatter = 'unique_tail'
 
@@ -261,18 +262,19 @@ nmap <C-_> <leader>c<Space>
 vmap <C-_> <leader>c<Space>
 
 "CoC
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1) :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
+function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+inoremap <silent><expr> <Tab>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+
+inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
+inoremap <silent><expr> <cr> coc#pum#visible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
