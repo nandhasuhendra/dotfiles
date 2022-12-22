@@ -6,7 +6,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release' }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'rking/ag.vim'
 Plug 'mattn/emmet-vim'
@@ -18,7 +18,6 @@ Plug 'liuchengxu/vista.vim'
 Plug 'christoomey/vim-system-copy'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 Plug 'SergioRibera/vim-screenshot', { 'do': 'npm install --prefix Renderizer' }
 
@@ -68,7 +67,7 @@ set encoding=utf-8
 let &t_ut=''
 
 let g:python_host_prog = "/usr/bin/python2.7"
-let g:python3_host_prog = "/usr/bin/python3.8"
+let g:python3_host_prog = "/usr/local/bin/python3.9"
 
 " Text Wrapper
 set wrap
@@ -128,12 +127,12 @@ set foldlevel=99
 set fillchars=fold:\ "The backslash escapes a space
 set foldtext=CustomFoldText()
 function! CustomFoldText()
-  let indentation = indent(v:foldstart - 1)
-  let foldSize = 1 + v:foldend - v:foldstart
-  let foldSizeStr = " " . foldSize . " lines "
-  let foldLevelStr = repeat("+--", v:foldlevel)
-  let expansionString = repeat(" ", indentation)
-  return expansionString . foldLevelStr . foldSizeStr
+let indentation = indent(v:foldstart - 1)
+let foldSize = 1 + v:foldend - v:foldstart
+let foldSizeStr = " " . foldSize . " lines "
+let foldLevelStr = repeat("+--", v:foldlevel)
+let expansionString = repeat(" ", indentation)
+return expansionString . foldLevelStr . foldSizeStr
 endfunction
 
 highlight Folded ctermfg=14 ctermbg=242 guifg=Cyan guibg=DarkGrey
@@ -169,10 +168,10 @@ inoremap <down> <nop>
 
 " Disable arrow movement, resize splits instead.
 if get(g:, 'elite_mode')
-  nnoremap <Up>    :resize -2<CR>
-  nnoremap <Down>  :resize +2<CR>
-  nnoremap <Left>  :vertical resize -2<CR>
-  nnoremap <Right> :vertical resize +2<CR>
+nnoremap <Up>    :resize -2<CR>
+nnoremap <Down>  :resize +2<CR>
+nnoremap <Left>  :vertical resize -2<CR>
+nnoremap <Right> :vertical resize +2<CR>
 endif
 
 " Remap CTRL-S for saving file instead
@@ -180,12 +179,21 @@ noremap <C-S> :w<CR>
 inoremap <C-S> <Esc>:w<CR>
 vnoremap <C-S> <Esc>:w<CR>
 
+" relative path
+nnoremap <leader>cpr :let @+ = expand("%")<CR>
+
+" full path
+nnoremap <leader>cpf :let @+ = expand("%:p")<CR>
+
+" just filename
+nnoremap <leader>cpt :let @+ = expand("%:t")<CR>
+
 " Command
 " Relative number
 augroup numbertoggle
-  autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+autocmd!
+autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
 
 " Remove trailing whitespace
@@ -193,11 +201,11 @@ autocmd BufWritePre * :%s/\s\+$//e
 
 " Auto create non existing director
 augroup Mkdir
-  autocmd!
-  autocmd BufWritePre *
-        \ if !isdirectory(expand("%:p:h")) |
-        \ call mkdir(expand("%:p:h"), "p") |
-        \ endif
+autocmd!
+autocmd BufWritePre *
+      \ if !isdirectory(expand("%:p:h")) |
+      \ call mkdir(expand("%:p:h"), "p") |
+      \ endif
 augroup END
 
 autocmd FileType *.slim setlocal filetype=slim
@@ -262,18 +270,28 @@ nmap <C-_> <leader>c<Space>
 vmap <C-_> <leader>c<Space>
 
 "CoC
-function! CheckBackspace() abort
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>":
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-inoremap <silent><expr> <Tab>
-      \ coc#pum#visible() ? coc#pum#next(1) :
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
 
-inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
-inoremap <silent><expr> <cr> coc#pum#visible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
