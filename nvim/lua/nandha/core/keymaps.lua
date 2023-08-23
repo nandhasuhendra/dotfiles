@@ -2,8 +2,11 @@ vim.g.mapleader = " "
 
 local keymap = vim.keymap -- for conciseness
 
--- generar keymaps
+-- replace basic keymaps
+keymap.set("n", "p", "P")
+keymap.set("v", "p", "P")
 
+-- generar keymaps
 keymap.set("n", "<leader>nh", ":nohl<CR>")
 keymap.set("n", "x", '"_x')
 keymap.set("n", "<leader>+", "<C-a>")
@@ -38,12 +41,12 @@ keymap.set("n", "<leader>y", "*y")
 keymap.set("n", "<leader>p", "*p")
 keymap.set("n", "<leader>Y", "+y")
 keymap.set("n", "<leader>P", "+p")
-keymap.set("n", "<leader>cp", ':let @+=expande("%")<CR>')
+keymap.set("n", "<leader>cp", ':let @+=expand("%")<CR>')
 
 -- switch buffers
 keymap.set("n", "<leader>bn", ":bn<CR>")
 keymap.set("n", "<leader>bp", ":bp<CR>")
-keymap.set("n", "<leader>bx", ":BD<CR>")
+keymap.set("n", "<leader>bx", ":bd<CR>")
 
 -- disabling Arrows
 keymap.set("n", "<left>", "<nop>")
