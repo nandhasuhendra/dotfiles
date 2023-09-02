@@ -4,7 +4,7 @@ export TERM="xterm-256color"
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-export ZSH="/home/nandha/.oh-my-zsh"
+export ZSH="/home/nanda/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -106,11 +106,16 @@ alias be="bundle exec"
 alias bl="bundle list"
 
 # Git log human readable
+git config --global alias.ll 'log --oneline'
 git config --global alias.lg "log --color --tags --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-git config --global alias.nco 'commit -a --allow-empty-message -m ""'
-git config --global alias.co 'commit -m '
-git config --global alias.pu 'pull'
+git config --global alias.cma 'commit -a --allow-empty-message -m ""'
+git config --global alias.cm 'commit -m '
+git config --global alias.ch 'checkout'
+git config --global alias.pl 'pull'
 git config --global alias.ps 'push -u'
+git config --global alias.sb 'status -sb'
+git config --global alias.dv 'difftool -t vimdiff -y'
+git config --global alias.se '!git rev-list --all | xargs git grep -F'
 
 source ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
