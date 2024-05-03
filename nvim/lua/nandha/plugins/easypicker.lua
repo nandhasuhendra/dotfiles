@@ -19,6 +19,13 @@ easypick.setup({
 			previewer = easypick.previewers.default(),
 		},
 
+		-- list all new files from git diff
+		{
+			name = "new_files",
+			command = "git diff --name-only --diff-filter=A --relative",
+			previewer = easypick.previewers.file_diff(),
+		},
+
 		-- diff current branch with base_branch and show files that changed with respective diffs in preview
 		{
 			name = "changed_files",
