@@ -36,6 +36,9 @@ keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<CR>")
 keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<CR>")
 keymap.set("n", "<leader>fn", "<cmd>Telescope help_tags<CR>")
 
+-- Easypicker
+keymap.set("n", "<leader>fg", ":Easypick<CR>")
+
 -- copy text from current cursor to end
 keymap.set("n", "<leader>y", "*y")
 keymap.set("n", "<leader>p", "*p")
@@ -46,7 +49,7 @@ keymap.set("n", "<leader>cp", ':let @+=expand("%")<CR>')
 -- switch buffers
 keymap.set("n", "<leader>bn", ":bn<CR>")
 keymap.set("n", "<leader>bp", ":bp<CR>")
-keymap.set("n", "<leader>bx", ":bd<CR>")
+keymap.set("n", "<leader>bx", ":bp<bar>sp<bar>bn<bar>bd<CR>")
 
 -- disabling Arrows
 keymap.set("n", "<left>", "<nop>")

@@ -28,8 +28,7 @@ return require("packer").startup(function(use)
 
 	-- preferred colorscheme
 	use("tjdevries/colorbuddy.nvim")
-	use("rebelot/kanagawa.nvim")
-	use("folke/tokyonight.nvim")
+	use("olimorris/onedarkpro.nvim")
 
 	use("christoomey/vim-tmux-navigator") -- tmux & split window navigation
 	use("szw/vim-maximizer") -- maximizes and restores current window
@@ -44,6 +43,7 @@ return require("packer").startup(function(use)
 	-- Fuzzy findinds
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" }) -- dependecy of fuzzy funding
 	use({ "nvim-telescope/telescope.nvim", branch = "0.1.x" })
+	use({ "axkirillov/easypick.nvim", requires = "nvim-telescope/telescope.nvim" })
 
 	-- Ranger
 	use("kelly-lin/ranger.nvim")
