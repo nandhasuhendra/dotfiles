@@ -15,7 +15,8 @@ command -v sudo >/dev/null || die "sudo is required."
 
 ARCH="$(dpkg --print-architecture)"
 case "$ARCH" in
-  amd64|arm64) ;;
+  amd64) NVIM_ARCH="x86_64" ;;
+  arm64) NVIM_ARCH="arm64" ;;
   *) die "Unsupported architecture: $ARCH" ;;
 esac
 
@@ -23,11 +24,27 @@ log "Installing system dependencies"
 sudo apt-get update
 sudo apt-get install -y software-properties-common git curl ca-certificates unzip tar gzip ripgrep fd-find fzf build-essential python3 python3-venv python3-pip ruby ruby-dev nodejs npm golang-go shellcheck
 
-if ! command -v nvim >/dev/null || ! nvim --version | head -1 | grep -q 'NVIM v0\.1[12]\|NVIM v0\.12'; then
-  log "Installing current stable Neovim"
-  sudo add-apt-repository -y ppa:neovim-ppa/stable
-  sudo apt-get update
-  sudo apt-get install -y neovim
+install_latest_neovim() {
+  local tmp_dir="/tmp/nvim-install-$$"
+  local archive="nvim-linux-${NVIM_ARCH}.tar.gz"
+  local install_dir="/opt/nvim-linux-${NVIM_ARCH}"
+
+  log "Installing latest stable Neovim"
+  rm -rf "$tmp_dir"
+  mkdir -p "$tmp_dir"
+
+  curl -fL --retry 3 --retry-delay 2 \
+    "https://github.com/neovim/neovim/releases/latest/download/${archive}" \
+    -o "$tmp_dir/$archive"
+
+  sudo rm -rf "$install_dir"
+  sudo tar -C /opt -xzf "$tmp_dir/$archive"
+  sudo ln -sfn "$install_dir/bin/nvim" /usr/local/bin/nvim
+  rm -rf "$tmp_dir"
+}
+
+if ! command -v nvim >/dev/null; then
+  install_latest_neovim
 fi
 
 log "Installing Ruby LSP"
