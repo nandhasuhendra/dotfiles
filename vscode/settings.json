@@ -1,71 +1,348 @@
 {
-  "window.zoomLevel": -2,
-  "window.menuBarVisibility": "toggle",
-  "editor.fontFamily": "'Fira Code', 'monospace'",
+  // =====================
+  // Editor
+  // =====================
+  "editor.fontFamily": "'JetBrainsMono Nerd Font'",
+  "editor.fontSize": 12,
+  "editor.lineHeight": 2,
   "editor.fontLigatures": true,
-  "editor.fontSize": 15,
+  "editor.fontWeight": "bold",
   "editor.tabSize": 2,
   "editor.wordWrap": "on",
-  "editor.fontWeight": "bold",
+  "editor.renderWhitespace": "none",
   "editor.renderControlCharacters": true,
-  "editor.multiCursorModifier": "ctrlCmd",
+  "editor.snippetSuggestions": "top",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.cursorStyle": "block",
+  "editor.cursorBlinking": "expand",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.largeFileOptimizations": false,
+  "editor.quickSuggestions": {
+    "strings": true,
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit",
+  },
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
-  "editor.renderWhitespace": "all",
-  "workbench.colorTheme": "Andromeda Italic Bordered",
-  "workbench.iconTheme": "material-icon-theme",
-  "workbench.startupEditor": "welcomePage",
-  "workbench.sideBar.location": "left",
-  "workbench.activityBar.visible": true,
-  "breadcrumbs.enabled": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.minimap.enabled": false,
+
+  // =====================
+  // Files
+  // =====================
+  "files.autoSave": "afterDelay",
+  "files.trimTrailingWhitespace": true,
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.classpath": true,
+    "**/.factorypath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "node_modules/": true,
+  },
+  "files.associations": {
+    "*.erb": "erb",
+  },
+
+  // =====================
+  // Terminal
+  // =====================
   "terminal.integrated.cursorBlinking": true,
-  "terminal.integrated.shell.linux": "zsh",
-  "terminal.integrated.shellArgs.linux": [
-    "-l"
-  ],
+  "terminal.integrated.fontSize": 12,
+  "terminal.integrated.shellIntegration.enabled": false,
+  "terminal.integrated.suggest.enabled": true,
+  "terminal.integrated.autoReplies": {
+    "[Oh My Zsh] Would you like to check for updates? [Y/n]": "Y\r",
+  },
+
+  // =====================
+  // Explorer & Workbench
+  // =====================
+  "explorer.openEditors.sortOrder": "alphabetical",
+  "explorer.compactFolders": false,
+  "workbench.editor.decorations.badges": true,
+  "workbench.editor.labelFormat": "short",
+  "workbench.startupEditor": "none",
+  "workbench.editor.showTabs": "none",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#005f5f",
+    "statusBar.debuggingBackground": "#005f5f",
+    "statusBar.foreground": "#ffffff",
+    "statusBar.noFolderBackground": "#005f5f",
+    "statusBar.debuggingForeground": "#ffffff",
+  },
+  "workbench.editorAssociations": {
+    "*.ipynb": "jupyter-notebook",
+  },
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+
+  // =====================
+  // Language-specific
+  // =====================
   "[html]": {
-    "editor.defaultFormatter": "vscode.html-language-features"
+    "editor.defaultFormatter": "vscode.html-language-features",
   },
-  "[json]": {
-    "editor.quickSuggestions": {
-      "strings": true
-    }
-  },
-  "json.schemas": [
-    {
-      "fileMatch": [
-        "/bower.json"
-      ],
-      "url": "http://json.schemastore.org/bower"
-    }
-  ],
   "[yaml]": {
+    "editor.autoIndent": "advanced",
     "editor.insertSpaces": true,
     "editor.tabSize": 2,
     "editor.quickSuggestions": {
       "other": true,
       "comments": false,
-      "strings": true
+      "strings": true,
     },
-    "editor.autoIndent": "none"
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+  },
+  "[erb]": {
+    "editor.defaultFormatter": "Shopify.ruby-lsp",
+    "editor.formatOnSave": true,
   },
   "[ruby]": {
-    "editor.defaultFormatter": "misogi.ruby-rubocop"
+    "editor.formatOnSave": true,
   },
+  "[gemfile]": {
+    "editor.defaultFormatter": "testdouble.vscode-standard-ruby",
+  },
+  "[go]": {
+    "editor.tabSize": 4,
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.autopep8",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features",
+    "editor.formatOnSave": true,
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[json]": {
+    "editor.quickSuggestions": {
+      "strings": true,
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[css]": {
+    "editor.suggest.insertMode": "replace",
+    "gitlens.codeLens.scopes": ["document"],
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features",
+  },
+  "[dockercompose]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true,
+    },
+  },
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+  },
+
+  // =====================
+  // Emmet
+  // =====================
   "emmet.includeLanguages": {
-    "erb": "html"
+    "javascript": "javascriptreact",
+    "vue-html": "html",
+    "erb": "html",
   },
-  "files.associations": {
-    "*.erb": "erb"
+  "emmet.syntaxProfiles": {
+    "html": {
+      "attr_quotes": "double",
+    },
+    "jsx": {
+      "self_closing_tag": true,
+    },
   },
-  "ruby.rubocop.executePath": "/home/nandha/.rbenv/shims/",
-  "ruby.rubocop.onSave": true,
+  "emmet.triggerExpansionOnTab": true,
+
+  // =====================
+  // Git & SCM
+  // =====================
   "git.autofetch": true,
-  "javascript.updateImportsOnFileMove.enabled": "always",
-  "workbench.colorCustomizations": {
-    "statusBar.background": "#8FBCBB",
-    "statusBar.noFolderBackground": "#8FBCBB",
-    "statusBar.debuggingBackground": "#8FBCBB",
-    "statusBar.foreground": "#434C5E"
-  }
+  "gitlens.advanced.messages": {
+    "suppressLineUncommittedWarning": true,
+  },
+  "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+
+  // =====================
+  // Advanced New File
+  // =====================
+  "advancedNewFile.exclude": {
+    "node_modules": true,
+    "node_modules_electron": true,
+    "dev": true,
+    "dist": true,
+  },
+  "advancedNewFile.showInformationMessages": true,
+  "advancedNewFile.convenienceOptions": ["last", "current", "root"],
+
+  // =====================
+  // Prettier
+  // =====================
+  "prettier.singleQuote": false,
+  "prettier.trailingComma": "es5",
+  "prettier.semi": false,
+  "prettier.printWidth": 100,
+  "prettier.vueIndentScriptAndStyle": true,
+
+  // =====================
+  // Python
+  // =====================
+  "python.pythonPath": "~/.pyenv/shims",
+
+  // =====================
+  // Go
+  // =====================
+  "go.useLanguageServer": true,
+  "go.formatTool": "goimports",
+  "go.toolsManagement.autoUpdate": true,
+  "go.linterTools": ["golangci-lint"],
+  "go.linter": "golangci-lint",
+  "go.linterOnSave": "package",
+
+  // =====================
+  // Ruby
+  // =====================
+  "ruby.rubocop.useBundler": true,
+  "ruby.rubocop.executePath": "~/.rbenv/shims/",
+  "ruby.rubocop.configFilePath": ".rubocop.yml",
+  "ruby.rubocop.onSave": true,
+
+  // =====================
+  // Miscellaneous
+  // =====================
+  "breadcrumbs.enabled": true,
+  "json.schemas": [
+    {
+      "fileMatch": ["/bower.json"],
+      "url": "http://json.schemastore.org/bower",
+    },
+  ],
+  "security.workspace.trust.untrustedFiles": "newWindow",
+  "remote.autoForwardPortsSource": "hybrid",
+  "remote.defaultExtensionsIfInstalledLocally": [
+    "GitHub.copilot",
+    "GitHub.copilot-chat",
+    "GitHub.vscode-pull-request-github",
+  ],
+  "debug.console.fontSize": 12,
+  "scm.inputFontSize": 12,
+  "chat.editor.fontSize": 12,
+  "chat.agent.maxRequests": 99999,
+  "chat.mcp.serverSampling": {
+    "Global in Code: oraios/serena": {
+      "allowedModels": ["copilot/gpt-4.1", "copilot/claude-sonnet-4", "copilot/gpt-5-codex"],
+    },
+  },
+  "github.copilot.chat.summarizeAgentConversationHistory.enabled": false,
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "github.copilot.enable": {
+    "*": true,
+    "ruby": true,
+    "plaintext": false,
+    "markdown": false,
+  },
+  "vs-kubernetes": {
+    "vscode-kubernetes.helm-path-mac": "/Users/nandash/.vs-kubernetes/tools/helm/darwin-arm64/helm",
+    "vscode-kubernetes.minikube-path-mac": "/Users/nandash/.vs-kubernetes/tools/minikube/darwin-arm64/minikube",
+    "vscode-kubernetes.kubectl-path-mac": "/Users/nandash/.vs-kubernetes/tools/kubectl/kubectl",
+    "vs-kubernetes.suppress-helm-not-found-alerts": true,
+    "vscode-kubernetes.helm-path-linux": "/home/nandha_suhendra/.local/state/vs-kubernetes/tools/helm/linux-amd64/helm",
+    "vscode-kubernetes.minikube-path-linux": "/home/nandha_suhendra/.local/state/vs-kubernetes/tools/minikube/linux-amd64/minikube",
+    "vscode-kubernetes.kubectl-path-linux": "/home/nandha_suhendra/.local/state/vs-kubernetes/tools/kubectl/kubectl",
+  },
+  "testing.followRunningTest": true,
+  "testing.showAllMessages": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "extensions.experimental.affinity": { "vscodevim.vim": 1 },
+  "vim.easymotion": true,
+  "vim.incsearch": true,
+  "vim.useSystemClipboard": true,
+  "vim.useCtrlKeys": false,
+  "vim.hlsearch": true,
+  "vim.insertModeKeyBindings": [{ "before": ["j", "j"], "after": ["<Esc>"] }],
+  "vim.normalModeKeyBindingsNonRecursive": [
+    { "before": ["<leader>", "d"], "after": ["d", "d"] },
+    { "before": ["<C-n>"], "commands": [":nohl"] },
+    { "before": ["K"], "commands": ["lineBreakInsert"], "silent": true },
+  ],
+  "vim.leader": "<space>",
+  "vim.handleKeys": {
+    "<C-a>": false,
+    "<C-f>": false,
+  },
+  "terminal.integrated.scrollback": 999999,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar",
+  },
+  // "kafka.clusters": [
+  //   {
+  //     "name": "staging-kafka",
+  //     "type": "kafka",
+  //     "brokers": [],
+  //     "securityProtocol": "PLAINTEXT",
+  //   },
+  // ],
+  "redhat.telemetry.enabled": true,
+  "http.systemCertificatesNode": true,
+  "remote.SSH.useCurlAndWgetConfigurationFiles": true,
+  "workbench.colorTheme": "Dracula Theme",
+  "chat.mcp.gallery.enabled": true,
+  "git.openRepositoryInParentFolders": "never",
+  "chat.viewSessions.orientation": "stacked",
+  "dev.containers.dockerPath": "podman",
+  "containers.containerClient": "com.microsoft.visualstudio.containers.podman",
+  "containers.orchestratorClient": "com.microsoft.visualstudio.orchestrators.podmancompose",
+  "coverage-gutters.coverageFileNames": [
+    "coverage/coverage.json",
+    "coverage/lcov.info",
+    "coverage/coverage.lcov",
+  ],
+  "coverage-gutters.showLineCoverage": true,
+  "coverage-gutters.showRulerCoverage": true,
+  "coverage-gutters.showGutterCoverage": true,
+  "claudeCode.preferredLocation": "panel",
+  "editor.guides.bracketPairs": true,
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [80],
+    "editor.selectionHighlight": false,
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": "off",
+  },
+  "diffEditor.codeLens": true,
+  "geminicodeassist.project": "promising-terminal-c213z",
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
+  "editor.lineNumbers": "relative",
+  "git.confirmSync": false,
+  "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font'",
+  "diffEditor.ignoreTrimWhitespace": false,
+  "debug.allowBreakpointsEverywhere": true,
+  "workbench.panel.showLabels": false,
+  "chat.fontSize": 12,
+  "terminal.integrated.lineHeight": 1.2,
+  "js/ts.updateImportsOnFileMove.enabled": "always",
+  "intellij.region": "apac",
+  "intellij.dataSharing": "none",
 }
