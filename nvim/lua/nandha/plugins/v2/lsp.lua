@@ -1,16 +1,18 @@
 return {
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     cmd = { "Mason", "MasonInstall", "MasonUpdate" },
     build = ":MasonUpdate",
     opts = { ui = { border = "rounded" } },
   },
   {
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason-lspconfig.nvim",
     event = { "BufReadPre", "BufNewFile" },
-    dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
+    dependencies = { "mason-org/mason.nvim", "neovim/nvim-lspconfig" },
     opts = {
-      ensure_installed = { "bashls", "basedpyright", "cssls", "dockerls", "eslint", "gopls", "html", "jsonls", "marksman", "ts_ls", "yamlls" },
+      -- Installation is handled by mason-tool-installer so the bootstrap
+      -- script can install everything deterministically in headless mode.
+      ensure_installed = {},
       automatic_enable = true,
     },
   },
