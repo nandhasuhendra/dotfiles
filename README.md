@@ -2,6 +2,8 @@
 
 Personal configuration files for my development environment.
 
+![Desktop and editor setup](screenshot.png)
+
 The repository is organized by application so each configuration can be installed, understood, and maintained independently.
 
 ## Configurations
