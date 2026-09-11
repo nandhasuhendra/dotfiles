@@ -12,14 +12,16 @@ return {
     },
     keys = { "<leader>tt", "<leader>tf", "<leader>to" },
     config = function()
-      require("neotest").setup({
-        adapters = {
-          require("neotest-rspec"),
-          require("neotest-jest"),
-          require("neotest-python"),
-          require("neotest-go"),
-        },
-      })
+      vim.schedule(function()
+        require("neotest").setup({
+          adapters = {
+            require("neotest-rspec"),
+            require("neotest-jest"),
+            require("neotest-python"),
+            require("neotest-go"),
+          },
+        })
+      end)
     end,
   },
 }
