@@ -26,7 +26,20 @@ return {
     },
     config = function(_, opts)
       require("nvim-treesitter").setup()
-      require("nvim-treesitter").install(opts.ensure_installed)
+
+      local function install_parsers()
+        if vim.fn.executable("tree-sitter") == 1 then
+          require("nvim-treesitter").install(opts.ensure_installed)
+        end
+      end
+
+      install_parsers()
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "MasonToolsUpdateCompleted",
+        once = true,
+        callback = install_parsers,
+      })
 
       vim.api.nvim_create_autocmd("FileType", {
         pattern = "*",
