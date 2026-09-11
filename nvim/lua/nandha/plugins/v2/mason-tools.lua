@@ -12,6 +12,9 @@ return {
     },
     opts = {
       ensure_installed = {
+        -- CLI tools
+        "tree-sitter-cli",
+
         -- LSP servers
         "bash-language-server",
         "basedpyright",
