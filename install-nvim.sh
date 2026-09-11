@@ -30,6 +30,9 @@ if ! command -v nvim >/dev/null || ! nvim --version | head -1 | grep -q 'NVIM v0
   sudo apt-get install -y neovim
 fi
 
+log "Installing Ruby LSP"
+sudo gem install --no-document ruby-lsp
+
 log "Backing up existing Neovim configuration"
 if [[ -e "$NVIM_CONFIG" && ! -L "$NVIM_CONFIG" ]]; then
   BACKUP="$HOME/.config/nvim.backup.$STAMP"
