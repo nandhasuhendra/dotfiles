@@ -68,24 +68,114 @@ The plugin specs are isolated under `plugins/v2`, so the old Packer configuratio
 | Bash | bashls | shfmt | ShellCheck | — |
 | Markdown | marksman | Prettier | — | — |
 
-## Daily keymaps
+## Keymaps
 
-- `<Space>ff` — find files
-- `<Space>fg` — live grep
-- `<Space>fb` — buffers
-- `<Space>fr` — recent files
-- `<Space>e` — Oil explorer
-- `gd` / `gr` / `gi` — LSP navigation
-- `<Space>ca` — code action
-- `<Space>rn` — rename
-- `<Space>f` — format
-- `<Space>d` — diagnostics
-- `<Space>gg` — Fugitive
-- `<Space>hs` / `<Space>hr` — stage/reset hunk
-- `<Ctrl-\\>` — floating terminal
-- `F5` / `F10` / `F11` / `F12` — debugger
-- `<Space>tt` — nearest test
-- `<Space>tf` — file tests
+`<Space>` is the leader key. Unless noted otherwise, mappings below are for **Normal mode**.
+
+### General
+
+| Key | Action |
+| --- | --- |
+| `<Esc>` | Clear search highlighting |
+| `<Space>q` | Quit with confirmation |
+| `<Space>w` | Save file |
+| `<Space>x` | Save and close current buffer |
+
+### Files & search
+
+| Key | Action |
+| --- | --- |
+| `<Space>e` | Open Oil file explorer |
+| `<Space>ff` | Find files with Telescope |
+| `<Space>fg` | Live grep with Telescope |
+| `<Space>fb` | List open buffers |
+| `<Space>fr` | Recent files |
+| `<Space>fh` | Search Neovim help tags |
+| `<Space>sg` | Search word under cursor |
+| `<Space>p` | Switch projects |
+
+### Windows & navigation
+
+| Key | Action |
+| --- | --- |
+| `<Space>sv` | Split window vertically |
+| `<Space>sh` | Split window horizontally |
+| `<Space>se` | Equalize window sizes |
+| `<Space>sx` | Close current window |
+| `<Ctrl-h>` | Move to left window |
+| `<Ctrl-j>` | Move to lower window |
+| `<Ctrl-k>` | Move to upper window |
+| `<Ctrl-l>` | Move to right window |
+
+### LSP & code navigation
+
+| Key | Action |
+| --- | --- |
+| `gd` | Go to definition |
+| `gD` | Go to declaration |
+| `gi` | Go to implementation |
+| `gr` | Find references |
+| `K` | Show hover documentation |
+| `<Space>ca` | Code action |
+| `<Space>rn` | Rename symbol |
+| `<Space>f` | Format current buffer |
+| `<Space>d` | Toggle diagnostics with Trouble |
+
+### Git
+
+| Key | Action |
+| --- | --- |
+| `<Space>gg` | Open Fugitive Git status |
+| `<Space>gb` | Show Git blame for current line |
+| `]c` | Jump to next Git hunk |
+| `[c` | Jump to previous Git hunk |
+| `<Space>hs` | Stage current hunk |
+| `<Space>hr` | Reset current hunk |
+| `<Space>hp` | Preview current hunk |
+
+`<Space>hs` and `<Space>hr` also work in Visual mode for selected hunks.
+
+### Terminal
+
+| Key | Action |
+| --- | --- |
+| `<Ctrl-\\>` | Toggle floating terminal |
+
+### Debugging
+
+| Key | Action |
+| --- | --- |
+| `F5` | Continue / start debugging |
+| `F10` | Step over |
+| `F11` | Step into |
+| `F12` | Step out |
+| `<Space>db` | Toggle breakpoint |
+| `<Space>du` | Toggle DAP UI |
+
+### Testing
+
+| Key | Action |
+| --- | --- |
+| `<Space>tt` | Run nearest test |
+| `<Space>tf` | Run tests in current file |
+| `<Space>to` | Toggle Neotest output panel |
+
+### Neovim & plugin management
+
+| Key | Action |
+| --- | --- |
+| `<Space>l` | Open Lazy plugin manager |
+
+## Useful commands
+
+These commands are not keymaps but are useful for maintaining the environment:
+
+| Command | Action |
+| --- | --- |
+| `:Lazy` | Open plugin manager |
+| `:Mason` | Open Mason package manager |
+| `:MasonToolsInstallSync` | Install configured Mason tools synchronously |
+| `:checkhealth` | Run Neovim health checks |
 
 ## Design decisions
 
