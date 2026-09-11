@@ -1,10 +1,31 @@
 return {
   {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
-    dependencies = { "williamboman/mason.nvim" },
-    event = "VeryLazy",
+    dependencies = { "mason-org/mason.nvim" },
+    lazy = false,
+    cmd = {
+      "MasonToolsInstall",
+      "MasonToolsInstallSync",
+      "MasonToolsUpdate",
+      "MasonToolsUpdateSync",
+      "MasonToolsClean",
+    },
     opts = {
       ensure_installed = {
+        -- LSP servers
+        "bash-language-server",
+        "basedpyright",
+        "css-lsp",
+        "dockerfile-language-server",
+        "eslint-lsp",
+        "gopls",
+        "html-lsp",
+        "json-lsp",
+        "marksman",
+        "typescript-language-server",
+        "yaml-language-server",
+
+        -- Formatters / linters
         "rubocop",
         "prettier",
         "eslint_d",
@@ -15,9 +36,15 @@ return {
         "shellcheck",
         "yamllint",
         "hadolint",
+
+        -- Debug adapters
+        "delve",
+        "debugpy",
+        "js-debug-adapter",
       },
       auto_update = false,
       run_on_start = true,
+      start_delay = 1000,
     },
   },
 }

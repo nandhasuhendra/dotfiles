@@ -5,7 +5,7 @@ return {
       "nvim-lua/plenary.nvim",
       "antoinemadec/FixCursorHold.nvim",
       "nvim-neotest/nvim-nio",
-      "nvim-neotest/neotest-rspec",
+      "olimorris/neotest-rspec",
       "nvim-neotest/neotest-jest",
       "nvim-neotest/neotest-python",
       "nvim-neotest/neotest-go",
