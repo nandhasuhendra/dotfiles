@@ -24,6 +24,13 @@ map("n", "<C-j>", "<C-w>j", opts)
 map("n", "<C-k>", "<C-w>k", opts)
 map("n", "<C-l>", "<C-w>l", opts)
 
+map("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "Buffer: delete" })
+map("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "Buffer: next" })
+map("n", "<leader>bp", "<cmd>bprevious<CR>", { desc = "Buffer: previous" })
+map("n", "<leader>bo", "<cmd>%bdelete|edit#|bdelete#<CR>", {
+  desc = "Buffer: delete others",
+})
+
 map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 map("n", "<leader>rn", vim.lsp.buf.rename, opts)
 map("n", "K", vim.lsp.buf.hover, opts)
@@ -34,7 +41,6 @@ map("n", "gr", vim.lsp.buf.references, opts)
 map("n", "<leader>f", function() require("conform").format({ async = true, lsp_fallback = true }) end, opts)
 map("n", "<leader>d", "<cmd>Trouble diagnostics toggle<CR>", opts)
 
-map("n", "<leader>gg", "<cmd>Git<CR>", opts)
 map("n", "<leader>gb", "<cmd>Gitsigns blame_line<CR>", opts)
 map("n", "]c", function() require("gitsigns").next_hunk() end, opts)
 map("n", "[c", function() require("gitsigns").prev_hunk() end, opts)
