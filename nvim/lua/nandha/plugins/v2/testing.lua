@@ -11,15 +11,16 @@ return {
       "nvim-neotest/neotest-go",
     },
     keys = { "<leader>tt", "<leader>tf", "<leader>to" },
-    opts = function()
-      return {
-        adapters = {
-          require("neotest-rspec"),
-          require("neotest-jest"),
-          require("neotest-python"),
-          require("neotest-go"),
-        },
-      }
+    opts = {
+      adapters = {
+        require("neotest-rspec"),
+        require("neotest-jest"),
+        require("neotest-python"),
+        require("neotest-go"),
+      },
+    },
+    config = function(_, opts)
+      require("neotest").setup(opts)
     end,
   },
 }
