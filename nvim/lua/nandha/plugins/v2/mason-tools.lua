@@ -3,6 +3,13 @@ return {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     dependencies = { "williamboman/mason.nvim" },
     event = "VeryLazy",
+    cmd = {
+      "MasonToolsInstall",
+      "MasonToolsInstallSync",
+      "MasonToolsUpdate",
+      "MasonToolsUpdateSync",
+      "MasonToolsClean",
+    },
     opts = {
       ensure_installed = {
         "rubocop",
