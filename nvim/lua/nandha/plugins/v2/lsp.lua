@@ -10,7 +10,7 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
     opts = {
-      ensure_installed = { "bashls", "basedpyright", "dockerls", "gopls", "jsonls", "marksman", "ts_ls", "yamlls" },
+      ensure_installed = { "bashls", "basedpyright", "cssls", "dockerls", "eslint", "gopls", "html", "jsonls", "marksman", "ts_ls", "yamlls" },
       automatic_enable = true,
     },
   },
@@ -22,8 +22,11 @@ return {
       local servers = {
         bashls = {},
         basedpyright = {},
+        cssls = {},
         dockerls = {},
+        eslint = {},
         gopls = { settings = { gopls = { gofumpt = true, staticcheck = true, usePlaceholders = true } } },
+        html = {},
         jsonls = {},
         marksman = {},
         ts_ls = {},
