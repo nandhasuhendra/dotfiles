@@ -47,7 +47,7 @@ The plugin specs are isolated under `plugins/v2`, so the old Packer configuratio
 - blink.cmp — completion
 - nvim-treesitter — syntax and structure
 - Telescope — search/navigation
-- Oil — file explorer
+- Neo-tree — file explorer
 - Gitsigns + Fugitive — Git workflow
 - Conform + nvim-lint — formatting/linting
 - nvim-dap + DAP UI — debugging
@@ -85,7 +85,7 @@ The plugin specs are isolated under `plugins/v2`, so the old Packer configuratio
 
 | Key | Action |
 | --- | --- |
-| `<Space>e` | Open Oil file explorer |
+| `<Space>e` | Toggle Neo-tree file explorer |
 | `<Space>ff` | Find files with Telescope |
 | `<Space>fg` | Live grep with Telescope |
 | `<Space>fb` | List open buffers |
@@ -139,7 +139,7 @@ The plugin specs are isolated under `plugins/v2`, so the old Packer configuratio
 
 | Key | Action |
 | --- | --- |
-| `<Ctrl-\\>` | Toggle floating terminal |
+| `<Ctrl-\\>` | Toggle terminal |
 
 ### Debugging
 
