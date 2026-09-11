@@ -48,7 +48,7 @@ The plugin specs are isolated under `plugins/v2`, so the old Packer configuratio
 - nvim-treesitter — syntax and structure
 - Telescope — search/navigation
 - Neo-tree — file explorer
-- Gitsigns + Fugitive — Git workflow
+- Gitsigns + LazyGit — Git workflow
 - Conform + nvim-lint — formatting/linting
 - nvim-dap + DAP UI — debugging
 - Neotest — test execution
@@ -107,6 +107,15 @@ The plugin specs are isolated under `plugins/v2`, so the old Packer configuratio
 | `<Ctrl-k>` | Move to upper window |
 | `<Ctrl-l>` | Move to right window |
 
+### Buffers
+
+| Key | Action |
+| --- | --- |
+| `<Space>bd` | Delete current buffer |
+| `<Space>bn` | Go to next buffer |
+| `<Space>bp` | Go to previous buffer |
+| `<Space>bo` | Delete all other buffers |
+
 ### LSP & code navigation
 
 | Key | Action |
@@ -125,7 +134,7 @@ The plugin specs are isolated under `plugins/v2`, so the old Packer configuratio
 
 | Key | Action |
 | --- | --- |
-| `<Space>gg` | Open Fugitive Git status |
+| `<Space>gg` | Open LazyGit |
 | `<Space>gb` | Show Git blame for current line |
 | `]c` | Jump to next Git hunk |
 | `[c` | Jump to previous Git hunk |
