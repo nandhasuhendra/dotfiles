@@ -1,49 +1,31 @@
-local opt = vim.opt -- for conciseness
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
--- line numers
-opt.ruler = true
-opt.relativenumber = true
+local opt = vim.opt
 opt.number = true
-opt.numberwidth = 3
-
--- tabs & indentation
-opt.list = true
-opt.tabstop = 2
-opt.shiftwidth = 2
+opt.relativenumber = true
+opt.mouse = "a"
+opt.clipboard = "unnamedplus"
+opt.termguicolors = true
+opt.signcolumn = "yes"
+opt.cursorline = true
+opt.wrap = false
+opt.breakindent = true
 opt.expandtab = true
-opt.autoindent = true
-opt.listchars = "eol:¬,tab:»-,space:.,trail:~"
-
--- line wrapping
-opt.wrap = true
-opt.linebreak = true
-
--- search settings
+opt.shiftwidth = 2
+opt.tabstop = 2
+opt.smartindent = true
 opt.ignorecase = true
 opt.smartcase = true
-
--- cursor line
-opt.cursorline = true
-
--- apparance
-opt.termguicolors = true
-opt.background = "dark"
-opt.signcolumn = "yes"
-
--- backspace
-opt.backspace = "indent,eol,start"
-
--- clipboard
-opt.clipboard:append("unnamedplus")
-
--- split windows
 opt.splitright = true
 opt.splitbelow = true
-
-opt.iskeyword:append("-")
-
--- turned off swapfile
-opt.swapfile = false
-
--- change buffer without save
-opt.hidden = true
+opt.undofile = true
+opt.updatetime = 250
+opt.timeoutlen = 400
+opt.scrolloff = 8
+opt.sidescrolloff = 8
+opt.confirm = true
+opt.inccommand = "split"
+opt.list = true
+opt.listchars = { tab = "→ ", trail = "·", nbsp = "␣" }
+opt.fillchars = { eob = " " }

@@ -1,61 +1,58 @@
 vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+local map = vim.keymap.set
+local opts = { silent = true }
 
-local keymap = vim.keymap -- for conciseness
+map("n", "<Esc>", "<cmd>nohlsearch<CR>")
+map("n", "<leader>q", "<cmd>confirm q<CR>", opts)
+map("n", "<leader>w", "<cmd>w<CR>", opts)
+map("n", "<leader>x", "<cmd>x<CR>", opts)
+map("n", "<leader>e", "<cmd>Oil<CR>", opts)
+map("n", "<leader>ff", "<cmd>Telescope find_files<CR>", opts)
+map("n", "<leader>fg", "<cmd>Telescope live_grep<CR>", opts)
+map("n", "<leader>fb", "<cmd>Telescope buffers<CR>", opts)
+map("n", "<leader>fr", "<cmd>Telescope oldfiles<CR>", opts)
+map("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", opts)
+map("n", "<leader>sg", "<cmd>Telescope grep_string<CR>", opts)
 
--- replace basic keymaps
-keymap.set("n", "p", "P")
-keymap.set("v", "p", "P")
+map("n", "<leader>sv", "<C-w>v", opts)
+map("n", "<leader>sh", "<C-w>s", opts)
+map("n", "<leader>se", "<C-w>=", opts)
+map("n", "<leader>sx", "<cmd>close<CR>", opts)
+map("n", "<C-h>", "<C-w>h", opts)
+map("n", "<C-j>", "<C-w>j", opts)
+map("n", "<C-k>", "<C-w>k", opts)
+map("n", "<C-l>", "<C-w>l", opts)
 
--- generar keymaps
-keymap.set("n", "<leader>nh", ":nohl<CR>")
-keymap.set("n", "x", '"_x')
-keymap.set("n", "<leader>+", "<C-a>")
-keymap.set("n", "<leader>-", "<C-x>")
+map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+map("n", "<leader>rn", vim.lsp.buf.rename, opts)
+map("n", "K", vim.lsp.buf.hover, opts)
+map("n", "gd", vim.lsp.buf.definition, opts)
+map("n", "gD", vim.lsp.buf.declaration, opts)
+map("n", "gi", vim.lsp.buf.implementation, opts)
+map("n", "gr", vim.lsp.buf.references, opts)
+map("n", "<leader>f", function() require("conform").format({ async = true, lsp_fallback = true }) end, opts)
+map("n", "<leader>d", "<cmd>Trouble diagnostics toggle<CR>", opts)
 
--- splitting windows
-keymap.set("n", "<leader>sv", "<C-w>v") -- split window vertically
-keymap.set("n", "<leader>sh", "<C-w>s") -- split window horizontally
-keymap.set("n", "<leader>se", "<C-w>=") -- make split window equal width
-keymap.set("n", "<leader>sx", ":close<CR>") -- close current split window
+map("n", "<leader>gg", "<cmd>Git<CR>", opts)
+map("n", "<leader>gb", "<cmd>Gitsigns blame_line<CR>", opts)
+map("n", "]c", function() require("gitsigns").next_hunk() end, opts)
+map("n", "[c", function() require("gitsigns").prev_hunk() end, opts)
+map({ "n", "v" }, "<leader>hs", function() require("gitsigns").stage_hunk() end, opts)
+map({ "n", "v" }, "<leader>hr", function() require("gitsigns").reset_hunk() end, opts)
+map("n", "<leader>hp", function() require("gitsigns").preview_hunk() end, opts)
 
--- tabs
-keymap.set("n", "<leader>to", ":tabnew<CR>") -- open new tab
-keymap.set("n", "<leader>tx", ":tabclose<CR>") -- close current tab
-keymap.set("n", "<leader>tn", ":tabn<CR>") -- go to next tab
-keymap.set("n", "<leader>tp", ":tabp<CR>") -- go to previous tab
+map("n", "<C-\\>", "<cmd>ToggleTerm<CR>", opts)
+map("n", "<F5>", function() require("dap").continue() end, opts)
+map("n", "<F10>", function() require("dap").step_over() end, opts)
+map("n", "<F11>", function() require("dap").step_into() end, opts)
+map("n", "<F12>", function() require("dap").step_out() end, opts)
+map("n", "<leader>db", function() require("dap").toggle_breakpoint() end, opts)
+map("n", "<leader>du", function() require("dapui").toggle() end, opts)
 
--- plugin keymaps
+map("n", "<leader>tt", function() require("neotest").run.run() end, opts)
+map("n", "<leader>tf", function() require("neotest").run.run(vim.fn.expand("%")) end, opts)
+map("n", "<leader>to", function() require("neotest").output_panel.toggle() end, opts)
 
--- vim-maximizer
-keymap.set("n", "<leader>sm", ":MaximizerToggle<CR>")
-
--- telescope
-keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<CR>")
-keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<CR>")
-keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<CR>")
-keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<CR>")
-keymap.set("n", "<leader>fn", "<cmd>Telescope help_tags<CR>")
-
--- Easypicker
-keymap.set("n", "<leader>fg", ":Easypick<CR>")
-
--- copy text from current cursor to end
-keymap.set("n", "<leader>y", "*y")
-keymap.set("n", "<leader>p", "*p")
-keymap.set("n", "<leader>Y", "+y")
-keymap.set("n", "<leader>P", "+p")
-keymap.set("n", "<leader>cp", ':let @+=expand("%")<CR>')
-
--- switch buffers
-keymap.set("n", "<leader>bn", ":bn<CR>")
-keymap.set("n", "<leader>bp", ":bp<CR>")
-keymap.set("n", "<leader>bx", ":bp<bar>sp<bar>bn<bar>bd<CR>")
-
--- disabling Arrows
-keymap.set("n", "<left>", "<nop>")
-keymap.set("n", "<right>", "<nop>")
-keymap.set("n", "<up>", "<nop>")
-keymap.set("n", "<down>", "<nop>")
-keymap.set("n", "<C-s>", ":w<CR>")
-keymap.set("i", "<C-s><ESC>", ":w<CR>")
-keymap.set("v", "<C-s><ESC>", ":w<CR>")
+map("n", "<leader>p", "<cmd>Telescope projects<CR>", opts)
+map("n", "<leader>l", "<cmd>Lazy<CR>", opts)
