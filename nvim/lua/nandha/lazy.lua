@@ -4,8 +4,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup("nandha.plugins", {
+require("lazy").setup("nandha.plugins.v2", {
   change_detection = { notify = false },
   checker = { enabled = false },
-  install = { colorscheme = { "onedark" } },
 })
