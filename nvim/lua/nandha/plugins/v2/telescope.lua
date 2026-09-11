@@ -21,8 +21,14 @@ return {
     end,
   },
   {
-    "ahmedkhalf/project.nvim",
+    "DrKJeff16/project.nvim",
     event = "VeryLazy",
-    opts = { detection_methods = { "pattern" }, patterns = { ".git", "Gemfile", "package.json", "go.mod", "pyproject.toml" } },
+    opts = {
+      detection_methods = { "pattern" },
+      patterns = { ".git", "Gemfile", "package.json", "go.mod", "pyproject.toml" },
+    },
+    config = function(_, opts)
+      require("project").setup(opts)
+    end,
   },
 }
