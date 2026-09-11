@@ -68,8 +68,18 @@ if ! command -v fd >/dev/null && command -v fdfind >/dev/null; then
   ln -sfn "$(command -v fdfind)" "$HOME/.local/bin/fd"
 fi
 
-log "Bootstrapping plugins and language tooling"
+log "Bootstrapping plugins"
 nvim --headless "+Lazy! sync" +qa
+
+# Lazy can report plugin installation errors without making the shell command fail.
+# Verify the previously failing adapter explicitly so the installer never reports a
+# successful installation when a required plugin is still missing.
+log "Verifying required plugins"
+nvim --headless \
+  '+lua assert(pcall(require, "neotest-rspec"), "neotest-rspec failed to load")' \
+  +qa
+
+log "Installing Mason tooling"
 nvim --headless "+MasonToolsInstallSync" +qa
 
 log "Final checks"
