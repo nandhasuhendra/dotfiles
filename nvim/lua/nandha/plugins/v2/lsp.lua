@@ -28,6 +28,11 @@ return {
         marksman = {},
         ts_ls = {},
         yamlls = {},
+        ruby_lsp = {
+          cmd = { "ruby-lsp" },
+          filetypes = { "ruby", "eruby" },
+          root_markers = { "Gemfile", ".git" },
+        },
       }
       for name, config in pairs(servers) do
         config.capabilities = capabilities
@@ -35,11 +40,5 @@ return {
         vim.lsp.enable(name)
       end
     end,
-  },
-  {
-    "adam12/ruby-lsp.nvim",
-    ft = { "ruby", "eruby" },
-    dependencies = { "neovim/nvim-lspconfig" },
-    opts = {},
   },
 }
