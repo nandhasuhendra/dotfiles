@@ -13,14 +13,16 @@ From this repository:
 The installer is idempotent and:
 
 - installs Ubuntu system dependencies
-- installs stable Neovim from the Neovim PPA
+- installs the latest stable Neovim automatically when `nvim` is not already installed
 - backs up an existing `~/.config/nvim`
 - symlinks this `nvim/` directory into `~/.config/nvim`
 - bootstraps `lazy.nvim`
 - installs plugins, LSP servers, formatters and linters through Mason
 - installs Ruby LSP
 
-Run it again whenever the dotfiles are updated.
+The installer is intended to leave you with a ready-to-use Neovim environment after it completes. Run it again whenever the dotfiles are updated.
+
+> The installer currently targets Ubuntu on `amd64` and `arm64` and uses the latest stable prebuilt Neovim release when Neovim is missing. Existing Neovim installations are left unchanged.
 
 ## Architecture
 
