@@ -40,7 +40,7 @@ install_macos_dependencies() {
 
   log "Installing macOS dependencies"
   brew update
-  brew install git curl ripgrep fd fzf build-essential python node go ruby shellcheck
+  brew install git curl ripgrep fd fzf python node go ruby shellcheck
 
   # Homebrew's Ruby is intentionally used instead of macOS's system Ruby.
   export PATH="$(brew --prefix ruby)/bin:$PATH"
