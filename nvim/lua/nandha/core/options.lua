@@ -27,5 +27,5 @@ opt.sidescrolloff = 8
 opt.confirm = true
 opt.inccommand = "split"
 opt.list = true
-opt.listchars = { tab = "→ ", trail = "·", nbsp = "␣" }
+opt.listchars = { tab = "│ ", trail = "·", nbsp = "␣" }
 opt.fillchars = { eob = " " }

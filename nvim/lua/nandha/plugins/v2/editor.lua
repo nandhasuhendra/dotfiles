@@ -29,4 +29,20 @@ return {
     event = "InsertEnter",
     opts = {},
   },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      indent = {
+        char = "│",
+        tab_char = "│",
+      },
+      scope = {
+        enabled = true,
+        show_start = true,
+        show_end = false,
+      },
+    },
+  },
 }
