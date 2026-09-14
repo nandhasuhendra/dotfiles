@@ -95,6 +95,7 @@ The plugin specs are isolated under `plugins/v2`, so the old Packer configuratio
 | `<Space>fh` | Search Neovim help tags |
 | `<Space>sg` | Search word under cursor |
 | `<Space>p` | Switch projects |
+| `<Space>mp` | Toggle Markdown preview in browser |
 
 ### Windows & navigation
 
@@ -187,6 +188,8 @@ These commands are not keymaps but are useful for maintaining the environment:
 | `:Mason` | Open Mason package manager |
 | `:MasonToolsInstallSync` | Install configured Mason tools synchronously |
 | `:checkhealth` | Run Neovim health checks |
+| `:MarkdownPreview` | Open current Markdown file preview in browser |
+| `:MarkdownPreviewStop` | Stop current Markdown preview |
 
 ## Design decisions
 
