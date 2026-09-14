@@ -1,6 +1,6 @@
 # Neovim v2
 
-A batteries-included Neovim setup for Ubuntu, designed as a daily driver for Ruby/Rails, TypeScript/JavaScript, Python, Go, Docker, YAML, JSON, Bash and Markdown.
+A batteries-included Neovim setup for Ubuntu and macOS, designed as a daily driver for Ruby/Rails, TypeScript/JavaScript, Python, Go, Docker, YAML, JSON, Bash and Markdown.
 
 ## Install
 
@@ -12,17 +12,19 @@ From this repository:
 
 The installer is idempotent and:
 
-- installs Ubuntu system dependencies
-- installs the latest stable Neovim automatically when `nvim` is not already installed
+- detects Linux/Ubuntu or macOS automatically
+- installs required system dependencies
+- installs Homebrew automatically on macOS when it is missing
+- installs the latest available Neovim package when `nvim` is not already installed
 - backs up an existing `~/.config/nvim`
 - symlinks this `nvim/` directory into `~/.config/nvim`
 - bootstraps `lazy.nvim`
 - installs plugins, LSP servers, formatters and linters through Mason
-- installs Ruby LSP
+- installs Ruby LSP using Homebrew Ruby on macOS
 
 The installer is intended to leave you with a ready-to-use Neovim environment after it completes. Run it again whenever the dotfiles are updated.
 
-> The installer currently targets Ubuntu on `amd64` and `arm64` and uses the latest stable prebuilt Neovim release when Neovim is missing. Existing Neovim installations are left unchanged.
+> Linux currently targets Ubuntu on `amd64` and `arm64`. macOS supports both Apple Silicon and Intel Macs. On macOS, Xcode Command Line Tools are required; if they are missing, the installer tells you how to install them and should be run again afterward.
 
 ## Architecture
 
@@ -192,4 +194,5 @@ These commands are not keymaps but are useful for maintaining the environment:
 2. Use Neovim's native LSP APIs rather than the deprecated `require('lspconfig').server.setup()` style.
 3. Prefer project-local tools when the project provides them; Mason provides a reliable global fallback for editor tooling.
 4. Keep the OS installer responsible for runtimes and system packages; keep Neovim responsible for editor tooling.
-5. Preserve normal Vim motions instead of turning Neovim into a clone of VS Code.
+5. Use Homebrew-managed runtimes on macOS instead of relying on Apple's system Ruby or other developer runtimes.
+6. Preserve normal Vim motions instead of turning Neovim into a clone of VS Code.
