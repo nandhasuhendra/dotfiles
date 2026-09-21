@@ -13,6 +13,7 @@ return {
         "html",
         "javascript",
         "json",
+        "kotlin",
         "lua",
         "markdown",
         "python",

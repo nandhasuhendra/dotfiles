@@ -39,6 +39,9 @@ return {
         "shellcheck",
         "yamllint",
         "hadolint",
+        "sqlfluff",
+        "ktlint",
+        "jsonlint",
 
         -- Debug adapters
         "delve",

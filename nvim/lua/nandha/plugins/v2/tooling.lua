@@ -23,6 +23,8 @@ return {
         go = { "gofumpt" },
         lua = { "stylua" },
         sh = { "shfmt" },
+        sql = { "sqlfluff" },
+        kotlin = { "ktlint" },
       },
     },
   },
@@ -42,6 +44,9 @@ return {
         sh = { "shellcheck" },
         yaml = { "yamllint" },
         dockerfile = { "hadolint" },
+        json = { "jsonlint" },
+        sql = { "sqlfluff" },
+        kotlin = { "ktlint" },
       }
       vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
         callback = function() lint.try_lint() end,
