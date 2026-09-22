@@ -129,6 +129,10 @@ map("n", "gr", vim.lsp.buf.references, opts)
 map("n", "<leader>f", function()
 	require("conform").format({ async = true, lsp_fallback = true })
 end, opts)
+map("n", "<leader>uf", function()
+	vim.b.disable_autoformat = not vim.b.disable_autoformat
+	vim.notify(vim.b.disable_autoformat and "Autoformat disabled (buffer)" or "Autoformat enabled (buffer)")
+end, opts)
 map("n", "<leader>d", "<cmd>Trouble diagnostics toggle<CR>", opts)
 
 map("n", "<leader>gg", "<cmd>LazyGit<CR>", { desc = "Git: LazyGit" })
