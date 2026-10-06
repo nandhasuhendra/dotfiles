@@ -1,5 +1,14 @@
 return {
   {
+    "MeanderingProgrammer/render-markdown.nvim",
+    ft = { "markdown" },
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+    opts = {},
+    keys = {
+      { "<leader>mr", "<cmd>RenderMarkdown toggle<cr>", desc = "Toggle Markdown rendering" },
+    },
+  },
+  {
     "iamcco/markdown-preview.nvim",
     ft = { "markdown" },
     build = "cd app && npx --yes yarn install",

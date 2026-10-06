@@ -16,6 +16,7 @@ return {
         "kotlin",
         "lua",
         "markdown",
+        "markdown_inline",
         "python",
         "ruby",
         "sql",

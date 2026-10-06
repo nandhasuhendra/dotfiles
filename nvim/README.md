@@ -48,6 +48,7 @@ The plugin specs are isolated under `plugins/v2`, so the old Packer configuratio
 - Mason + mason-lspconfig — LSP installation
 - blink.cmp — completion
 - nvim-treesitter — syntax and structure
+- render-markdown.nvim — in-editor Markdown rendering
 - Telescope — search/navigation
 - Neo-tree — file explorer
 - Gitsigns + LazyGit — Git workflow
@@ -96,6 +97,7 @@ The plugin specs are isolated under `plugins/v2`, so the old Packer configuratio
 | `<Space>sg` | Search word under cursor |
 | `<Space>p` | Switch projects |
 | `<Space>mp` | Toggle Markdown preview in browser |
+| `<Space>mr` | Toggle in-editor Markdown rendering |
 
 ### Windows & navigation
 
@@ -190,6 +192,7 @@ These commands are not keymaps but are useful for maintaining the environment:
 | `:checkhealth` | Run Neovim health checks |
 | `:MarkdownPreview` | Open current Markdown file preview in browser |
 | `:MarkdownPreviewStop` | Stop current Markdown preview |
+| `:RenderMarkdown toggle` | Toggle in-editor Markdown rendering |
 
 ## Design decisions
 
