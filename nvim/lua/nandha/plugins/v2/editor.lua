@@ -2,26 +2,17 @@ return {
 	{ "nvim-lua/plenary.nvim", lazy = true },
 	{ "nvim-tree/nvim-web-devicons", lazy = true },
 	{
-		"projekt0n/github-nvim-theme",
-		name = "github-theme",
+		"Mofiqul/dracula.nvim",
 		lazy = false,
+		priority = 1000,
 		config = function()
-			-- require("github-theme").setup({ })
-			vim.cmd("colorscheme github_light")
+			vim.cmd.colorscheme("dracula")
 		end,
 	},
-	-- {
-	--   "navarasu/onedark.nvim",
-	--   priority = 1000,
-	--   config = function()
-	--     require("onedark").setup({ style = "dark" })
-	--     require("onedark").load()
-	--   end,
-	-- },
 	{
 		"nvim-lualine/lualine.nvim",
 		event = "VeryLazy",
-		opts = { options = { globalstatus = true, section_separators = "", component_separators = "" } },
+		opts = { options = { theme = "dracula-nvim", globalstatus = true, section_separators = "", component_separators = "" } },
 	},
 	{
 		"folke/which-key.nvim",
