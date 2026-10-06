@@ -1,0 +1,95 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "/home/nanda-suhendra/.config/opencode/skills/caveman/SKILL.md",
+    "/home/nanda-suhendra/.config/opencode/skills/skill-miner/SKILL.md",
+    "/home/nanda-suhendra/.config/opencode/skills/skill-personalizer/SKILL.md",
+    "/home/nanda-suhendra/.config/opencode/skills/skill-generalizer/SKILL.md"
+  ],
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true
+    },
+    "gh_grep": {
+      "type": "remote",
+      "url": "https://mcp.grep.app",
+      "enabled": true
+    },
+    "serena": {
+      "type": "local",
+      "command": [
+        "uvx",
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server",
+        "--context",
+        "ide-assistant",
+        "--tool-timeout",
+        "120"
+      ],
+      "enabled": true,
+      "timeout": 120000
+    },
+    "playwright": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@playwright/mcp@latest"
+      ],
+      "enabled": true,
+      "timeout": 30000
+    },
+    "filesystem": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem@latest",
+        "/home/nanda-suhendra"
+      ],
+      "enabled": true
+    },
+    "sequential-thinking": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking@latest"
+      ],
+      "enabled": true
+    },
+
+    "memory": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-memory@latest"
+      ],
+      "enabled": true
+    }
+  },
+  "tools": {
+    "filesystem_*": false,
+    "memory_*": false,
+    "sequential-thinking_*": false
+  },
+  "agent": {
+    "build": {
+      "tools": {
+        "sequential-thinking_*": true,
+        "memory_*": true
+      }
+    },
+    "plan": {
+      "tools": {
+        "sequential-thinking_*": true,
+        "memory_*": true
+      }
+    }
+  }
+}

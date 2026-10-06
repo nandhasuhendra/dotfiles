@@ -11,6 +11,8 @@ The repository is organized by application so each configuration can be installe
 | Configuration | Purpose | Documentation |
 |---|---|---|
 | `nvim/` | Neovim editor and development environment | [README](nvim/README.md) |
+| `herdr/` | Herdr terminal workspace manager | [README](herdr/README.md) |
+| `opencode/` | OpenCode settings, MCP servers, plugins, and skills | [README](opencode/README.md) |
 | `vim/` | Legacy Vim configuration | [README](vim/README.md) |
 | `vscode/` | Visual Studio Code settings | [README](vscode/README.md) |
 | `kitty/` | Kitty terminal configuration | [README](kitty/README.md) |
@@ -25,6 +27,8 @@ The repository is organized by application so each configuration can be installe
 - `nerd_fonts.sh` — helper for installing Nerd Fonts.
 - `screenshot.png` — example desktop/editor screenshot.
 - `install-nvim.sh` — Ubuntu installer for the modern Neovim configuration.
+- `install-herdr.sh` — install Herdr and link its configuration without disturbing runtime files.
+- `install-opencode.sh` — install OpenCode V2 and link settings, plugins, and skills without disturbing runtime files.
 
 ## Neovim
 
