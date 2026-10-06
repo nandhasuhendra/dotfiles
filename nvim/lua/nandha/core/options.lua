@@ -29,3 +29,16 @@ opt.inccommand = "split"
 opt.list = true
 opt.listchars = { tab = "│ ", trail = "·", nbsp = "␣" }
 opt.fillchars = { eob = " " }
+
+-- Keep code visible on open; use native z-motions to fold when needed.
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldlevel = 99
+opt.foldlevelstart = 99
+opt.foldcolumn = "1"
+_G.NandhaFoldText = function()
+  local first = vim.fn.getline(vim.v.foldstart)
+  local hidden = vim.v.foldend - vim.v.foldstart
+  return string.format("%s  ⋯ %d line%s folded", first, hidden, hidden == 1 and "" or "s")
+end
+opt.foldtext = "v:lua.NandhaFoldText()"

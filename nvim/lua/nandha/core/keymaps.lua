@@ -79,6 +79,7 @@ end
 vim.api.nvim_create_user_command("ReopenClosedBuffer", reopen_closed_buffer, { desc = "Reopen last closed buffer" })
 
 map("n", "<Esc>", "<cmd>nohlsearch<CR>")
+map("n", "<leader>z", "za", { desc = "Toggle fold" })
 map("n", "<leader>q", "<cmd>confirm q<CR>", opts)
 map("n", "<leader>w", "<cmd>w<CR>", opts)
 map("n", "<leader>x", "<cmd>x<CR>", opts)

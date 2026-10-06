@@ -135,6 +135,14 @@ The plugin specs are isolated under `plugins/v2`, so the old Packer configuratio
 | `<Space>f` | Format current buffer |
 | `<Space>d` | Toggle diagnostics with Trouble |
 
+### Code folding
+
+Folds follow Tree-sitter syntax where a parser is available. Files open with all folds expanded. A closed fold shows its first line and the number of lines folded below it.
+
+| Key | Action |
+| --- | --- |
+| `<Space>z` | Toggle the fold under the cursor |
+
 ### Git
 
 | Key | Action |
