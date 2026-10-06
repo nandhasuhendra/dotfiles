@@ -99,6 +99,8 @@ The plugin specs are isolated under `plugins/v2`, so the old Packer configuratio
 | `<Space>mp` | Toggle Markdown preview in browser |
 | `<Space>mr` | Toggle in-editor Markdown rendering |
 
+Rendered Markdown soft-wraps at the window width without changing the file; the normal no-wrap view returns when rendering is off.
+
 ### Windows & navigation
 
 | Key | Action |
