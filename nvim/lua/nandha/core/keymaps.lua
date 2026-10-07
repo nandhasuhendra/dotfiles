@@ -186,3 +186,67 @@ end, opts)
 
 map("n", "<leader>p", "<cmd>Telescope projects<CR>", opts)
 map("n", "<leader>l", "<cmd>Lazy<CR>", opts)
+
+-- Mermaid ASCII Preview
+local function preview_mermaid_at_cursor()
+	local cur_line = vim.api.nvim_win_get_cursor(0)[1]
+	local start_line = vim.fn.search("^```mermaid", "bcnW")
+	local end_line = vim.fn.search("^```\\s*$", "cnW")
+	local prev_close = vim.fn.search("^```\\s*$", "bnW")
+
+	local is_inside = start_line > 0
+		and end_line > 0
+		and cur_line >= start_line
+		and cur_line <= end_line
+		and (prev_close == 0 or prev_close < start_line or cur_line == prev_close)
+
+	if not is_inside then
+		vim.notify("Cursor not inside a ```mermaid block", vim.log.levels.WARN)
+		return
+	end
+
+	local lines = vim.api.nvim_buf_get_lines(0, start_line, end_line - 1, false)
+	local input = table.concat(lines, "\n")
+	local cmd = vim.fn.executable("mermaid-ascii") == 1 and "mermaid-ascii" or "npx -y mermaid-ascii"
+	local out = vim.fn.system(cmd, input)
+
+	if vim.v.shell_error ~= 0 or out == "" then
+		vim.notify("Failed to render mermaid diagram:\n" .. out, vim.log.levels.ERROR)
+		return
+	end
+
+	local buf = vim.api.nvim_create_buf(false, true)
+	local out_lines = vim.split(out, "\n")
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, out_lines)
+	vim.bo[buf].bufhidden = "wipe"
+	vim.bo[buf].filetype = "text"
+
+	local max_w = 0
+	for _, l in ipairs(out_lines) do
+		max_w = math.max(max_w, vim.fn.strdisplaywidth(l))
+	end
+	local width = math.min(math.max(max_w + 4, 30), vim.o.columns - 6)
+	local height = math.min(#out_lines + 2, vim.o.lines - 6)
+
+	local win = vim.api.nvim_open_win(buf, true, {
+		relative = "editor",
+		width = width,
+		height = height,
+		col = math.floor((vim.o.columns - width) / 2),
+		row = math.floor((vim.o.lines - height) / 2),
+		style = "minimal",
+		border = "rounded",
+		title = " Mermaid ASCII Preview (q to close) ",
+		title_pos = "center",
+	})
+
+	for _, key in ipairs({ "q", "<Esc>" }) do
+		vim.keymap.set("n", key, function()
+			if vim.api.nvim_win_is_valid(win) then
+				vim.api.nvim_win_close(win, true)
+			end
+		end, { buffer = buf, silent = true, nowait = true })
+	end
+end
+
+map("n", "<leader>mm", preview_mermaid_at_cursor, vim.tbl_extend("force", opts, { desc = "Preview Mermaid block in ASCII" }))

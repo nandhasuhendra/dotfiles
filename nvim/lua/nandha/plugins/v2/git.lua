@@ -14,6 +14,16 @@ return {
     },
   },
   {
+    "sindrets/diffview.nvim",
+    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory", "DiffviewFocusFiles", "DiffviewToggleFiles" },
+    dependencies = { "nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons" },
+    opts = {},
+    keys = {
+      { "<leader>gv", "<cmd>DiffviewOpen<CR>", desc = "Git: review changes" },
+      { "<leader>gh", "<cmd>DiffviewFileHistory %<CR>", desc = "Git: file history" },
+    },
+  },
+  {
     "kdheepak/lazygit.nvim",
     cmd = {
       "LazyGit",

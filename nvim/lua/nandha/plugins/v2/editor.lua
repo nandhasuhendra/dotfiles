@@ -1,6 +1,7 @@
 return {
 	{ "nvim-lua/plenary.nvim", lazy = true },
 	{ "nvim-tree/nvim-web-devicons", lazy = true },
+	{ "kylechui/nvim-surround", version = "^4.0.0", event = "VeryLazy", opts = {} },
 	{
 		"Mofiqul/dracula.nvim",
 		lazy = false,

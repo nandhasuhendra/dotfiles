@@ -52,6 +52,8 @@ The plugin specs are isolated under `plugins/v2`, so the old Packer configuratio
 - Telescope — search/navigation
 - Neo-tree — file explorer
 - Gitsigns + LazyGit — Git workflow
+- Diffview — review changes and file history
+- nvim-surround — edit surrounding quotes, brackets and tags
 - Conform + nvim-lint — formatting/linting
 - nvim-dap + DAP UI — debugging
 - Neotest — test execution
@@ -137,6 +139,15 @@ Rendered Markdown soft-wraps at the window width without changing the file; the 
 | `<Space>f` | Format current buffer |
 | `<Space>d` | Toggle diagnostics with Trouble |
 
+### Surround editing
+
+| Key | Action |
+| --- | --- |
+| `ysiw)` | Surround a word with parentheses |
+| `ds"` | Remove surrounding quotes |
+| `cs'"` | Change surrounding single quotes to double quotes |
+| `S` (Visual mode) | Surround a selection |
+
 ### Code folding
 
 Folds follow Tree-sitter syntax where a parser is available. Files open with all folds expanded. A closed fold shows its first line and the number of lines folded below it.
@@ -151,6 +162,8 @@ Folds follow Tree-sitter syntax where a parser is available. Files open with all
 | --- | --- |
 | `<Space>gg` | Open LazyGit |
 | `<Space>gb` | Show Git blame for current line |
+| `<Space>gv` | Review changes with Diffview |
+| `<Space>gh` | View history of the current file |
 | `]c` | Jump to next Git hunk |
 | `[c` | Jump to previous Git hunk |
 | `<Space>hs` | Stage current hunk |
@@ -203,6 +216,7 @@ These commands are not keymaps but are useful for maintaining the environment:
 | `:MarkdownPreview` | Open current Markdown file preview in browser |
 | `:MarkdownPreviewStop` | Stop current Markdown preview |
 | `:RenderMarkdown toggle` | Toggle in-editor Markdown rendering |
+| `:DiffviewClose` | Close the Diffview tab |
 
 ## Design decisions
 

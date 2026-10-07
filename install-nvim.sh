@@ -109,6 +109,22 @@ install_ruby_lsp() {
   gem install --no-document ruby-lsp
 }
 
+install_node_tools() {
+  log "Installing Node CLI tools (mermaid-ascii)"
+  if command -v npm >/dev/null 2>&1; then
+    if npm install -g mermaid-ascii 2>/dev/null; then
+      :
+    elif command -v sudo >/dev/null 2>&1; then
+      sudo npm install -g mermaid-ascii
+    else
+      npm install -g mermaid-ascii
+    fi
+    if command -v nodenv >/dev/null 2>&1; then
+      nodenv rehash
+    fi
+  fi
+}
+
 backup_and_link_config() {
   log "Backing up existing Neovim configuration"
   if [[ -e "$NVIM_CONFIG" && ! -L "$NVIM_CONFIG" ]]; then
@@ -144,6 +160,7 @@ final_checks() {
   echo "Node:    $(node --version)"
   echo "Python:  $(python3 --version)"
   echo "Go:      $(go version | cut -d' ' -f3-)"
+  echo "Mermaid: $(command -v mermaid-ascii >/dev/null 2>&1 && echo 'mermaid-ascii installed' || echo 'missing (npx fallback)')"
   echo
   nvim --headless "+checkhealth" +qa >/dev/null 2>&1 || true
   echo "Neovim installation complete. Start with: nvim"
@@ -166,6 +183,7 @@ case "$OS" in
 esac
 
 install_ruby_lsp
+install_node_tools
 backup_and_link_config
 
 # Telescope's native fzf extension needs a compiler; fd is named fdfind on Ubuntu.
