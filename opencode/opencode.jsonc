@@ -17,22 +17,6 @@
       "url": "https://mcp.grep.app",
       "enabled": true
     },
-    "serena": {
-      "type": "local",
-      "command": [
-        "uvx",
-        "--from",
-        "git+https://github.com/oraios/serena",
-        "serena",
-        "start-mcp-server",
-        "--context",
-        "ide-assistant",
-        "--tool-timeout",
-        "120"
-      ],
-      "enabled": true,
-      "timeout": 120000
-    },
     "playwright": {
       "type": "local",
       "command": [

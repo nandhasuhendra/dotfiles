@@ -58,4 +58,4 @@ if [[ ! -e "$CONFIG_DIR/package.json" ]]; then
 fi
 
 log "OpenCode config ready at $CONFIG_DIR"
-log "MCP tools need npx and uvx; sign in to providers and OAuth MCP servers separately"
+log "Local MCP tools need npx; sign in to providers and OAuth MCP servers separately"

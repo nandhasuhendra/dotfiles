@@ -22,7 +22,7 @@ The installer backs up existing files or directories at each link path and is
 safe to re-run. It keeps `node_modules/`, service settings, and local state
 untouched, and copies `package.json` only if absent. Install its dependencies
 locally if your OpenCode version needs them. Adjust the hard-coded home path in
-`opencode.jsonc` for another username; MCP commands require `uvx` and `npx`.
+`opencode.jsonc` for another username; local MCP commands require `npx`.
 MCP OAuth credentials and provider sign-ins are intentionally **not** stored
 here and must be authorized separately.
 
