@@ -5,7 +5,7 @@ Snapshot of the global OpenCode setup in `~/.config/opencode/`:
 - `opencode.jsonc` — existing settings and MCP server definitions
 - `cli.json` — terminal appearance and behavior
 - `skills/` — personal skills and their supporting files
-- `agents/` — seven role-based agents plus a PRD/technical-document orchestrator
+- `agents/` — eight role-based agents plus a PRD/technical-document orchestrator
 - `templates/` — canonical PRD and technical-document Markdown templates
 - `plugins/`, `herdr-opencode/`, and `herdr-tui-session.js` — local integrations
 - `tui.jsonc` — existing legacy TUI configuration
@@ -34,14 +34,15 @@ The Markdown agents in `agents/` are linked globally to
 subagent. Select `team-leader` (or ask your current agent to use it) for a
 technical document and dependency-aware task breakdown. The other IDs are
 `product-manager`, `senior-architect-engineer`, `senior-backend-engineer`,
-`senior-frontend-engineer`, `senior-qa-engineer`, and `senior-devops-engineer`.
+`senior-frontend-engineer`, `senior-qa-engineer`, `senior-devops-engineer`,
+and `senior-security-engineer` (red-team analysis and blue-team defense).
 They inherit the session model unless you configure one explicitly.
 
 Select `document-orchestrator` as the primary agent and ask it to create or
 update a PRD and technical document. It invokes Product Manager → Team Leader
-→ Architect → Team Leader (final revision) sequentially, checks both templates,
-and saves the documents only when requested. It is linked globally with the
-other agents by `./install-opencode.sh`.
+→ Architect → Security Engineer → Team Leader (final revision) sequentially,
+checks both templates, and saves the documents only when requested. It is
+linked globally with the other agents by `./install-opencode.sh`.
 
 The Product Manager uses `templates/PRD.md` for new and existing PRDs. The Team
 Leader uses `templates/TECH-DOC.md` for technical documents and task breakdowns

@@ -22,7 +22,10 @@
       "command": [
         "npx",
         "-y",
-        "@playwright/mcp@latest"
+        "@playwright/mcp@latest",
+        "--executable-path",
+        "/home/nanda-suhendra/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome",
+        "--no-sandbox"
       ],
       "enabled": true,
       "timeout": 30000

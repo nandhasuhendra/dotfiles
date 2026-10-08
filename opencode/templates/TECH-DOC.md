@@ -148,15 +148,59 @@ Keep each contract subsection, even when the system has no such interface; state
 
 ## 9. Task breakdown
 
-Use stable IDs `TASK-001`, `TASK-002`, etc. Group rows by milestone and dependency order. **Every task title MUST start with an action verb** (e.g. Define, Design, Implement, Migrate, Test, Validate, Deploy, Document). Do not start task titles with nouns such as `API`, `Database`, or `Testing`. Each task should yield a reviewable deliverable, not merely an activity. Use relative sizing (S/M/L or `Unknown — <reason>`) rather than invented dates; dependencies refer to task IDs. Include product decisions, diagrams/contracts, backend/frontend, QA, migration, DevOps, integration, and handoffs only where applicable.
+Write the breakdown as **Asana-ready delivery slices and per-task blocks** so every task is directly copy-pasteable into Asana: copy the task heading and block into one Asana parent task; checkbox lines become subtasks. Relative sizes only (S/M/L or `Unknown — <reason>`), never invented dates or day estimates; dependencies refer to stable task IDs; unresolved decisions block dependent work, not license to guess.
 
-| ID | Milestone | Task (verb-first) | Owner role | Deliverable | Requirement IDs | Dependencies | Completion / verification criteria | Size or uncertainty |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| TASK-001 | <milestone> | Define the API contract | <Product Manager / Architect / Team Leader / Backend / Frontend / QA / DevOps> | <reviewed contract artifact> | <PRD IDs> | <None or TASK IDs> | <testable done condition> | <S/M/L or Unknown + reason> |
+- **Stable IDs:** use `TASK-001`, `TASK-002`, etc., and assign each one a delivery code so ownership is explicit at a glance: **PM** = Product Manager, **ARCH** = Architect, **BE** = Backend, **FE** = Frontend, **QA** = QA, **OPS** = DevOps, **LEAD** = Team Leader (e.g. `TASK-006 = BE-2`). Keep the mapping explicit so no prior `TASK-` reference dangles.
+- **Every task title MUST start with an action verb** (Define, Design, Implement, Migrate, Test, Validate, Deploy, Document, Build, Reconcile, Verify, Prepare, Record). Do not start titles with nouns such as `API`, `Database`, or `Testing`.
+- **Each task block requires all of:** owner role, stable `TASK-` ID, PRD requirement IDs, dependencies (`TASK-xxx` codes), deliverable, size/uncertainty, acceptance criteria, test case scenarios (IDs like `TC-<ROLE>-<task>.<n>`, with backend/API scenarios and frontend Given-When-Then as `T-FE-<task>.<n>`), and a verb-first Asana checklist with subtask IDs like `- [ ] **BE-2.1:** <verb> ...`.
+- Include product decisions, diagrams/contracts, backend/frontend, QA, migration, DevOps, integration, and handoffs only where applicable.
+
+### 9.1 Delivery slice and stable-ID mapping
+
+Overview matrix only (do not duplicate the full task details here): each existing `TASK-` reference maps to exactly one delivery code.
+
+| Slice | Focus | Tasks (owner role) | Stable ID mapping | Exit gate |
+| --- | --- | --- | --- | --- |
+| 0 | Align, discover, decide and freeze contracts | PM-1, PM-2 (Product Manager); ARCH-1, ARCH-2 (Architect) | TASK-001 = PM-1; TASK-002 = ARCH-1; ... | <reviewed decision/contract gate> |
+| 1 | <storage, data and security work> | BE-1, BE-2 (Backend) | TASK-00N = BE-1; ... | <verified storage/security gate> |
+| 2 | <backend service and GraphQL implementation> | BE-3, BE-4 (Backend); ARCH-3 (Architect) | TASK-00N = BE-3; ... | <reviewed API contract gate> |
+| 3 | <frontend live journeys> | FE-1, FE-2 (Frontend) | TASK-00N = FE-1; ... | <live UI journey gate> |
+| 4 | <verification and release gating> | QA-1, QA-2 (QA); OPS-1 (DevOps); LEAD-1 (Team Leader) | TASK-00N = QA-1; ... | <evidence and go/no-go record> |
 
 **Parallel work and handoffs:** <tasks that may proceed together and the contract/decision required to connect them.>
 
 **Critical path and blockers:** <dependency chain and unresolved decisions, if nontrivial.>
+
+### 9.2 <Slice N>: <focus area>
+
+#### 9.2.1 <ROLE>-<n>: <Verb-first task title>
+
+**Stable ID:** <TASK-XXX> · **Owner role:** <Product Manager / Architect / Backend / Frontend / QA / DevOps / Team Leader> · **Size:** <S/M/L or Unknown — reason> · **PRD IDs:** <PRD-XXX or range>
+**Dependencies:** <None or TASK-XXX (CODE-N) ...> · **Deliverable:** <reviewable artifact> · **Uncertainty:** <what could change the plan>
+
+##### 1. Problem Statement / Context
+
+<What problem this task solves, which verified current-state facts apply, and which decision IDs it unblocks.>
+
+##### 2. <Contract / Validation Rules / User Flow>
+
+<Concrete rules, matrix, or flow for this task; link or summarize the relevant §4 contracts and §5 decisions.>
+
+##### 3. Acceptance Criteria
+
+- <testable done condition 1>
+- <testable done condition 2>
+- <testable done condition 3>
+
+##### 4. Test Case Scenarios
+
+- **TC-<ROLE>-<task>.<n>:** <Given ... when ... then ...; or HTTP/E2E scenario for backend tasks>.
+- **T-FE-<task>.<n>:** <Given-When-Then for frontend tasks; verbose enough to paste into a test tracker>.
+
+##### 5. Sub-Tasks (Asana Checklist)
+
+- [ ] **<ROLE>-<task>.<n>:** <verb-first step>.
+- [ ] **<ROLE>-<task>.<n>:** <verb-first step>.
 
 ## 10. Change log
 
@@ -172,5 +216,5 @@ Use stable IDs `TASK-001`, `TASK-002`, etc. Group rows by milestone and dependen
 - [ ] Current-state claims have evidence; proposed designs and assumptions are labeled.
 - [ ] Interfaces, failure behavior, and relevant security/operational considerations are explicit.
 - [ ] Verification covers requirements and release gates; planned versus executed checks are distinct.
-- [ ] Every task title starts with an action verb and has a role, deliverable, dependencies, completion criteria, and uncertainty/size.
+- [ ] Every task has a stable `TASK-` ID mapped to an owner-coded delivery ID (PM/ARCH/BE/FE/QA/OPS/LEAD), a verb-first title, and a block containing role, PRD IDs, dependencies, deliverable, size/uncertainty, acceptance criteria, test scenarios, and an Asana-ready verb-first checklist.
 - [ ] Dependencies are consistent; migration/rollout/rollback and open decisions have owners where relevant.
