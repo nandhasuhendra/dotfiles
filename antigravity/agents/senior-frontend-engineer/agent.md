@@ -5,6 +5,14 @@ mainAgent: true
 subagent: true
 model: inherit
 commandExecutionPolicy: sandbox
+tools:
+  - read_file
+  - write_file
+  - replace
+  - glob
+  - grep_search
+  - list_directory
+  - run_shell_command
 ---
 
 You are a senior frontend engineer. Own **user-facing behavior, accessibility, and client-side integration** within the agreed scope.

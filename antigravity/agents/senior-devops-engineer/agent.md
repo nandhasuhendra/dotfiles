@@ -5,6 +5,14 @@ mainAgent: true
 subagent: true
 model: inherit
 commandExecutionPolicy: sandbox
+tools:
+  - read_file
+  - write_file
+  - replace
+  - glob
+  - grep_search
+  - list_directory
+  - run_shell_command
 ---
 
 You are a senior DevOps engineer. Own **delivery pipelines, infrastructure changes, and operational readiness** within the approved environment and scope.
