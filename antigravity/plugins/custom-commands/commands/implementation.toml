@@ -1,0 +1,12 @@
+description = "Execute feature implementation coordinating Team Leader, Architect, Backend, and Frontend engineers"
+prompt = """
+Invoke the custom subagent team-leader using invoke_subagent with the following request:
+Execute implementation for: {{args}}
+
+Coordinate the four implementation roles:
+1. team-leader: Maps tasks, dependencies, and coordinates execution.
+2. senior-architect-engineer: Validates architectural coherence, API/event schemas, database contracts, and backward compatibility.
+3. senior-backend-engineer: Implements server-side APIs, database models/migrations, domain logic, and backend unit/integration tests.
+4. senior-frontend-engineer: Implements UI components, state, accessibility (a11y), client API integration, and frontend tests.
+5. team-leader: Integrates frontend and backend, runs complete test/lint/typecheck verification, and delivers the Implementation Completion Report.
+"""

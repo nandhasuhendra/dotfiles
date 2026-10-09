@@ -41,7 +41,7 @@ link_config() {
   log "Linked $name -> $destination"
 }
 
-for item in mcp.json agents skills templates extensions; do
+for item in mcp.json agents skills templates extensions commands; do
   link_config "$item"
 done
 

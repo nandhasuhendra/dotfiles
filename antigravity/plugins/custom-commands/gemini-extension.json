@@ -1,0 +1,6 @@
+{
+  "name": "custom-commands",
+  "description": "Custom agent commands for planning, reviews, git operations, security, and QA.",
+  "version": "1.0.0",
+  "contextFileName": "GEMINI.md"
+}

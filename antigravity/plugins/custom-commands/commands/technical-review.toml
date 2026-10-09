@@ -1,0 +1,12 @@
+description = "Review system architecture, contracts, data models, and migration strategy"
+prompt = """
+Invoke the custom subagent senior-architect-engineer using invoke_subagent with the following request:
+Review the architecture, contracts, or code diff: {{args}}
+
+Audit against templates/TECH-DOC.md:
+1. Evaluate system boundaries, coupling, and adherence to repository architectural patterns.
+2. Audit API, event, and database schemas (ERD, idempotency, error envelopes, indexes).
+3. Evaluate NFRs (scalability, latency, timeouts, exponential backoff, circuit breaking).
+4. Verify Expand-and-Contract database migrations and zero-downtime rollback procedures.
+5. Deliver Architecture Decision Record (ADR) and Executive Verdict (APPROVED, APPROVED WITH REVISIONS, REJECTED).
+"""

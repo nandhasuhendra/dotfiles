@@ -1,0 +1,12 @@
+description = "Synchronize current branch safely with upstream remote (fetch, check, rebase/merge)"
+prompt = """
+Invoke the custom subagent senior-devops-engineer using invoke_subagent with the following request:
+Perform safe git branch synchronization: {{args}}
+
+Protocol:
+1. Working tree check: Alert user and stop if uncommitted changes exist (offer safe stash).
+2. Fetch remote references (git fetch --prune) and compute divergence (ahead/behind).
+3. Pre-assess conflict risk by comparing changed files.
+4. Execute synchronization (rebase or merge). If conflicts occur, pause, show conflict markers, and guide resolution without running destructive resets.
+5. Restore stash if previously stashed and verify clean branch state.
+"""

@@ -1,0 +1,13 @@
+description = "Orchestrate end-to-end planning with PM, Team Leader, Architect, and Security Engineer"
+prompt = """
+Invoke the custom subagent document-orchestrator using invoke_subagent with the following request:
+Feature / Scope: {{args}}
+
+Execute the full end-to-end planning workflow:
+1. Product Manager drafts PRD using templates/PRD.md.
+2. Team Leader drafts Technical Document with 4 Mermaid diagrams and verb-first task breakdown using templates/TECH-DOC.md.
+3. Senior Architect reviews architecture, contracts, and migration feasibility.
+4. Senior Security Engineer reviews threat model, auth, and mitigations.
+5. Team Leader reconciles findings and finalizes task breakdown.
+Do not write or modify application code.
+"""

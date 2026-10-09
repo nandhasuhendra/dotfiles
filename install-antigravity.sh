@@ -32,3 +32,36 @@ for source in "$AGENTS_DIR"/*/agent.md; do
   name="$(basename "$(dirname "$source")")"
   link_file "$source" "$CONFIG_DIR/$name/agent.md"
 done
+
+# Link custom commands rule
+mkdir -p "$HOME/.gemini/config/rules"
+link_file "$DOTFILES_DIR/antigravity/rules/custom-commands.md" "$HOME/.gemini/config/rules/custom-commands.md"
+
+# Link custom commands plugin
+mkdir -p "$HOME/.gemini/config/plugins"
+link_file "$DOTFILES_DIR/antigravity/plugins/custom-commands" "$HOME/.gemini/config/plugins/custom-commands"
+
+# Ensure custom-commands is registered in plugins.json
+PLUGINS_JSON="$HOME/.gemini/config/plugins.json"
+if [[ -f "$PLUGINS_JSON" ]]; then
+  if ! grep -q '"custom-commands"' "$PLUGINS_JSON"; then
+    node -e '
+      const fs = require("fs");
+      const p = process.argv[1];
+      const data = JSON.parse(fs.readFileSync(p, "utf8"));
+      if (!data.plugins.includes("custom-commands")) {
+        data.plugins.push("custom-commands");
+        fs.writeFileSync(p, JSON.stringify(data, null, 2) + "\n");
+      }
+    ' "$PLUGINS_JSON" 2>/dev/null || true
+  fi
+fi
+
+# Ensure custom-commands rule is included in GEMINI.md
+GEMINI_MD="$HOME/.gemini/config/GEMINI.md"
+if [[ -f "$GEMINI_MD" ]]; then
+  if ! grep -q 'custom-commands.md' "$GEMINI_MD"; then
+    sed -i '/antigravity-rtk-rules.md/a @~/.gemini/config/rules/custom-commands.md' "$GEMINI_MD" 2>/dev/null || \
+    printf '\n@~/.gemini/config/rules/custom-commands.md\n' >> "$GEMINI_MD"
+  fi
+fi

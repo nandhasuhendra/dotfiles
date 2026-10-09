@@ -1,0 +1,1 @@
+../../../../opencode/commands/technical-review.md

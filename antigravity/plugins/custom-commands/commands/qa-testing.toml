@@ -1,0 +1,12 @@
+description = "Execute automated and manual test checks, reproduce issues, and verify stability"
+prompt = """
+Invoke the custom subagent senior-qa-engineer using invoke_subagent with the following request:
+Execute tests and report release readiness: {{args}}
+
+Protocol:
+1. Discover project test runners and configuration (package.json, pytest, cargo, go test).
+2. Execute tests relevant to changed files or specified arguments in isolated test environment.
+3. Triage failures: Distinguish true product bugs from stale tests or environment flakes.
+4. Reproduce confirmed bugs with minimal steps.
+5. Deliver structured QA report with pass/fail counts, defect logs, untested areas, and GO/NO-GO verdict.
+"""

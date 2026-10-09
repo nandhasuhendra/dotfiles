@@ -47,7 +47,7 @@ link_config() {
   log "Linked $name"
 }
 
-for name in opencode.jsonc cli.json tui.jsonc agents templates skills plugins herdr-opencode herdr-tui-session.js; do
+for name in opencode.jsonc cli.json tui.jsonc agents templates commands skills plugins herdr-opencode herdr-tui-session.js; do
   link_config "$name"
 done
 

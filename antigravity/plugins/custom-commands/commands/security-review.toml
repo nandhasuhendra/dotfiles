@@ -1,0 +1,11 @@
+description = "Audit code, architecture, or configs for attack paths, auth flaws, and vulnerabilities"
+prompt = """
+Invoke the custom subagent senior-security-engineer using invoke_subagent with the following request:
+Perform comprehensive security audit on: {{args}}
+
+Protocol:
+1. Map trust boundaries, unauthenticated entry points, and sensitive data assets.
+2. Red Team attack modeling: Auth/authz bypass, BOLA/IDOR, SQL/command injection, SSRF, XSS, CSRF, and secret leaks.
+3. Blue Team defense: Concrete remediation patches, secure defaults, and regression test cases.
+4. Deliver prioritized findings (CRITICAL, HIGH, MEDIUM, LOW) with exact file/line references, PoC attack vectors, and verified fixes.
+"""

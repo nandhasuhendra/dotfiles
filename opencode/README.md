@@ -7,6 +7,7 @@ Snapshot of the global OpenCode setup in `~/.config/opencode/`:
 - `skills/` — personal skills and their supporting files
 - `agents/` — eight role-based agents plus a PRD/technical-document orchestrator
 - `templates/` — canonical PRD and technical-document Markdown templates
+- `commands/` — custom slash commands triggering role-based agents
 - `plugins/`, `herdr-opencode/`, and `herdr-tui-session.js` — local integrations
 - `tui.jsonc` — existing legacy TUI configuration
 - `package.json` — dependency declaration (install dependencies locally)

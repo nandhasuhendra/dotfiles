@@ -1,0 +1,11 @@
+description = "Review technical document, task breakdown, dependencies, and execution readiness"
+prompt = """
+Invoke the custom subagent team-leader using invoke_subagent with the following request:
+Review the technical document or plan: {{args}}
+
+Audit against templates/TECH-DOC.md:
+1. Check template compliance and 4 Mermaid diagrams (architecture, flowchart, sequence, ERD).
+2. Verify 100% traceability from PRD- IDs to engineering tasks and verification criteria.
+3. Audit task breakdown (verb-first titles, assigned roles, acyclic dependencies, realistic sizing).
+4. Identify risks, critical path, and deliver an Executive Verdict (APPROVED, APPROVED WITH CONDITIONS, NEEDS REVISION).
+"""

@@ -1,0 +1,12 @@
+description = "Review product requirements, user journeys, edge cases, and acceptance criteria"
+prompt = """
+Invoke the custom subagent product-manager using invoke_subagent with the following request:
+Review the PRD or feature requirements: {{args}}
+
+Audit against templates/PRD.md:
+1. Validate problem statement, customer persona, and business value.
+2. Verify scope discipline (first-release MVP strictly separated from future opportunities and non-goals).
+3. Audit user journeys including unauthenticated states, permissions, error recovery, and data boundaries.
+4. Verify all requirements have stable IDs (PRD-XXX) and quantifiable, testable acceptance criteria.
+5. Deliver Executive Verdict (APPROVED, APPROVED WITH MINOR EDITS, NEEDS MAJOR REVISION).
+"""

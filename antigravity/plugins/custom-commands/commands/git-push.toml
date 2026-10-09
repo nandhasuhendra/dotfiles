@@ -1,0 +1,12 @@
+description = "Validate branch state, run pre-push safety checks, and push commits to remote"
+prompt = """
+Invoke the custom subagent senior-devops-engineer using invoke_subagent with the following request:
+Perform safe pre-push validation and execution: {{args}}
+
+Protocol:
+1. Check git status, current branch, upstream tracking, and untracked files.
+2. Scan outgoing commits for leaked secrets (API keys, tokens, credentials, .env files) and build artifacts.
+3. Verify local linting/test checks pass before push.
+4. Confirm target branch with user if pushing to protected branches (main/master/production).
+5. Execute git push safely and report remote commit hash. Never force push without explicit request.
+"""

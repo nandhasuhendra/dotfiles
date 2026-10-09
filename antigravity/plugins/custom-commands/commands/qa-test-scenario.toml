@@ -1,0 +1,11 @@
+description = "Design comprehensive risk-based test scenarios, edge cases, and test matrices"
+prompt = """
+Invoke the custom subagent senior-qa-engineer using invoke_subagent with the following request:
+Design a risk-weighted test scenario matrix for: {{args}}
+
+Protocol:
+1. Map requirements to stable PRD- IDs for 100% bidirectional traceability.
+2. Design scenarios across 4 quadrants: Happy Path, Negative/Validation, Boundary/Edge Cases, and Concurrency/Resilience.
+3. Enforce schema for each scenario: ID, Traced PRD ID, Title, Category, Test Level, Priority (P0 Blocker, P1 High, P2 Medium), Preconditions, Steps, and Expected Observable Outcome.
+4. Provide automation implementation guidance (unit vs integration vs E2E) and non-negotiable release gate criteria.
+"""

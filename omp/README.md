@@ -25,6 +25,7 @@ omp/
 │   └── skill-personalizer/
 ├── extensions/    # Runtime extensions and hooks
 │   └── zen-free-tier-headers.ts
+├── commands/     # Custom slash commands (symlinked to opencode commands)
 └── templates/     # PRD and Technical Document templates
     ├── PRD.md
     └── TECH-DOC.md
@@ -44,6 +45,7 @@ This links:
 - `omp/skills` -> `~/.omp/agent/skills`
 - `omp/templates` -> `~/.omp/agent/templates`
 - `omp/extensions` -> `~/.omp/agent/extensions`
+- `omp/commands` -> `~/.omp/agent/commands`
 Existing configurations are safely backed up before symlinks are created.
 
 ## Components
