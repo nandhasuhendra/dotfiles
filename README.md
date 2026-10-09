@@ -15,6 +15,7 @@ The repository is organized by application so each configuration can be installe
 | `opencode/` | OpenCode settings, MCP servers, plugins, and skills | [README](opencode/README.md) |
 | `antigravity/` | Antigravity custom security agent | [README](antigravity/README.md) |
 | `omp/` | OMP coding assistant settings, MCP servers, agents, and skills | [README](omp/README.md) |
+| `claude/` | Claude Code subagents, slash commands, skills, and templates | [README](claude/README.md) |
 | `vim/` | Legacy Vim configuration | [README](vim/README.md) |
 | `vscode/` | Visual Studio Code settings | [README](vscode/README.md) |
 | `kitty/` | Kitty terminal configuration | [README](kitty/README.md) |
@@ -33,6 +34,7 @@ The repository is organized by application so each configuration can be installe
 - `install-opencode.sh` — install OpenCode V2 and link settings, plugins, and skills without disturbing runtime files.
 - `install-antigravity.sh` — link the custom Antigravity security agent without replacing other configuration.
 - `install-omp.sh` — link OMP MCP servers, custom agents, skills, and templates without disturbing runtime databases.
+- `install-claude.sh` — link Claude Code subagents, slash commands, skills, and templates without disturbing other `~/.claude` files.
 
 ## Neovim
 
