@@ -24,12 +24,29 @@
  *     403); this patch targets the verified minimal pair `bash` + `read`
  *     (see ZEN_REQUIRED_TOOL_NAMES). Bodies that already carry enough core
  *     names get no stubs injected.
- *   - The legacy `https://opencode.ai/zen/v1` path is rate-limited for free
- *     accounts (429 FreeUsageLimitError on every request), while the same
- *     request against the current `https://opencode.ai/inference/openai/v1`
- *     path passes. So this patch transparently rewrites `/zen/…` URLs to
- *     `/inference/openai/…` — no new provider in models.yml needed. Disable
- *     with ZEN_REWRITE_URL=0.
+ *   - 2026-10-10 regression: `/inference/openai/…` no longer exists on
+ *     opencode.ai — every method on it answers `404` with an empty body
+ *     (`/zen/go/v1/chat/completions` answers 200 with the same key), so the
+ *     rewrite is now opt-in and OFF by default. Enable with
+ *     ZEN_REWRITE_URL=1 only after re-verifying the path with curl.
+ *
+ * 2026-10-13 update (captured the real client with a logging proxy, bisected
+ * against the live gate):
+ *   - The gate fingerprints the `ses_` id prefix, not just its shape: raw
+ *     sha256 hex 403s even with the right UA, tools and stream. OpenCode's
+ *     own ids encode `~((ms * 4096 + counter) mod 2^48)` in the 12 hex chars
+ *     and the gate only accepts a small decoded counter (0..15); the time bits
+ *     are not policed (ids 2 years old, and hash-derived ones, pass). See
+ *     `canonicalizeSessionId` / `isGateAcceptableSessionId`.
+ *   - The tool rule is `bash` + `read` together, not "any two core names":
+ *     `read`+`grep`, `read`+`write`, `bash`+`grep` and one-tool bodies all
+ *     403, while `bash`+`read`, `read`+`shell` and the full agent set pass.
+ *     Tool schemas are ignored; unknown tool names are ignored. Since the
+ *     injected pair is exactly `bash`+`read`, this still holds.
+ *   - The Go lane (`/zen/go/…`, provider `opencode-go`) needs
+ *     `x-opencode-session` but no tool names and no `opencode/` UA. It is
+ *     excluded from the URL rewrite and from tool injection so this patch
+ *     cannot disturb it.
  *
  * Tool injection: string JSON bodies on OpenCode endpoints get stubs for the
  * missing core tool names appended (Responses + chat-completions envelopes).
@@ -47,7 +64,7 @@
  *
  * Env:
  *   ZEN_INJECT_TOOLS=0  — disable the tool-name injection (headers still patched)
- *   ZEN_REWRITE_URL=0   — keep /zen/ URLs as-is (legacy 429 path)
+ *   ZEN_REWRITE_URL=1   — rewrite /zen/ to /inference/openai/ (opt-in; that route 404s as of 2026-10-10)
  *   ZEN_HEADERS_DEBUG=1 — append one line per zen request to
  *     <tmpdir>/zen-free-tier-headers.log (url path, session prefix,
  *     required names present, names injected, url rewritten?)
@@ -97,22 +114,46 @@ const LEGACY_PATH = "/zen/";
 const CURRENT_PATH = "/inference/openai/";
 
 /**
+ * Largest value the gate accepts in the low 12 bits of an id's encoded prefix
+ * (curl bisection 2026-10-13: 0/1/5/15 pass, 64/255/1023/4095 fail).
+ */
+const OPENCODE_ID_COUNTER_MAX = 15;
+
+/**
+ * True when a `ses_` id carries a prefix the free-tier gate accepts. OpenCode
+ * mints `ses_<hex:12><base62:14>` where the hex half encodes
+ * `~((ms * 4096 + counter) mod 2^48)`; the gate rejects prefixes whose decoded
+ * counter is large, so an id built from raw sha256 hex always 403s.
+ * `0xffffffffffff - prefix` keeps the low 12 bits of that complement.
+ */
+function isGateAcceptableSessionId(id: string): boolean {
+  if (!OPENCODE_SESSION_RE.test(id)) return false;
+  const counter = (0xffffffffffff - Number.parseInt(id.slice(4, 16), 16)) & 0xfff;
+  return counter <= OPENCODE_ID_COUNTER_MAX;
+}
+
+/**
  * Canonicalize a session id into OpenCode's `ses_<hex:12><base62:14>` format,
- * deterministic per input so turns keep attribution and prompt-cache
- * affinity. Same scheme as PR #12326 (sha256 over `opencode\0omp\0<id>`).
+ * deterministic per input so turns keep attribution and prompt-cache affinity.
+ * The 36 leading bits come from the digest and the low 12 hold `counter = 1`,
+ * the shape the gate verified (only the counter field is policed; the time
+ * field is not, so a hash-derived value is accepted).
  */
 function canonicalizeSessionId(sessionId?: string): string {
   const id = sessionId?.trim();
-  if (id && OPENCODE_SESSION_RE.test(id)) return id;
+  if (id && isGateAcceptableSessionId(id)) return id;
   const digest = createHash("sha256")
     .update(`opencode\0omp\0${id || "default"}`)
     .digest();
-  const timeHex = Buffer.from(digest.subarray(0, 6)).toString("hex");
+  const timeBits = BigInt(`0x${digest.subarray(0, 5).toString("hex")}`) >> 4n;
+  const prefix = (((timeBits << 12n) | 1n) ^ 0xffffffffffffn)
+    .toString(16)
+    .padStart(12, "0");
   let randomPart = "";
   for (let i = 6; i < 20; i++) {
     randomPart += BASE62_CHARS[digest[i] % 62];
   }
-  return `ses_${timeHex}${randomPart}`;
+  return `ses_${prefix}${randomPart}`;
 }
 
 /** True for requests aimed at the OpenCode zen/go gateways. */
@@ -125,9 +166,17 @@ function isZenUrl(url: string): boolean {
   }
 }
 
-/** Rewrite the legacy /zen/ gateway path to the current /inference/openai/. */
+/**
+ * Opt-in rewrite of /zen/ to the /inference/openai/ gateway (currently dead).
+ * The Go lane `/zen/go/…` is never rewritten: the plain substring replace
+ * would turn it into `/inference/openai/go/…` and break opencode-go.
+ */
 function rewriteZenUrl(url: string): { url: string; rewritten: boolean } {
-  if (process.env.ZEN_REWRITE_URL === "0" || !url.includes(LEGACY_PATH)) {
+  if (
+    process.env.ZEN_REWRITE_URL !== "1" ||
+    url.includes("/zen/go/") ||
+    !url.includes(LEGACY_PATH)
+  ) {
     return { url, rewritten: false };
   }
   return { url: url.replace(LEGACY_PATH, CURRENT_PATH), rewritten: true };
@@ -223,7 +272,7 @@ function injectZenTools(url: string, bodyText: string) {
   }
   return {
     text: JSON.stringify({ ...body, tools: tools ? [...tools, ...stubs] : stubs }),
-    injected: stubs.map((s) => String((s as { name: string }).name)),
+    injected: stubs.map((s) => toolName(s) ?? "?"),
     present,
   };
 }
@@ -298,6 +347,7 @@ function installFetchPatch(): void {
         let present = 0;
         if (
           process.env.ZEN_INJECT_TOOLS !== "0" &&
+          !url.includes("/zen/go/") &&
           typeof body === "string" &&
           body.trimStart().startsWith("{")
         ) {
