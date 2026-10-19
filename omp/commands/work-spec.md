@@ -1,15 +1,15 @@
 ---
-description: Generate a PRD or technical design.
+description: Legacy compatibility route; use work-prepare after human planning approval.
 ---
-## Load and gate
+## Compatibility route\n\nThis command is no longer the authoring stage for human PRDs or Tech Docs. Use `/work-product-plan`, `/work-tech-plan` and `/work-doc-review` first.\n\n## Load and gate
 
 - Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates and freshness protocol.
 - Change slug: $1. Read `openspec/changes/$1/` artifacts, repository instructions, existing specs and relevant source before editing.
-- Re-enumerate inputs and recompute upstream SHA-256 manifests. Require a complete interview without blocking questions, independent interview review PASS and explicit human interview approval against matching current inputs. Missing, stale or changed/missing/added inputs block this transition; do not renew approvals yourself.
+- Re-enumerate inputs and recompute upstream SHA-256 manifests. Require a complete human planning bundle (`prd.md` when applicable, `design.md` when applicable, and `task-breakdown.md`), independent document review PASS and explicit human planning approval against matching current inputs. Missing, stale or changed/missing/added inputs block this transition; do not renew approvals yourself.
 
-## Specify
+## Deprecated authoring flow
 
-- Use product-manager for product requirements and tech-lead for technical design. Dispatch the applicable author roles with full context; if unavailable, adopt their instructions and disclose it.
+- Use `/work-prepare $1` as the canonical implementation-preparation stage. Do not use this legacy command to bypass human planning approval; follow the `work-prepare` instructions.
 - Follow the interview route: product requires `prd.md`; engineering requires `design.md`; mixed requires both. Product also needs design when technical decisions or the installed schema require it.
 - Resolve/read `PRD.md` and/or `TECH-DOC.md` through shared template rules before authoring. Pass the applicable template paths/content to the authors; preserve installed OpenSpec schema requirements.
 - Inspect installed OpenSpec help, config and artifact instructions. Produce its required `proposal.md`, delta `specs/**/spec.md` and design artifacts without competing requirements. Leave implementation task planning to its later gate.
