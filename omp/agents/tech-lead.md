@@ -11,6 +11,9 @@ description: Produce evidence-based technical designs.
 - Read repository instructions, source, existing specs and installed OpenSpec help/config/schema. If adopting this author role without dispatch, disclose it; independent review still requires a separate agent.
 
 ## Engineering specification
+- Write the Tech Doc as human engineering documentation first, not a checklist for an agent. Open with a 2–4 sentence executive summary, explain the current problem and proposed design in plain language, and make the reasoning understandable without prior conversation context.
+- Explain why the design fits the existing system and what alternatives or trade-offs were considered. Use prose for architecture and rationale, diagrams only when they clarify a flow, and compact tables for contracts, compatibility and traceability.
+- Define domain terms and avoid unexplained acronyms, repeated content, generic filler and template placeholders. Preserve stable REQ IDs and precise technical acceptance criteria without allowing them to overwhelm the explanation.
 - Own `design.md` for engineering/mixed routes; add it for product work only when technical decisions or the installed schema require it.
 - Read `TECH-DOC.md` using shared template resolution; adapt its content to installed OpenSpec design instructions rather than overriding schema requirements.
 - Document current/proposed behavior, acceptance criteria, alternatives and tradeoffs, affected modules, dependencies, API/data contracts, failure modes, security, compatibility, migration, rollout and rollback. Include concurrency and observability when relevant; mark inapplicable concerns with reasons.
