@@ -12,7 +12,7 @@ description: Create the human-readable Tech Doc and task breakdown.
 - Dispatch `tech-lead`; disclose if adopting the role directly.
 - Read `TECH-DOC.md` and `HUMAN-TASK-BREAKDOWN.md`. Inspect source, repository instructions and relevant architecture to ground claims in the actual project.
 - Write `design.md` for engineering/mixed work and for product work that needs technical decisions. Explain current behavior, proposed architecture, flow, rationale, alternatives, contracts, data impact, failure modes, security, compatibility, rollout and rollback in plain language.
-- Write `task-breakdown.md` as a human-readable sequence of milestones/work packages, dependencies, affected areas, risks and completion outcomes. Do not make schema-specific checkboxes the primary presentation.
+- Write `task-breakdown.md` as a human-readable sequence of milestones/work packages, dependencies, affected areas, risks and completion outcomes. For focused engineering changes, keep design and breakdown proportional (short, specific sections; N/A with reasons for irrelevant concerns), while retaining compatibility, rollback, risk and measurable acceptance. Escalate to full if impact analysis reveals broader scope or uncertainty. Do not make schema-specific checkboxes the primary presentation.
 - Link stable REQ IDs to relevant design decisions and work packages. Avoid repeating the entire PRD. Surface decisions that require the human.
 - Keep OpenSpec proposal/spec/task files absent until the human planning bundle is reviewed and approved.
 
