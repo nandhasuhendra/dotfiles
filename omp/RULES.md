@@ -139,6 +139,16 @@ Next: <one command or action>
 - Keep handoffs factual: actual commands, observed results, limitations and unresolved blockers. Never claim approval, verification or delegation that did not happen.
 - Do not repeat information already in an approved artifact; link it. If an upstream contract changes, state which downstream records are invalidated.
 
+## Context efficiency
+
+- Treat artifact paths and manifests as the index; do not load every artifact body just because it exists. Enumerate and hash all gate-relevant inputs, then read the complete authoritative artifacts needed for the current decision and retrieve supporting material on demand.
+- Authors read their owned artifact's required inputs and only the source, tests, schema instructions and supporting evidence relevant to the task. Do not copy whole upstream documents into prompts or handoffs; pass paths, stable REQ/TC IDs, concise facts, unresolved questions and manifest identity.
+- Independent reviewers must inspect the complete authoritative inputs for their gate, relevant source/diff and actual evidence. A compact handoff is navigation, not a substitute for independent review or source verification.
+- QA receives every approved acceptance criterion and scenario, the changed source/tests and affected regression surface. Security receives the threat boundaries, changed paths and security-relevant evidence. Reviewers retrieve additional artifacts whenever a finding depends on them.
+- Prefer targeted searches, bounded command output and file/line references. Preserve raw logs for failed or gated commands without injecting entire logs into every agent context.
+- Load only the template for the artifact currently being authored. Reuse approved IDs and link existing decisions instead of restating them.
+- Context reduction must not weaken coverage, approval freshness, independent review, tool-evidence requirements or the distinction between planned and executed checks.
+
 ## Approval and freshness protocol
 
 These are agent-enforced gates, not a runtime access-control mechanism. There is no `scripts/workflow_gate.py`; do not call it or claim automated enforcement.
