@@ -1,6 +1,10 @@
 ---
 description: Show change status and next action.
 ---
+## Rule loading
+
+Read `RULES.md` and `rules/core.md`. Load a stage-specific rule file only if needed for the target gate; do not load all rules by default.
+
 ## Load and inspect
 
 - Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates and freshness protocol.
