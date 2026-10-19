@@ -1,5 +1,16 @@
 # Gated engineering workflow
 
+## Context and effort policy
+
+- Optimize for verified outcomes per token, not minimum tokens at any cost. Reuse authoritative files by path and digest; never paste the same full document into successive agent handoffs.
+- Classify each change during interview as **focused** (localized, behavior-preserving, low-risk) or **full** (new behavior, cross-module change, migrations, security/privacy, external contracts, or uncertain impact). Record the classification, evidence, and escalation triggers in `interview.md`. If unsure, use full.
+- **Focused** is a documentation and exploration budget, NOT a gate bypass: engineering work still needs its human Tech Doc/task breakdown, independent review, explicit approvals, OpenSpec preparation/validation, QA coverage, task planning, implementation, and independent verification. Keep artifacts concise and mark irrelevant sections N/A with reasons. Never invent a PRD for engineering-only work.
+- **Full** uses comprehensive impact exploration and the complete applicable documentation. Escalate focused to full if scope expands, behavioral compatibility is uncertain, data/schema/auth changes emerge, or the reviewer finds material risk; invalidate and renew affected approvals.
+- At each stage, read complete authoritative inputs required for that decision. Read only relevant source files, test files and dependency docs; expand on discovered callers, risks, or review findings. Do not summarize away requirements, security concerns, or evidence.
+- In a continuous session, do not re-read unchanged shared policy or artifact bodies already available in context merely to restate them; verify current file identity/freshness before relying on them. A new agent/session must read the required policy and source documents itself. Digests establish identity, not comprehension.
+- Handoffs should contain change slug, route/effort, authoritative paths and digests, REQ/TC IDs, decisions, blockers and next action. Avoid transcript dumps, redundant summaries, and repeated tool/version discovery when existing evidence is current and applicable.
+- Collect per-change efficiency evidence when available: input/output tokens, agent calls, review loops, wall time and verification results. Report unknown values as unknown; RTK output reduction is not a token benchmark.
+
 ## Load and scope
 
 - Commands and agents must read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Project rules may strengthen, not silently bypass, these gates.
