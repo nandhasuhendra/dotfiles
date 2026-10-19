@@ -10,7 +10,7 @@ description: Produce evidence-based technical designs.
 - Before specification work require a complete interview, no blocking questions, independent interview review PASS and explicit human interview approval.
 - Read repository instructions, source, existing specs and installed OpenSpec help/config/schema. If adopting this author role without dispatch, disclose it; independent review still requires a separate agent.
 
-## Engineering specification
+## Human-first technical planning\n- Before OpenSpec preparation, author human-readable `design.md` and `task-breakdown.md` from the approved interview/PRD and source evidence. Do not create `proposal.md`, delta specs or agent-ready `tasks.md` in this stage.\n- Explain architecture and trade-offs in plain language for a teammate who did not join the conversation. The human task breakdown describes milestones and work packages; agent-ready schema checkboxes are created later, after QA planning.\n\n## Engineering specification
 - Write the Tech Doc as human engineering documentation first, not a checklist for an agent. Open with a 2–4 sentence executive summary, explain the current problem and proposed design in plain language, and make the reasoning understandable without prior conversation context.
 - Explain why the design fits the existing system and what alternatives or trade-offs were considered. Use prose for architecture and rationale, diagrams only when they clarify a flow, and compact tables for contracts, compatibility and traceability.
 - Define domain terms and avoid unexplained acronyms, repeated content, generic filler and template placeholders. Preserve stable REQ IDs and precise technical acceptance criteria without allowing them to overwhelm the explanation.
