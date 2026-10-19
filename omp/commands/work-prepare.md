@@ -4,7 +4,7 @@ description: Translate approved human planning documents into OpenSpec and agent
 
 ## Rule loading
 
-- Read the installed shared `RULES.md` and `rules/core.md` before acting. Also read `rules/planning.md`; do not load unrelated stage rules.
+- Read the installed shared `RULES.md` and `rules/core.md` before acting. Also read `rules/planning.md` and `rules/gates.md` for approval, review and freshness requirements; do not load unrelated stage rules.
 ## Load and gate
 
 - Read project rules and re-enumerate/hash the complete human planning bundle.
