@@ -13,14 +13,14 @@ Read `RULES.md` and `rules/core.md`. When creating or reviewing a test plan, als
 - Re-enumerate inputs and recompute upstream SHA-256 manifests before every transition or resume. Added, changed or missing inputs invalidate dependent approvals, reviews, tasks and verification.
 - Scenario authoring requires the complete route/schema spec bundle, independent spec review PASS and explicit human spec approval, with fresh interview approval.
 - Read the approved PRD/design and OpenSpec specs, existing tests and relevant source. Do not load unrelated artifact bodies; retrieve supporting evidence when a scenario or finding depends on it. Use source-confirmed Codegraph impact analysis; record source/reference fallback limitations if unavailable.
-- Use OpenSpec, Codegraph, Playwright when the change has a browser surface, and `rtk` per the shared matrix. Record actual invocations and results, or N/A reasons.
+- Use OpenSpec for required schema/validation, Playwright for browser behavior, and Codegraph only when dependency impact is nontrivial. Use `rtk` for any shell commands. Record actual invocations/results or brief N/A reasons; do not run tools solely to populate evidence.
 - Author-role adoption is allowed only with disclosure. Final QA verification requires an independently dispatched agent, separate from implementation; if dispatch is unavailable, mark BLOCKED rather than self-verify.
 
 ## Scenario planning
 - Write `test-plan.md` with stable `TC-001` IDs, linked `REQ-001` IDs, priority, test layer, preconditions/fixtures and observable expected outcomes. Preserve IDs across revisions.
 - Read `QA-TEST-CASES.md` using shared template resolution. Use its case details and coverage matrix; keep the approved plan immutable and put actual execution results in `verification.md`.
 - Express each scenario as Given/When/Then. Cover every REQ with positive, negative, boundary, permissions/security and compatibility scenarios; include concurrency, performance and migration cases when applicable.
-- Read the independent security-engineer spec assessment in `review.md`. Map each red-team threat and blue-team mitigation to SEC/REQ/TC-linked abuse and legitimate-path regression scenarios; missing security coverage blocks plan readiness.
+- If the change is security-sensitive or the reviewer identified a credible risk, read the independent security-engineer spec assessment in `review.md` and map threats/mitigations to SEC/REQ/TC-linked abuse and legitimate-path regression scenarios. Otherwise, assess ordinary security/permission regressions from the approved requirements and record specialist security review as N/A.
 - Map affected existing features, callers, shared interfaces and neighboring user flows to explicit regression scenarios. Reuse existing test conventions; explain impact exclusions and N/A cases instead of claiming no regression risk.
 - For browser work plan Playwright checks for changed and affected existing flows, error/empty/loading states, keyboard access and relevant viewport sizes. For non-browser work record why browser checks are N/A.
 - Include real smoke runs of the changed path, automation/manual gaps, commands, environment needs and evidence locations. Proposed scenarios start NOT_RUN, never PASS.
