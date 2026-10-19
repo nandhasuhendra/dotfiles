@@ -59,7 +59,8 @@ Tools are required only when their concern applies. Record N/A with a reason ins
 | `design.md` | tech-lead | Human-readable technical design: current/proposed behavior, architecture rationale, alternatives, REQ IDs, impact, contracts, failure/security risks, rollout/rollback. |
 | OpenSpec artifacts | product-manager + tech-lead | Installed schema's proposal and delta specs reflecting approved intent; design/tasks when required. Link REQ IDs; do not maintain competing requirements. |
 | `test-plan.md` | qa-engineer | TC-to-REQ coverage, Given/When/Then, priority, layer, fixtures, expected results, affected existing-feature regression, manual gaps. |
-| `task-breakdown.md` | tech-lead | Human-readable plan: milestones, approach, dependencies, risks and sequence of work. |\n| `tasks.md` | tech-lead | Agent-ready OpenSpec implementation tasks linked to REQ/TC IDs, affected files, dependencies, rollout/rollback; created after QA planning. |
+| `task-breakdown.md` | tech-lead | Human-readable plan: milestones, approach, dependencies, risks and sequence of work. |
+| `tasks.md` | tech-lead | Agent-ready OpenSpec implementation tasks linked to REQ/TC IDs, affected files, dependencies, rollout/rollback; created after QA planning. |
 | `review.md` | reviewer + security-engineer | Append independent gate/security records: target, input path/digest manifest, PASS/CHANGES_REQUESTED/BLOCKED, file/line findings, risks, tool-use evidence or N/A reasons. Security records include red-team attack paths and blue-team mitigations. |
 | `approvals.md` | orchestrator | Append-only human decisions binding exact artifact/input digests; never write approval on a human's behalf. |
 | `verification.md` | qa-engineer + reviewer | Per TC/REQ result and real command/browser evidence, dependency invocations/results, implementation identity, regressions, review findings, remaining risks. |
@@ -99,7 +100,7 @@ Do not conflate `task-breakdown.md` (human planning) with `tasks.md` (agent-read
 | `prd.md` | `PRD.md` | product-manager |
 | `design.md` | `TECH-DOC.md` | tech-lead |
 | `test-plan.md` | `QA-TEST-CASES.md` | qa-engineer |
-| `tasks.md` | `TASK-BREAKDOWN.md` | tech-lead |
+| `task-breakdown.md` | `HUMAN-TASK-BREAKDOWN.md` | tech-lead |\n| `tasks.md` | `TASK-BREAKDOWN.md` | tech-lead |
 
 - Before authoring, read the matching project `.omp/templates/<file>` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/templates/<file>`. Stop if neither exists; pass the resolved path and template content to dispatched authors.
 - Templates guide document content, not business policy. Fill them from confirmed inputs and source evidence; preserve IDs, explain applicable N/A cases and remove example rows/unresolved template tokens before review. Unknown material decisions stay explicit blockers, never invented defaults.
@@ -113,7 +114,10 @@ Every transition rechecks all upstream evidence. Missing, stale, FAIL, BLOCKED o
 
 | Next action | Required evidence |
 | --- | --- |
-| Product planning (`work-product-plan`) | Interview complete, independent interview review PASS and human interview approval. |\n| Technical planning (`work-tech-plan`) | Human PRD/product context approved; technical questions resolved; design and human task breakdown complete. |\n| Human document review (`work-doc-review`) | Independent review of the complete human planning bundle PASS and explicit human approval of its manifest. |\n| Implementation preparation (`work-prepare`) | Human planning bundle approved and fresh; generate OpenSpec artifacts and validate fidelity before spec review. |
+| Product planning (`work-product-plan`) | Interview complete, independent interview review PASS and human interview approval. |
+| Technical planning (`work-tech-plan`) | Human PRD/product context approved; technical questions resolved; design and human task breakdown complete. |
+| Human document review (`work-doc-review`) | Independent review of the complete human planning bundle PASS and explicit human approval of its manifest. |
+| Implementation preparation (`work-prepare`) | Human planning bundle approved and fresh; generate OpenSpec artifacts and validate fidelity before spec review. |
 | Write QA scenarios (`work-qa`) | Human planning bundle approved; OpenSpec preparation complete, independent spec/security review PASS and explicit human approval of generated specs. |
 | Plan tasks (`work-plan`) | Every REQ covered by QA scenarios, independent test-plan review PASS, explicit human test-plan approval. |
 | Implement (`work-implement`) | Fresh interview/spec/test-plan approvals, complete tasks, independent tasks review PASS, human tasks approval binding the full planning bundle, successful OpenSpec validation. |
