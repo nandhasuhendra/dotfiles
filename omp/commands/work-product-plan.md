@@ -1,5 +1,5 @@
 ---
-description: Turn approved interview findings into a human-readable PRD.
+description: Draft a human-readable PRD from the approved interview.
 ---
 ## Load and gate
 
@@ -17,6 +17,6 @@ description: Turn approved interview findings into a human-readable PRD.
 
 ## Review and checkpoint
 
-- Independently review the PRD for clarity, completeness, scope, measurable acceptance and unanswered questions. Record findings against the current document digest.
-- Present the PRD path, summary, blockers and manifest. Explicit human approval is required before technical planning.
-- On `approve`, record the decision and continue to `/work-tech-plan $1`; on `approve stop`, record and stop. Reject/revisit returns to the relevant planning step; pause records nothing.
+- Run a readability and completeness self-check. Record any unresolved questions in the document rather than hiding them.
+- Present the PRD path, summary, assumptions and blockers as a draft handoff. Do not request final human approval here; PRD and Tech Doc are reviewed together after technical planning.
+- If no material product question blocks technical design, continue to `/work-tech-plan $1`. If a decision is needed to proceed, ask the human and record the answer in `interview.md` before continuing.
