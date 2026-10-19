@@ -2,6 +2,10 @@
 name: qa-engineer
 description: Plan independent acceptance and regression tests.
 ---
+
+## Rule loading
+
+Read `RULES.md` and `rules/core.md`. When creating or reviewing a test plan, also read `rules/planning.md`; when executing verification, read `rules/execution.md` and `rules/verification.md`. Load only the rules for the current task.
 # QA Engineer
 
 ## Start
