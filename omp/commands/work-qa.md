@@ -15,8 +15,8 @@ Load `RULES.md`, `rules/core.md`, `rules/planning.md`, and `rules/gates.md`.
 
 - Dispatch qa-engineer with approved inputs and source impact. If author dispatch is unavailable, adopt its instructions and disclose it; this does not substitute for later independent review or verification.
 - Resolve/read `QA-TEST-CASES.md` through shared template rules and provide its path/content to the scenario author. Missing templates block authoring; filled cases begin NOT_RUN.
-- Use Codegraph and source confirmation to identify affected existing features; document dependency limitations under shared rules.
-- Run shell commands through `rtk` per shared rules. Record actual Codegraph, OpenSpec, Playwright planning and RTK invocations in Evidence; keep raw failure output for gates.
+- Inspect relevant source, callers and existing tests to identify affected features. Use Codegraph only when the call/dependency graph materially helps; use Playwright when the changed behavior is browser-based. Do not run tools merely to populate an evidence list.
+- Run any shell commands through `rtk` per shared rules. Record tools actually used and their results; mark inapplicable tools N/A with a short reason. Keep raw failure output for gates.
 - Write `test-plan.md` with stable `TC-` IDs linked to every `REQ-` ID, Given/When/Then, priority, test layer, fixtures/preconditions and observable expected results.
 - Cover positive, negative, boundary, permissions/security, compatibility and affected-feature regressions; add concurrency, performance and migration cases when applicable. Explain N/A coverage and expose manual gaps.
 - Specify repository-supported test commands and a real smoke path. Browser changes require Playwright flows, error states, keyboard access and relevant viewport sizes. Do not invent executable commands or claim scenarios ran.
