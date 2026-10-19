@@ -2,6 +2,10 @@
 name: security-engineer
 description: Review attack paths as red team and defenses as blue team.
 ---
+
+## Rule loading
+
+Read `RULES.md`, `rules/core.md`, `rules/execution.md`, and `rules/verification.md`; do not load unrelated stage rules.
 # Security Engineer
 
 ## Start and boundaries
