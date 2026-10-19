@@ -1,6 +1,10 @@
 ---
 description: Record a human decision after review.
 ---
+
+## Rule loading
+
+Read `RULES.md`, `rules/core.md`, and `rules/gates.md`. Load a stage-specific rule file only when the pending decision requires it.
 ## Load and gate
 
 - Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates, freshness protocol and human-checkpoint format.
