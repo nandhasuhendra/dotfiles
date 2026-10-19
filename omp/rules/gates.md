@@ -43,7 +43,7 @@ Every transition rechecks all upstream evidence. Missing, stale, FAIL, BLOCKED o
 | Technical planning (`work-tech-plan`) | Interview approved; PRD draft/product context available; technical questions resolved; design and human task breakdown complete. |
 | Human document review (`work-doc-review`) | Independent review of the complete human planning bundle PASS and explicit human approval of its manifest. |
 | Implementation preparation (`work-prepare`) | Human planning bundle approved and fresh; generate OpenSpec artifacts and validate fidelity before spec review. |
-| Write QA scenarios (`work-qa`) | Human planning bundle approved; OpenSpec preparation complete, independent spec/security review PASS and explicit human approval of generated specs. |
+| Write QA scenarios (`work-qa`) | Human planning bundle approved; OpenSpec preparation complete, independent spec review PASS (plus security-engineer PASS when risk requires it) and explicit human approval of generated specs. |
 | Plan tasks (`work-plan`) | Every REQ covered by QA scenarios, independent test-plan review PASS, explicit human test-plan approval. |
 | Implement (`work-implement`) | Fresh interview/spec/test-plan approvals, complete tasks, independent tasks review PASS, human tasks approval binding the full planning bundle, successful OpenSpec validation. |
 | Verify (`work-verify`) | Implementation tasks complete; approved scope preserved; current source identity, test changes and runnable checks available. |
