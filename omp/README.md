@@ -221,7 +221,7 @@ This row illustrates the format, not a requirement for your application. Real sc
 ## Configuration changes
 
 - Replaced references to a nonexistent gate script with one explicit review/approval/freshness protocol.
-- Aligned all seven agents and twelve commands with the gated lifecycle and six dependency roles, including red-team/blue-team security review.
+- Aligned all seven agents and fifteen commands with the gated lifecycle and six dependency roles, including red-team/blue-team security review.
 - Fixed installation of workflow rules and handling of absent optional directories.
 - Replaced stale agent, template and MCP documentation with the current configuration.
 - Added dependency installation/verification and a staged, theme-native terminal UI with plain-text fallback and retained failure logs.
