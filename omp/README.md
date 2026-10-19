@@ -79,6 +79,12 @@ Installation boundaries:
 - Chromium no longer uses a machine-specific executable path. The existing `--no-sandbox` policy remains explicit in config and installer output: use trusted test content or an isolated environment.
 - Linux may need Chromium OS libraries. Browser launch errors remain in the full log; install the reported platform libraries and rerun rather than treating a browser download as a successful launch.
 
+## Efficiency and adaptive effort
+
+`/work-new` classifies each change as **focused** or **full** and records the rationale in `interview.md`. Focused is for localized, low-risk, behavior-preserving engineering work: short Tech Doc and task breakdown, targeted repository inspection and compact handoffs. Full is for new behavior, migrations, cross-module or security-sensitive work and uncertain impact. Escalate focused to full when evidence reveals broader risk.
+
+Both modes preserve independent review, human approvals, OpenSpec validation, QA planning and independent verification. Focused mode is **not** a shortcut past safety gates; it reduces document verbosity and unnecessary context. Shared policy and approved artifacts may be reused within a continuous session when unchanged, but each independent agent must inspect its authoritative inputs. Track actual token/call/time data before claiming savings.
+
 ## Human-first command sequence
 
 | Step | Command | Output and gate |
