@@ -1,6 +1,10 @@
 ---
 description: Review artifacts and present the human decision.
 ---
+
+## Rule loading
+
+Read `RULES.md` and `rules/core.md`; load `rules/gates.md` and only the stage rule(s) relevant to the review target.
 ## Load and gate
 
 - Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates and freshness protocol.
