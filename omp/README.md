@@ -140,7 +140,7 @@ Open the printed `http://<laptop-lan-ip>:8765/` on a phone connected to the same
 | --- | --- |
 | interviewer | Ask 1–3 plain-language questions per round; keep interviewing until readiness passes, then request explicit approval. |
 | product-manager | Convert product requirements into a business-facing PRD with measurable REQ IDs. |
-| tech-lead | Write engineering design and OpenSpec-compatible implementation tasks. |
+| tech-lead | Write the human Tech Doc and task breakdown, then derive agent-ready OpenSpec tasks after QA planning. |
 | qa-engineer | Write traceable TC scenarios after spec approval; independently verify implementation later. |
 | security-engineer | Red-team attack-path analysis and blue-team defenses, mitigations and security regression checks. |
 | reviewer | Independently review gate inputs and final changes, with concrete evidence. |
