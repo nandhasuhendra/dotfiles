@@ -3,7 +3,7 @@ description: Archive a completed change.
 ---
 ## Rule loading
 
-Load `RULES.md`, `rules/core.md`, `rules/execution.md`, and `rules/verification.md`; do not load unrelated stage rules.
+Load `RULES.md`, `rules/core.md`, `rules/execution.md`, `rules/verification.md`, and `rules/gates.md`.
 
 ## Load and gate
 
