@@ -1,6 +1,0 @@
-node_modules/
-package-lock.json
-bun.lock
-service.json
-.serena/
-*.log

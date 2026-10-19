@@ -1,1 +1,0 @@
-../../../../opencode/commands/prd-review.md

@@ -1,1 +1,0 @@
-../../../../opencode/commands/qa-test-scenario.md

@@ -1,1 +1,0 @@
-../../../../opencode/commands/git-sync.md

@@ -1,1 +1,0 @@
-../../../../opencode/commands/security-review.md
