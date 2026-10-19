@@ -16,7 +16,7 @@ bash omp/install-omp.sh
 
 Requires Linux or macOS, Node.js **20.19+**, npm, OMP, Git, curl and tar already on PATH. The installer installs missing workflow dependencies, verifies them, then replaces configuration. It never invokes `sudo` or edits your shell profile.
 
-Configuration goes into `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`. Existing `mcp.json`, `agents/`, `commands/`, `RULES.md` and `templates/` are moved to timestamped backups and replaced with current source links. Matching links remain unchanged. All four document templates are required and checked before dependency installation. Optional `skills/` and `extensions/` are linked only if present.
+Configuration goes into `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`. Existing `mcp.json`, `agents/`, `commands/`, `RULES.md` and `templates/` are moved to timestamped backups and replaced with current source links. Matching links remain unchanged. All five document templates are required and checked before dependency installation. Optional `skills/` and `extensions/` are linked only if present.
 
 CLI packages go into `${NPM_CONFIG_PREFIX:-$HOME/.local}`; keep its `bin/` directory first on PATH when starting OMP. The installer prints the exact shell command. Chromium uses Playwright's managed browser cache; Ponytail uses OMP's user plugin store.
 
@@ -84,7 +84,7 @@ Installation boundaries:
 | Step | Command | Output and gate |
 | --- | --- | --- |
 | 1. Interview | `/work-new <request>` | Gather requirements and approve the interview. No OpenSpec specs yet. |
-| 2. Product planning | `/work-product-plan <slug>` | Human-readable `prd.md` when applicable; approve product intent. |
+| 2. Product planning | `/work-product-plan <slug>` | Draft human-readable `prd.md` when applicable; final review happens with the Tech Doc. |
 | 3. Technical planning | `/work-tech-plan <slug>` | Human-readable `design.md` and `task-breakdown.md`. |
 | 4. Human document review | `/work-doc-review <slug>` | Independent review and approval of the complete human planning bundle. |
 | 5. Implementation preparation | `/work-prepare <slug>` | Translate approved docs into OpenSpec artifacts, validate REQ traceability, review and approve. |
@@ -172,7 +172,7 @@ Replace `change-slug` with the slug recorded by the interview. Each stage comman
 | Step | Command | Result / checkpoint |
 | --- | --- | --- |
 | Interview | `/work-new <request>` | Ask adaptive questions until requirements fit; write `interview.md`, review, then ask for approval. |
-| Product planning | `/work-product-plan change-slug` | Human PRD. |
+| Product planning | `/work-product-plan change-slug` | Draft human PRD; final approval is in the combined review. |
 | Technical planning | `/work-tech-plan change-slug` | Human Tech Doc and task breakdown. |
 | Human doc review | `/work-doc-review change-slug` | Independent review and approval of human docs. |
 | Implementation prep | `/work-prepare change-slug` | Translate approved docs to OpenSpec specs; validate and review. |
