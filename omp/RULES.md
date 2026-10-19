@@ -4,10 +4,10 @@ Read `omp/RULES.md` (this file) and `rules/core.md` for every stage. Then load o
 
 | Stage / command | Additional rules |
 |---|---|
-| Interview, `work-new`, product plan, tech plan, human doc review, OpenSpec preparation, QA planning, task planning | `rules/planning.md` |
-| Implementation and repository changes | `rules/execution.md` |
-| QA execution, `work-verify`, security review, `work-archive` | `rules/execution.md` and `rules/verification.md` |
-| Status, resume, view, approve, standalone review | `rules/core.md` plus the specific gate's relevant stage file only when needed |
+| Interview, `work-new`, product plan, tech plan, human doc review, OpenSpec preparation, QA planning, task planning | `rules/planning.md`; load `rules/gates.md` when handling approvals or transitions |
+| Implementation and repository changes | `rules/execution.md`; load `rules/gates.md` when handling approvals or transitions |
+| QA execution, `work-verify`, security review, `work-archive` | `rules/execution.md`, `rules/verification.md`, and `rules/gates.md` |
+| Status, resume, view, approve, standalone review | `rules/core.md` plus `rules/gates.md` for approval/status decisions; load a relevant stage file only when needed |
 
 ## Universal invariants
 
