@@ -104,7 +104,6 @@ Installation boundaries:
 | [QA Test Case Scenarios](templates/QA-TEST-CASES.md) | `test-plan.md` / qa-engineer | `/work-qa <slug>` after spec approval |
 | [Human Task Breakdown](templates/HUMAN-TASK-BREAKDOWN.md) | `task-breakdown.md` / tech-lead | `/work-tech-plan <slug>` |
 | [Agent Task Checklist](templates/TASK-BREAKDOWN.md) | `tasks.md` / tech-lead | `/work-plan <slug>` after QA-plan approval |
-| [Agent Task Checklist](templates/TASK-BREAKDOWN.md) | `tasks.md` / tech-lead | `/work-plan <slug>` after QA-plan approval |
 
 Adapted from the supplied EVA document templates and embedded QA scenarios, retaining structure rather than EVA-specific repositories, frameworks, tenant policies or CRUD ordering. They use short sections, observable acceptance criteria and stable REQ/TC/SEC/task links.
 
