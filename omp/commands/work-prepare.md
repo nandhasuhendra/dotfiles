@@ -23,6 +23,6 @@ description: Translate approved human planning documents into OpenSpec and agent
 ## Review and checkpoint
 
 - Dispatch independent security-engineer and spec reviewer runs against the current prepared bundle and human-source manifest.
-- Repair findings once within approved intent; any material change to human intent returns to planning and requires renewed human document approval.
+- Repair findings once within approved intent; any material change to human intent returns to planning and requires renewed human document approval. Do not launch parallel agents for redundant opinions.
 - On PASS, show human-source documents, derived OpenSpec artifacts, REQ mapping, validation evidence, review verdicts and manifest.
 - Require explicit human approval of the derived specification bundle before continuing to `/work-qa $1`. This does not replace human planning approval.
