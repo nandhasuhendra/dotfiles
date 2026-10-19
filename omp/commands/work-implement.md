@@ -3,7 +3,7 @@ description: Implement an approved change.
 ---
 ## Rule loading
 
-Load `RULES.md`, `rules/core.md`, and `rules/execution.md`; do not load unrelated stage rules.
+Load `RULES.md`, `rules/core.md`, `rules/execution.md`, and `rules/gates.md` for implementation authorization and freshness checks.
 
 ## Load and gate
 
