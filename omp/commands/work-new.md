@@ -4,7 +4,7 @@ description: Start a gated product or engineering change.
 
 ## Rule loading
 
-- Read the installed shared `RULES.md` and `rules/core.md` before acting. Also read `rules/planning.md`; do not load unrelated stage rules.
+- Read the installed shared `RULES.md` and `rules/core.md` before acting. Also read `rules/planning.md`; load `rules/gates.md` when recording approvals or transitioning stages. Do not load unrelated stage rules.
 
 ## Rule loading
 
