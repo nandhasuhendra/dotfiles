@@ -3,7 +3,7 @@
 ## Load and scope
 
 - Commands and agents must read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Project rules may strengthen, not silently bypass, these gates.
-- Read repository `AGENTS.md`, OpenSpec config, existing specs, and relevant source before proposing changes.
+- Read repository `AGENTS.md`, relevant source and existing human documentation before proposing changes. Inspect OpenSpec config/schema during implementation preparation, after human planning approval.
 - Keep one change in `openspec/changes/<slug>/`. Use a kebab-case slug; never overwrite an existing change to start another.
 - Record route in `interview.md`: product (new/improved user-facing behavior), engineering (internal technical outcome), or mixed. Ask only when business intent cannot be established from the request.
 - No application code, production configuration, migrations, or implementation tests before the implementation gate. Reading source and running existing checks are allowed.
@@ -55,11 +55,11 @@ Tools are required only when their concern applies. Record N/A with a reason ins
 | Artifact | Owner | Minimum content |
 | --- | --- | --- |
 | `interview.md` | interviewer | Route, current/desired behavior, users, goals, constraints, non-goals, facts, assumptions, blocking questions, dependency readiness. |
-| `prd.md` | product-manager | Product/mixed route: business outcome, flows, rules, stable REQ IDs, measurable acceptance, success measures. |
-| `design.md` | tech-lead | Engineering/mixed route, or product requiring technical decisions: current/proposed behavior, REQ IDs, impact, alternatives, contracts, failure/security risks, rollout/rollback. |
+| `prd.md` | product-manager | Human-readable product/mixed route: executive summary, user problem, desired experience, business rules, stable REQ IDs, measurable acceptance and success measures. |
+| `design.md` | tech-lead | Human-readable technical design: current/proposed behavior, architecture rationale, alternatives, REQ IDs, impact, contracts, failure/security risks, rollout/rollback. |
 | OpenSpec artifacts | product-manager + tech-lead | Installed schema's proposal and delta specs reflecting approved intent; design/tasks when required. Link REQ IDs; do not maintain competing requirements. |
 | `test-plan.md` | qa-engineer | TC-to-REQ coverage, Given/When/Then, priority, layer, fixtures, expected results, affected existing-feature regression, manual gaps. |
-| `tasks.md` | tech-lead | Ordered implementation and test tasks linked to REQ/TC IDs, affected files, dependencies, rollout/rollback. |
+| `task-breakdown.md` | tech-lead | Human-readable plan: milestones, approach, dependencies, risks and sequence of work. |\n| `tasks.md` | tech-lead | Agent-ready OpenSpec implementation tasks linked to REQ/TC IDs, affected files, dependencies, rollout/rollback; created after QA planning. |
 | `review.md` | reviewer + security-engineer | Append independent gate/security records: target, input path/digest manifest, PASS/CHANGES_REQUESTED/BLOCKED, file/line findings, risks, tool-use evidence or N/A reasons. Security records include red-team attack paths and blue-team mitigations. |
 | `approvals.md` | orchestrator | Append-only human decisions binding exact artifact/input digests; never write approval on a human's behalf. |
 | `verification.md` | qa-engineer + reviewer | Per TC/REQ result and real command/browser evidence, dependency invocations/results, implementation identity, regressions, review findings, remaining risks. |
@@ -76,6 +76,22 @@ Tools are required only when their concern applies. Record N/A with a reason ins
 - Define domain-specific terms, avoid unexplained acronyms, repeated paragraphs, generic filler and invented facts. Keep paragraphs short, remove unused template sections/placeholders, and state uncertainty explicitly.
 - Keep stable REQ IDs and testable acceptance criteria so downstream agents can trace and verify the work. Human readability must not weaken requirement coverage, review independence, approval gates or evidence freshness.
 
+## Human-first lifecycle
+
+The workflow has two distinct documentation layers. Human planning documents are the source of truth for people; OpenSpec artifacts are derived for agent execution only after the human planning bundle has passed review and received explicit approval. Never start by drafting OpenSpec specs.
+
+1. **Interview** — gather context, goals, users, constraints, current/desired behavior, facts, assumptions and stable REQ IDs. No OpenSpec specification artifacts.
+2. **Product planning** — write `prd.md` for product/mixed routes. For engineering-only work, explain why a PRD is not applicable.
+3. **Technical planning** — write `design.md` for engineering/mixed work and when product work needs technical decisions. Write `task-breakdown.md` as a readable implementation approach and milestone sequence.
+4. **Human document review** — independently review the complete planning bundle for clarity, completeness, consistency, feasibility, risks, scope, traceability and unresolved questions.
+5. **Human approval** — approve the exact PRD/Tech Doc/task-breakdown bundle and manifest. No OpenSpec proposal, delta specs, agent task files or implementation before this approval.
+6. **Implementation preparation** — inspect the installed OpenSpec schema and translate approved documents into `proposal.md`, delta `specs/**/spec.md` and required design artifacts. Validate fidelity to approved intent.
+7. **Specification review** — independent spec/security review and explicit human approval of generated artifacts. Any material discrepancy returns to human planning.
+8. **QA planning** — derive test scenarios from approved requirements and threat analysis; review coverage and obtain approval.
+9. **Agent task planning** — create schema-compatible `tasks.md` linked to REQ/TC IDs; review, validate and obtain approval.
+10. **Implementation, verification, completion review and archive/release approval** — preserve all existing gates and require real evidence.
+
+Do not conflate `task-breakdown.md` (human planning) with `tasks.md` (agent-ready execution checklist).
 ## Document templates
 
 | Output | Template | Author |
@@ -97,8 +113,8 @@ Every transition rechecks all upstream evidence. Missing, stale, FAIL, BLOCKED o
 
 | Next action | Required evidence |
 | --- | --- |
-| Write PRD/design (`work-spec`) | Interview complete, no blocking questions, independent interview review PASS, human interview approval. |
-| Write QA scenarios (`work-qa`) | Route-required spec bundle complete, independent spec review PASS, explicit human spec approval. |
+| Product planning (`work-product-plan`) | Interview complete, independent interview review PASS and human interview approval. |\n| Technical planning (`work-tech-plan`) | Human PRD/product context approved; technical questions resolved; design and human task breakdown complete. |\n| Human document review (`work-doc-review`) | Independent review of the complete human planning bundle PASS and explicit human approval of its manifest. |\n| Implementation preparation (`work-prepare`) | Human planning bundle approved and fresh; generate OpenSpec artifacts and validate fidelity before spec review. |
+| Write QA scenarios (`work-qa`) | Human planning bundle approved; OpenSpec preparation complete, independent spec/security review PASS and explicit human approval of generated specs. |
 | Plan tasks (`work-plan`) | Every REQ covered by QA scenarios, independent test-plan review PASS, explicit human test-plan approval. |
 | Implement (`work-implement`) | Fresh interview/spec/test-plan approvals, complete tasks, independent tasks review PASS, human tasks approval binding the full planning bundle, successful OpenSpec validation. |
 | Verify (`work-verify`) | Implementation tasks complete; approved scope preserved; current source identity, test changes and runnable checks available. |
@@ -129,7 +145,7 @@ Decision: approve | approve stop | reject: <reason> | revisit: <question/stage> 
 - `pause`: record nothing and point to `/work-resume <slug>`.
 - One explicit reply is enough. Do not ask for the same decision twice; do not make the human re-run review after a PASS unless inputs changed.
 - Show artifact paths, a one-line scope/risk summary, review findings and the manifest identity before asking. Invocation, silence, "continue" or an earlier approval is not a decision.
-- `work-review` performs the independent review and presents this checkpoint. `work-approve` resumes a pending decision or records one supplied after a review.
+- `work-doc-review` reviews the human planning bundle before OpenSpec; `work-review` performs later independent gate reviews and presents this checkpoint. `work-approve` resumes a pending decision or records one supplied after a review.
 
 ## Agent handoffs
 
@@ -162,7 +178,7 @@ Next: <one command or action>
 These are agent-enforced gates, not a runtime access-control mechanism. There is no `scripts/workflow_gate.py`; do not call it or claim automated enforcement.
 
 1. Build a sorted manifest of relative artifact paths and SHA-256 file digests. Use real hashing tools, such as `sha256sum` on Linux or `shasum -a 256` on macOS. Never invent hashes.
-2. Bind interview approval to `interview.md`; spec approval to interview plus all route/schema specification inputs (including proposal and every delta spec); test-plan approval to those inputs plus `test-plan.md`; tasks approval to all previous inputs plus `tasks.md`. Include OpenSpec config/schema inputs used by the change. Exclude the mutable approval/review/evidence ledgers themselves.
+2. Bind interview approval to `interview.md`; human planning approval to interview plus `prd.md`, `design.md` when applicable, and `task-breakdown.md`; spec approval to the human planning bundle plus all route/schema specification inputs (including proposal and every delta spec); test-plan approval to those inputs plus `test-plan.md`; tasks approval to all previous inputs plus `tasks.md`. Include OpenSpec config/schema inputs used by the change. Exclude the mutable approval/review/evidence ledgers themselves.
 3. Reviewer records PASS against the same input manifest for that gate. Show the human artifact paths, review findings, short scope/risk summary and manifest before asking approval.
 4. After an explicit human decision, recompute the manifest. If unchanged, append target, UTC timestamp, human decision reference/quote, manifest and matching review record to `approvals.md`. If changed during the decision, ask again. Never modify historical decisions.
 5. Before proceeding or resuming, re-enumerate files and recompute every upstream manifest. Changed bytes, missing files or new specification inputs invalidate that gate and all dependent approvals/reviews/tasks/verification. Treat prior records as historical, not current authority.
