@@ -68,6 +68,14 @@ Tools are required only when their concern applies. Record N/A with a reason ins
 - Questions affecting scope, expected behavior, compatibility, security or data integrity block approval. Explicitly accepted nonblocking assumptions remain visible.
 - Authors may use their role instructions directly if dispatch is unavailable and disclose it. Gate review and final QA verification require independent agent runs with full context; no self-review fallback. If dispatch is unavailable, mark BLOCKED.
 
+## Human-readable product and technical documents
+
+- Treat `prd.md` and `design.md` as durable documentation for teammates, not merely handoff payloads for agents. A reader should understand the problem, proposed outcome and important decisions without reading the conversation transcript.
+- Start each document with a 2–4 sentence executive summary in plain language. Explain the current situation, why it matters and what the change will accomplish before dense tables or IDs.
+- Use narrative prose for problem framing, user experience, architecture and decision rationale; use compact tables for comparisons, contracts, requirement traceability and measurable acceptance. Add diagrams only when they improve understanding, and explain them in text.
+- Define domain-specific terms, avoid unexplained acronyms, repeated paragraphs, generic filler and invented facts. Keep paragraphs short, remove unused template sections/placeholders, and state uncertainty explicitly.
+- Keep stable REQ IDs and testable acceptance criteria so downstream agents can trace and verify the work. Human readability must not weaken requirement coverage, review independence, approval gates or evidence freshness.
+
 ## Document templates
 
 | Output | Template | Author |
