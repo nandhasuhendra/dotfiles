@@ -3,7 +3,7 @@ description: Show change status and next action.
 ---
 ## Rule loading
 
-Read `RULES.md` and `rules/core.md`. Load a stage-specific rule file only if needed for the target gate; do not load all rules by default.
+Read `RULES.md`, `rules/core.md`, and `rules/gates.md` for gate freshness and approval status. Load a relevant stage rule only if needed.
 
 ## Load and inspect
 
