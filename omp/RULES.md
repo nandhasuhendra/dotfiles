@@ -100,7 +100,8 @@ Do not conflate `task-breakdown.md` (human planning) with `tasks.md` (agent-read
 | `prd.md` | `PRD.md` | product-manager |
 | `design.md` | `TECH-DOC.md` | tech-lead |
 | `test-plan.md` | `QA-TEST-CASES.md` | qa-engineer |
-| `task-breakdown.md` | `HUMAN-TASK-BREAKDOWN.md` | tech-lead |\n| `tasks.md` | `TASK-BREAKDOWN.md` | tech-lead |
+| `task-breakdown.md` | `HUMAN-TASK-BREAKDOWN.md` | tech-lead |
+| `tasks.md` | `TASK-BREAKDOWN.md` | tech-lead |
 
 - Before authoring, read the matching project `.omp/templates/<file>` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/templates/<file>`. Stop if neither exists; pass the resolved path and template content to dispatched authors.
 - Templates guide document content, not business policy. Fill them from confirmed inputs and source evidence; preserve IDs, explain applicable N/A cases and remove example rows/unresolved template tokens before review. Unknown material decisions stay explicit blockers, never invented defaults.
