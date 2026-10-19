@@ -1,6 +1,10 @@
 ---
 description: Resume a change at its current gate.
 ---
+
+## Rule loading
+
+Read `RULES.md` and `rules/core.md`. Load `rules/gates.md` and the relevant stage rule only when checking or reopening a gate.
 ## Load and reconstruct
 
 - Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates and freshness protocol.
