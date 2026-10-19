@@ -8,7 +8,7 @@ description: Plan independent acceptance and regression tests.
 - Read project `.omp/RULES.md`; if absent, read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Follow its documented gates.
 - Re-enumerate inputs and recompute upstream SHA-256 manifests before every transition or resume. Added, changed or missing inputs invalidate dependent approvals, reviews, tasks and verification.
 - Scenario authoring requires the complete route/schema spec bundle, independent spec review PASS and explicit human spec approval, with fresh interview approval.
-- Read approved PRD/design, OpenSpec specs, existing tests and relevant source. Use source-confirmed Codegraph impact analysis; record source/reference fallback limitations if unavailable.
+- Read the approved PRD/design and OpenSpec specs, existing tests and relevant source. Do not load unrelated artifact bodies; retrieve supporting evidence when a scenario or finding depends on it. Use source-confirmed Codegraph impact analysis; record source/reference fallback limitations if unavailable.
 - Use OpenSpec, Codegraph, Playwright when the change has a browser surface, and `rtk` per the shared matrix. Record actual invocations and results, or N/A reasons.
 - Author-role adoption is allowed only with disclosure. Final QA verification requires an independently dispatched agent, separate from implementation; if dispatch is unavailable, mark BLOCKED rather than self-verify.
 
