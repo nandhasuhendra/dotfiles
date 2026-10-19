@@ -116,7 +116,7 @@ Every transition rechecks all upstream evidence. Missing, stale, FAIL, BLOCKED o
 | Next action | Required evidence |
 | --- | --- |
 | Product planning (`work-product-plan`) | Interview complete, independent interview review PASS and human interview approval. |
-| Technical planning (`work-tech-plan`) | Human PRD/product context approved; technical questions resolved; design and human task breakdown complete. |
+| Technical planning (`work-tech-plan`) | Interview approved; PRD draft/product context available; technical questions resolved; design and human task breakdown complete. |
 | Human document review (`work-doc-review`) | Independent review of the complete human planning bundle PASS and explicit human approval of its manifest. |
 | Implementation preparation (`work-prepare`) | Human planning bundle approved and fresh; generate OpenSpec artifacts and validate fidelity before spec review. |
 | Write QA scenarios (`work-qa`) | Human planning bundle approved; OpenSpec preparation complete, independent spec/security review PASS and explicit human approval of generated specs. |
