@@ -19,7 +19,7 @@ Load when creating, reviewing, approving, transitioning, verifying, or archiving
 
 - Product route requires PRD; engineering route requires design; mixed requires both. Schema-required design is still required on product work. Human approval covers the entire spec bundle, not just the PRD title.
 - Questions affecting scope, expected behavior, compatibility, security or data integrity block approval. Explicitly accepted nonblocking assumptions remain visible.
-- Authors may use their role instructions directly if dispatch is unavailable and disclose it. Gate review and final QA verification require independent agent runs with full context; no self-review fallback. If dispatch is unavailable, mark BLOCKED.
+- Authors may use their role instructions directly if dispatch is unavailable and disclose it. Required independent gate review and final QA verification must be separate from the author/implementer; no self-review fallback. Use a separate security-engineer run only for security-sensitive changes or when a reviewer identifies a credible security risk. For routine low-risk changes, the independent reviewer checks security relevance and records why specialist review is N/A. If a required independent reviewer or QA run is unavailable, mark BLOCKED.
 
 ## Approval and freshness protocol
 
@@ -49,11 +49,11 @@ Every transition rechecks all upstream evidence. Missing, stale, FAIL, BLOCKED o
 | Verify (`work-verify`) | Implementation tasks complete; approved scope preserved; current source identity, test changes and runnable checks available. |
 | Archive (`work-archive`) | All required scenarios PASS, no unresolved review defects, OpenSpec validation PASS, independent QA and reviewer PASS for current source, explicit human archive authorization. Merge/release requires its own authorization. |
 
-- Each stage command runs its required independent review, repairs findings within approved scope, then presents one checkpoint. The human does not need to run a separate review command.
+- Each stage command runs its required independent review, repairs findings within approved scope, then presents one checkpoint. Avoid duplicate review runs: reuse a PASS only when the exact input manifest is unchanged; the human does not need to run a separate review command.
 - Stop at every human approval boundary. Do not chain past a pending decision, infer approval from silence, or treat a generic "continue" as approval of undisclosed content.
 - Material scope changes return to interview/spec. Changed QA expectations return to QA approval. Repair code within approved scope, then repeat affected verification.
-- Spec review requires a separate `security-engineer` red-team/blue-team assessment of the same input manifest before the reviewer can PASS. QA must cover its threat scenarios; subsequent gate reviews check that coverage and mitigation tasks remain intact.
-- Final verification requires a fresh independent security-engineer PASS bound to the actual source and approved planning manifests, in addition to QA/reviewer PASS. Missing dispatch, stale security evidence or unresolved security findings blocks the gate. Record security results in `review.md` and reference them from `verification.md`; no extra human approval target.
+- For security-sensitive specs, require a separate `security-engineer` red-team/blue-team assessment of the same input manifest before the reviewer can PASS; QA must cover its threat scenarios. For routine low-risk specs, the independent reviewer checks the change classification and records a concise security-N/A rationale.
+- Final verification always requires independent QA and reviewer PASS. Add a fresh security-engineer PASS bound to the current source/planning manifests only for security-sensitive changes or when a credible security issue is found. Missing required specialist evidence or unresolved findings blocks the gate. Record applicable security results in `review.md` and reference them from `verification.md`; no extra human approval target.
 
 ## Human checkpoints
 
