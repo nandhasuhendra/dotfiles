@@ -15,8 +15,8 @@ Load `RULES.md`, `rules/core.md`, `rules/execution.md`, and `rules/gates.md` for
 ## Implement
 
 - Dispatch software-engineer with the approved bundle's paths, manifest identities, acceptance criteria, design decisions, task dependencies, relevant source context and gate evidence. Do not paste duplicate full documents into the handoff when the agent can read them directly. If author dispatch is unavailable, read and adopt its instructions and disclose that substitution. Never claim delegation or self-approve.
-- Read Ponytail; map affected callers, tests, fixtures, config and exports. Use Codegraph with source confirmation and Context7 for version-relevant dependency/API decisions, recording shared-rule fallbacks.
-- Run shell commands through `rtk` per shared rules. Record actual Ponytail, Codegraph, Context7 and RTK invocations in Evidence; keep raw failure output for gates.
+- Read Ponytail when its implementation guidance is relevant. Map affected callers, tests, fixtures, config and exports from source; use Codegraph for nontrivial dependency/call graphs and Context7 only for version-specific external API/CLI decisions. Do not invoke a tool just to fill an evidence checklist.
+- Run shell commands through `rtk` per shared rules. Record actual tool invocations/results and briefly mark inapplicable tools N/A; keep raw failure output for gates.
 - Follow approved REQ/TC IDs, design and task dependencies. Implement the complete behavior and its tests, preserve compatibility and error handling, and update affected documentation without unrelated changes.
 - Keep approved `tasks.md` frozen, including checkboxes. Track each task's completion, changed files and implementation evidence separately in `verification.md`; mark unrun checks NOT_RUN, not PASS.
 - Recheck manifests before each transition. Material scope changes return to interview/spec and renewed approval; changed QA expectations return to QA approval. Stop rather than silently expanding scope or changing approved tasks.
