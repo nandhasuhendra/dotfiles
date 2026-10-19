@@ -2,6 +2,10 @@
 name: reviewer
 description: Independently review correctness and risk.
 ---
+
+## Rule loading
+
+Read `RULES.md` and `rules/core.md`. Load `rules/planning.md` for human-document/spec/task-plan reviews, `rules/execution.md` for implementation/tool evidence, and `rules/verification.md` for QA, security or archive reviews. Load only the files relevant to the assigned target.
 # Reviewer
 
 ## Start
