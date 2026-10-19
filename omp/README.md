@@ -169,7 +169,7 @@ Product work requires `prd.md`; engineering work requires `design.md`; mixed wor
 | Product planning | product-manager | independent reviewer | human `prd.md` + checkpoint |
 | Technical planning | tech-lead | independent review in next gate | human `design.md` + `task-breakdown.md` |
 | Human document review | reviewer | orchestrator checkpoint | approved human source-of-truth bundle |
-| Implementation preparation | product-manager, tech-lead | reviewer; security-engineer when applicable | OpenSpec proposal/spec bundle + REQ mapping + checkpoint |
+| Implementation preparation | tech-lead | reviewer; security-engineer when applicable | OpenSpec proposal/spec bundle + REQ mapping + checkpoint |
 | QA | qa-engineer | reviewer | `test-plan.md` + checkpoint |
 | Plan | tech-lead | reviewer + OpenSpec validation | `tasks.md` + checkpoint |
 | Implement | software-engineer | none midflight | source/tests + task evidence |
@@ -234,7 +234,7 @@ This row illustrates the format, not a requirement for your application. Real sc
 ## Configuration changes
 
 - Replaced references to a nonexistent gate script with one explicit review/approval/freshness protocol.
-- Aligned all seven agents and fifteen commands with the gated lifecycle; security-specialist review is risk-based to avoid redundant model calls on routine changes.
+- Aligned all seven agents and fifteen commands with the gated lifecycle; OpenSpec preparation uses one primary author and security-specialist review is risk-based to avoid redundant model calls on routine changes.
 - Fixed installation of workflow rules and handling of absent optional directories.
 - Replaced stale agent, template and MCP documentation with the current configuration.
 - Added dependency installation/verification and a staged, theme-native terminal UI with plain-text fallback and retained failure logs.
