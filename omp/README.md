@@ -82,9 +82,9 @@ Installation boundaries:
 
 ### Modular shared rules
 
-- `RULES.md` is a short policy index; every stage also reads `rules/core.md`.
-- Planning stages load `rules/planning.md`; implementation loads `rules/execution.md`; verification/security/archive load `rules/execution.md` and `rules/verification.md` as applicable.
-- Agents must load only the rule files relevant to their assigned task. Do not read every stage rule by default.
+- `RULES.md` is a short policy index; every stage reads `rules/core.md`.
+- Planning stages load `rules/planning.md`; gate/approval transitions load `rules/gates.md`; implementation loads `rules/execution.md`; verification/security/archive load `rules/execution.md` and `rules/verification.md`.
+- Agents load only the rules relevant to their assigned task. Do not read every stage rule by default.
 
 ## Efficiency and adaptive effort
 
