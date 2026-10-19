@@ -4,7 +4,7 @@ Custom agents and slash commands for human-first product/technical planning, Ope
 
 ## Context and token efficiency
 
-The workflow is evidence-first without requiring every agent to load every artifact. Agents enumerate and hash all gate-bound inputs, read the complete authoritative inputs required for their decision, and retrieve supporting material only when relevant. Handoffs pass artifact paths, manifest identities, stable REQ/TC IDs, concise findings and unresolved questions instead of copying whole documents. Independent reviewers still inspect the authoritative inputs, relevant source/diff and actual evidence; context reduction never relaxes approval, freshness, coverage or verification gates.
+The workflow is evidence-first and cost-aware. One primary model authors each stage; use one independent reviewer at required gates, and invoke specialist agents only when risk requires them. Agents enumerate/hash gate-bound inputs, read authoritative inputs needed for their decision, and retrieve supporting material on demand. Handoffs pass paths, manifest identities, REQ/TC IDs and concise findings instead of duplicating documents. This reduces redundant model calls without relaxing human approvals, freshness, coverage or independent final verification.
 
 ## Install
 
@@ -61,16 +61,16 @@ File read/search/edit tools remain preferred over shell. Internal script plumbin
 
 ### Use by stage
 
-| Stage | Required tools | Evidence |
+| Stage | Use when relevant | Evidence |
 | --- | --- | --- |
-| Interview | OpenSpec, rtk | CLI versions/help, wrapped commands |
-| Spec | OpenSpec, Codegraph, Context7, Ponytail, rtk | schema, impact, library/version, smallest solution |
-| QA | OpenSpec, Codegraph, Playwright when browser, rtk | regression surface, planned flows, commands |
-| Implement | Ponytail, Codegraph, Context7, rtk | smallest change, confirmed callers, version docs, raw commands |
-| Verify | OpenSpec, Playwright when browser, rtk | validation, observed browser evidence, raw logs |
-| Security | Codegraph, Context7, Playwright when applicable, rtk | abuse paths, version behavior, browser evidence |
+| Interview | Repository instructions and existing docs; OpenSpec only if needed to clarify workflow constraints | Confirmed facts and blockers |
+| Spec | OpenSpec for schema/validation; Codegraph for nontrivial impact; Context7 for version-specific API questions | Actual results and limitations |
+| QA | Existing tests/source always; Playwright for browser behavior; Codegraph for nontrivial dependency impact | Regression surface and runnable scenarios |
+| Implement | Ponytail for implementation approach; Codegraph for nontrivial callers; Context7 for external API/version questions | Smallest solution and relevant command results |
+| Verify | OpenSpec validation; actual project tests; Playwright for browser changes | Commands, exit codes and observed outcomes |
+| Security | Security-engineer only for security-sensitive scope or a credible risk | Attack paths, mitigations and evidence |
 
-Record each actual invocation in the handoff `Evidence` line, or mark it N/A with a reason. Naming a tool without running it is not use.
+Do not invoke a tool solely to fill an evidence checklist. Record each actual invocation and result; mark genuinely inapplicable tools N/A with a short reason. Never claim a tool ran when it did not.
 
 Installation boundaries:
 
@@ -90,7 +90,7 @@ Installation boundaries:
 
 `/work-new` classifies each change as **focused** or **full** and records the rationale in `interview.md`. Focused is for localized, low-risk, behavior-preserving engineering work: short Tech Doc and task breakdown, targeted repository inspection and compact handoffs. Full is for new behavior, migrations, cross-module or security-sensitive work and uncertain impact. Escalate focused to full when evidence reveals broader risk.
 
-Both modes preserve independent review, human approvals, OpenSpec validation, QA planning and independent verification. Focused mode is **not** a shortcut past safety gates; it reduces document verbosity and unnecessary context. Shared policy and approved artifacts may be reused within a continuous session when unchanged, but each independent agent must inspect its authoritative inputs. Track actual token/call/time data before claiming savings.
+Both modes preserve human approval, required gate review, OpenSpec validation, QA planning and independent final verification. Focused mode reduces document verbosity, unnecessary tool calls and specialist fan-out; it is not a gate bypass. Security-engineer review is mandatory only for security-sensitive scope or credible risks; otherwise the reviewer records why it is not applicable. Reuse unchanged artifacts within a session and measure actual token/call/time data before claiming savings.
 
 ## Human-first command sequence
 
@@ -169,11 +169,11 @@ Product work requires `prd.md`; engineering work requires `design.md`; mixed wor
 | Product planning | product-manager | independent reviewer | human `prd.md` + checkpoint |
 | Technical planning | tech-lead | independent review in next gate | human `design.md` + `task-breakdown.md` |
 | Human document review | reviewer | orchestrator checkpoint | approved human source-of-truth bundle |
-| Implementation preparation | product-manager, tech-lead | security-engineer, reviewer | OpenSpec proposal/spec bundle + REQ mapping + checkpoint |
+| Implementation preparation | product-manager, tech-lead | reviewer; security-engineer when applicable | OpenSpec proposal/spec bundle + REQ mapping + checkpoint |
 | QA | qa-engineer | reviewer | `test-plan.md` + checkpoint |
 | Plan | tech-lead | reviewer + OpenSpec validation | `tasks.md` + checkpoint |
 | Implement | software-engineer | none midflight | source/tests + task evidence |
-| Verify | qa-engineer, security-engineer | reviewer | `verification.md` + archive checkpoint |
+| Verify | qa-engineer | reviewer; security-engineer when applicable | `verification.md` + archive checkpoint |
 | Archive | orchestrator | OpenSpec validation | archived change |
 
 Every author returns the shared handoff block from `RULES.md`. The orchestrator runs the review, presents one checkpoint and records the human reply; no author records approval.
@@ -192,7 +192,7 @@ Replace `change-slug` with the slug recorded by the interview. Each stage comman
 | QA plan | `/work-qa change-slug` | Positive, negative, boundary and regression scenarios; review, then approval. |
 | Plan | `/work-plan change-slug` | Tasks linked to REQ/TC IDs, OpenSpec validation and review, then approval. |
 | Implement | `/work-implement change-slug` | Implement approved tasks, then run independent verification automatically. |
-| Verify | `/work-verify change-slug` | QA, security-engineer and reviewer evidence per scenario; present archive authorization. |
+| Verify | `/work-verify change-slug` | Independent QA and reviewer evidence; security specialist when risk warrants; present archive authorization. |
 | Close | `/work-archive change-slug` | Requires verification PASS and explicit archive authorization. Does not authorize merge/deploy. |
 
 Every checkpoint offers the same replies:
