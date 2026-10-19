@@ -79,6 +79,13 @@ Installation boundaries:
 - Chromium no longer uses a machine-specific executable path. The existing `--no-sandbox` policy remains explicit in config and installer output: use trusted test content or an isolated environment.
 - Linux may need Chromium OS libraries. Browser launch errors remain in the full log; install the reported platform libraries and rerun rather than treating a browser download as a successful launch.
 
+
+### Modular shared rules
+
+- `RULES.md` is a short policy index; every stage also reads `rules/core.md`.
+- Planning stages load `rules/planning.md`; implementation loads `rules/execution.md`; verification/security/archive load `rules/execution.md` and `rules/verification.md` as applicable.
+- Agents must load only the rule files relevant to their assigned task. Do not read every stage rule by default.
+
 ## Efficiency and adaptive effort
 
 `/work-new` classifies each change as **focused** or **full** and records the rationale in `interview.md`. Focused is for localized, low-risk, behavior-preserving engineering work: short Tech Doc and task breakdown, targeted repository inspection and compact handoffs. Full is for new behavior, migrations, cross-module or security-sensitive work and uncertain impact. Escalate focused to full when evidence reveals broader risk.
