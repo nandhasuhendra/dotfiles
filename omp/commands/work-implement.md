@@ -1,6 +1,10 @@
 ---
 description: Implement an approved change.
 ---
+## Rule loading
+
+Load `RULES.md`, `rules/core.md`, and `rules/execution.md`; do not load unrelated stage rules.
+
 ## Load and gate
 
 - Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates and freshness protocol.
