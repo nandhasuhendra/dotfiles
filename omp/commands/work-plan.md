@@ -15,10 +15,10 @@ Load `RULES.md`, `rules/core.md`, `rules/planning.md`, and `rules/gates.md` for 
 
 - Dispatch tech-lead with the approved bundle. If author dispatch is unavailable, adopt its instructions and disclose it.
 - Inspect installed OpenSpec help/config/schema instructions; create or update its `tasks.md` format, preserving existing artifact content unless a reviewed change is needed.
-- Run shell commands through `rtk` per shared rules. Record actual OpenSpec, Ponytail, Codegraph, Context7 and RTK invocations in Evidence; keep raw failure output for gates.
+- Run shell commands through `rtk` per shared rules. Validate OpenSpec using its installed CLI. Use Ponytail for implementation approach, Codegraph for nontrivial call/dependency impact, and Context7 for version-specific external API questions only when relevant. Do not invoke tools solely to populate Evidence; record actual use and mark inapplicable tools N/A briefly.
 - Resolve/read `TASK-BREAKDOWN.md` through shared template rules and pass it to tech-lead. Use it as a handoff/content checklist within the installed OpenSpec task format, not a replacement schema.
 - Produce small ordered implementation and test tasks linked to `REQ-`/`TC-` IDs, affected files/callers, dependencies, acceptance evidence and rollout/rollback. Include independent verification and real smoke coverage, with Playwright for browser changes.
-- Read Ponytail and use confirmed source/Codegraph impact to choose the smallest complete implementation. Record dependency limitations, assumptions and blocking questions.
+- Choose the smallest complete implementation from repository conventions and confirmed source impact. Read Ponytail and use Codegraph only when the task's complexity or dependency surface warrants them. Record dependency limitations, assumptions and blocking questions.
 - Record the full planning-bundle input manifest. Any changed task wording or upstream scope requires renewed affected review/approval; do not alter approved artifacts to force readiness.
 - No application code, production configuration, migrations or implementation tests.
 
