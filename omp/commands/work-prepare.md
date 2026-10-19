@@ -14,7 +14,7 @@ description: Translate approved human planning documents into OpenSpec and agent
 ## Prepare agent specifications
 
 - Read the approved `interview.md`, `prd.md` when applicable, `design.md` when applicable, and `task-breakdown.md` in full.
-- Use product-manager and tech-lead to translate approved intent into the installed OpenSpec schema's `proposal.md`, delta `specs/**/spec.md`, and any required design artifacts. These are derived execution specifications, not replacements for human documents.
+- Use tech-lead as the single primary author to translate approved intent into the installed OpenSpec schema's `proposal.md`, delta `specs/**/spec.md`, and required design artifacts. Consult product-manager only if a material product-requirement interpretation remains, and stop for human clarification rather than inventing intent. These are derived execution specifications, not replacements for human documents.
 - Preserve approved REQ IDs, acceptance criteria, scope, non-goals, assumptions and decisions. Link every agent requirement to its human source. Do not silently add scope, remove criteria or change technical decisions.
 - If the schema requires details not settled in human documents, stop and return to planning; do not invent material behavior.
 - Validate using the installed OpenSpec command discovered from actual help. Record invocation, exit status and full failure evidence. Do not create agent implementation tasks in this stage.
