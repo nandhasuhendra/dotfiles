@@ -1,6 +1,6 @@
 # OMP engineering workflow
 
-Custom agents and slash commands for requirements, approval, QA and implementation. Shared policy: [RULES.md](RULES.md).
+Custom agents and slash commands for human-first product/technical planning, OpenSpec preparation, QA and implementation. Shared policy: [RULES.md](RULES.md).
 
 ## Context and token efficiency
 
@@ -79,14 +79,14 @@ Installation boundaries:
 - Chromium no longer uses a machine-specific executable path. The existing `--no-sandbox` policy remains explicit in config and installer output: use trusted test content or an isolated environment.
 - Linux may need Chromium OS libraries. Browser launch errors remain in the full log; install the reported platform libraries and rerun rather than treating a browser download as a successful launch.
 
-## Document templates
+## Human-first command sequence\n\n| Step | Command | Output and gate |\n| --- | --- | --- |\n| 1. Interview | `/work-new <request>` | Gather requirements and approve the interview. No OpenSpec specs yet. |\n| 2. Product planning | `/work-product-plan <slug>` | Human-readable `prd.md` when applicable; approve product intent. |\n| 3. Technical planning | `/work-tech-plan <slug>` | Human-readable `design.md` and `task-breakdown.md`. |\n| 4. Human document review | `/work-doc-review <slug>` | Independent review and approval of the complete human planning bundle. |\n| 5. Implementation preparation | `/work-prepare <slug>` | Translate approved docs into OpenSpec artifacts, validate REQ traceability, review and approve. |\n| 6. QA planning | `/work-qa <slug>` | Agent-ready scenarios derived from approved requirements; review and approval. |\n| 7. Agent task planning | `/work-plan <slug>` | OpenSpec-compatible `tasks.md` linked to REQ/TC IDs; review and approval. |\n| 8. Build and verify | `/work-implement <slug>` then verification | Implement approved tasks; verify real evidence, regressions and security. |\n| 9. Complete | `/work-archive <slug>` | Requires final verification and explicit archive authorization; merge/release remains separate. |\n\n**Important:** `task-breakdown.md` is for people; `tasks.md` is the agent-ready execution checklist. Human planning docs are the source of truth. If OpenSpec preparation discovers an unresolved material decision or changes approved intent, return to planning and re-review.\n\n## Document templates
 
 | Template | Output / author | Command |
 | --- | --- | --- |
-| [PRD](templates/PRD.md) | `prd.md` / product-manager | `/work-spec <slug>` on product/mixed work |
-| [Tech Doc](templates/TECH-DOC.md) | `design.md` / tech-lead | `/work-spec <slug>` when design is required |
+| [PRD](templates/PRD.md) | `prd.md` / product-manager | `/work-product-plan <slug>` |
+| [Tech Doc](templates/TECH-DOC.md) | `design.md` / tech-lead | `/work-tech-plan <slug>` |
 | [QA Test Case Scenarios](templates/QA-TEST-CASES.md) | `test-plan.md` / qa-engineer | `/work-qa <slug>` after spec approval |
-| [Task Breakdown](templates/TASK-BREAKDOWN.md) | `tasks.md` / tech-lead | `/work-plan <slug>` after QA-plan approval |
+| [Task Breakdown](templates/TASK-BREAKDOWN.md) | `task-breakdown.md` / tech-lead | `/work-tech-plan <slug>` |
 
 Adapted from the supplied EVA document templates and embedded QA scenarios, retaining structure rather than EVA-specific repositories, frameworks, tenant policies or CRUD ordering. They use short sections, observable acceptance criteria and stable REQ/TC/SEC/task links.
 
@@ -136,7 +136,7 @@ Product work requires `prd.md`; engineering work requires `design.md`; mixed wor
 | Stage | Author | Independent check | Handoff |
 | --- | --- | --- | --- |
 | Interview | interviewer | reviewer | `interview.md` + checkpoint |
-| Specify | product-manager, tech-lead | security-engineer, reviewer | `prd.md`/`design.md` + OpenSpec bundle + checkpoint |
+| Product planning | product-manager | independent reviewer | human `prd.md` + checkpoint |\n| Technical planning | tech-lead | independent review in next gate | human `design.md` + `task-breakdown.md` |\n| Human document review | reviewer | orchestrator checkpoint | approved human source-of-truth bundle |\n| Implementation preparation | product-manager, tech-lead | security-engineer, reviewer | OpenSpec proposal/spec bundle + REQ mapping + checkpoint |
 | QA | qa-engineer | reviewer | `test-plan.md` + checkpoint |
 | Plan | tech-lead | reviewer + OpenSpec validation | `tasks.md` + checkpoint |
 | Implement | software-engineer | none midflight | source/tests + task evidence |
@@ -152,7 +152,7 @@ Replace `change-slug` with the slug recorded by the interview. Each stage comman
 | Step | Command | Result / checkpoint |
 | --- | --- | --- |
 | Interview | `/work-new <request>` | Ask adaptive questions until requirements fit; write `interview.md`, review, then ask for approval. |
-| Specify | `/work-spec change-slug` | PRD/design plus OpenSpec proposal and delta specs; security and reviewer PASS, then approval. |
+| Product planning | `/work-product-plan change-slug` | Human PRD. |\n| Technical planning | `/work-tech-plan change-slug` | Human Tech Doc and task breakdown. |\n| Human doc review | `/work-doc-review change-slug` | Independent review and approval of human docs. |\n| Implementation prep | `/work-prepare change-slug` | Translate approved docs to OpenSpec specs; validate and review. |
 | QA plan | `/work-qa change-slug` | Positive, negative, boundary and regression scenarios; review, then approval. |
 | Plan | `/work-plan change-slug` | Tasks linked to REQ/TC IDs, OpenSpec validation and review, then approval. |
 | Implement | `/work-implement change-slug` | Implement approved tasks, then run independent verification automatically. |
