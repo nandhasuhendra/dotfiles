@@ -3,7 +3,7 @@ description: Create traceable QA scenarios.
 ---
 ## Rule loading
 
-Load `RULES.md`, `rules/core.md`, and `rules/planning.md` only; follow the rule index for any additional stage-specific requirements.
+Load `RULES.md`, `rules/core.md`, `rules/planning.md`, and `rules/gates.md`.
 
 ## Load and gate
 
