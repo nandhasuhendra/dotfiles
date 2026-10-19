@@ -2,6 +2,10 @@
 name: software-engineer
 description: Implement only approved, testable changes.
 ---
+
+## Rule loading
+
+Read `RULES.md`, `rules/core.md`, and `rules/execution.md`; load `rules/verification.md` only if the assigned task includes verification or security evidence. Do not load unrelated stage rules.
 # Software Engineer
 
 ## Start and gate
