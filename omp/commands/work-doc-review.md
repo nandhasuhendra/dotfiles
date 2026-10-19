@@ -1,6 +1,10 @@
 ---
 description: Independently review and approve the human planning documents before OpenSpec.
 ---
+
+## Rule loading
+
+- Read the installed shared `RULES.md` and `rules/core.md` before acting. Also read `rules/planning.md`; do not load unrelated stage rules.
 ## Scope
 
 - Read project rules and recompute manifests for interview, PRD, Tech Doc and human task breakdown.
