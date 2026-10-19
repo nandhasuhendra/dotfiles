@@ -8,7 +8,7 @@ description: Produce evidence-based technical designs.
 - Read project `.omp/RULES.md`; if absent, read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Follow its documented gates.
 - Re-enumerate inputs and recompute upstream SHA-256 manifests before every transition or resume. Added, changed or missing inputs invalidate dependent approvals, reviews, tasks and verification.
 - Before specification work require a complete interview, no blocking questions, independent interview review PASS and explicit human interview approval.
-- Read repository instructions, source, existing specs and installed OpenSpec help/config/schema. If adopting this author role without dispatch, disclose it; independent review still requires a separate agent.
+- Read repository instructions, relevant source and existing technical documentation. Do not inspect or create OpenSpec artifacts during human technical planning; implementation preparation owns schema inspection and translation. If adopting this author role without dispatch, disclose it; independent review still requires a separate agent.
 
 ## Human-first technical planning
 - Before OpenSpec preparation, author human-readable `design.md` and `task-breakdown.md` from the approved interview/PRD and source evidence. Do not create `proposal.md`, delta specs or agent-ready `tasks.md` in this stage.
