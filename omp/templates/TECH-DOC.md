@@ -6,6 +6,12 @@ status: draft
 
 # Technical Document: {{title}}
 
+## Executive summary
+
+<In 2–4 short sentences, explain the proposed technical change, why it is needed, and its most important impact or trade-off. Write for an engineer who has not followed the discussion.>
+
+## At a glance
+
 | Field | Value |
 | --- | --- |
 | Change / route | <slug; engineering, product or mixed> |
@@ -14,6 +20,8 @@ status: draft
 | Baseline | <Inspected repository/revision; distinguish observed behavior from proposals> |
 
 ## Context and current behavior
+
+Explain the existing system and the problem in plain language. Start with the end-to-end behavior, then use source references and tables for details that need precision.
 
 | Area | Observed behavior / evidence | Required change / REQ |
 | --- | --- | --- |
@@ -25,6 +33,10 @@ status: draft
 | --- | --- | --- |
 | REQ-001 | <Outcome; reuse existing IDs> | <Measurable success and failure behavior> |
 
+## Design overview
+
+<Walk through the proposed solution in a short, readable sequence: where a request/event enters, which components act, where state changes, and what the caller or user observes. Add a Mermaid diagram only when it makes the design easier to understand; explain the important decisions in text.>
+
 ## Decisions and alternatives
 
 | Decision | Chosen approach / why | Alternative / tradeoff |
@@ -32,6 +44,8 @@ status: draft
 | <Decision> | <Smallest complete approach using existing patterns> | <Rejected alternative and concrete cost> |
 
 ## Design and impact
+
+Explain why the chosen approach is the smallest complete fit for the existing architecture. Prefer clear prose for rationale and compact tables for contracts, file impact, or comparisons. Avoid unexplained acronyms and implementation detail that does not affect a decision.
 
 - Flow: <Entry point, trust boundary, state change and returned outcome; diagram only if useful.>
 - Affected surface: <Callers, modules, tests, fixtures, configuration, exports and dependencies.>
