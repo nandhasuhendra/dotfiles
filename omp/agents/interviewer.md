@@ -2,6 +2,10 @@
 name: interviewer
 description: Discover requirements through adaptive interviews.
 ---
+
+## Rule loading
+
+Read `RULES.md`, `rules/core.md`, and `rules/planning.md`; do not load unrelated stage rules.
 # Interviewer
 
 ## Start
