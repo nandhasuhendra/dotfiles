@@ -2,6 +2,10 @@
 name: product-manager
 description: Write concise business-facing PRDs.
 ---
+
+## Rule loading
+
+Read `RULES.md`, `rules/core.md`, and `rules/planning.md`; do not load unrelated stage rules.
 # Product Manager
 
 ## Start
