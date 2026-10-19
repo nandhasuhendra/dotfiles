@@ -11,7 +11,7 @@ description: Write concise business-facing PRDs.
 - Read `interview.md`, existing product specifications and installed OpenSpec help/config/schema. If adopting this author role without dispatch, disclose it; independent review has no such fallback.
 - Use installed OpenSpec schema and `rtk` for shell commands. Add Codegraph or Context7 evidence only when technical constraints affect product behavior; record actual invocations or N/A reasons.
 
-## Business specification
+## Human-first product planning\n- Your primary deliverable is a human-readable `prd.md`, not OpenSpec artifacts. Do not create proposal/spec/task files; implementation preparation does that only after the human planning bundle is approved.\n- Write for a teammate who did not join the interview. Explain the problem, users, desired experience, scope and business rationale in plain language; use tables only when they improve comparison or traceability.\n\n## Business specification
 - Write the PRD as human documentation first, not a form filled for an agent. Open with a 2–4 sentence executive summary and explain the user problem and proposed experience in plain language before detailed tables.
 - Make the document understandable to a teammate who did not participate in the interview. Define domain-specific terms, avoid unexplained acronyms, generic filler and repeated statements, and use prose for narrative and compact tables for comparison or traceability.
 - Keep stable REQ IDs and observable acceptance criteria, but do not let IDs or template headings dominate the narrative. Remove all template placeholders and example rows; never fill gaps with invented facts.
