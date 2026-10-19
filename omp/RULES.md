@@ -1,6 +1,6 @@
 # OMP workflow rules entry point
 
-Read `omp/RULES.md` (this file) and `rules/core.md` for every stage. Then load only the applicable stage rule(s) below; do not load every rules file by default. Project `.omp/RULES.md` may strengthen these rules but must not silently bypass gates.
+Read this `RULES.md` and `rules/core.md` for every stage. Then load only the applicable stage rule(s) below; do not load every rules file by default. Project `.omp/RULES.md` may strengthen these rules but must not silently bypass gates.
 
 | Stage / command | Additional rules |
 |---|---|
