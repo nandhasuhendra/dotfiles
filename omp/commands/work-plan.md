@@ -3,7 +3,7 @@ description: Produce implementation task breakdown.
 ---
 ## Rule loading
 
-Load `RULES.md`, `rules/core.md`, and `rules/planning.md`; do not load unrelated stage rules.
+Load `RULES.md`, `rules/core.md`, `rules/planning.md`, and `rules/gates.md` for approval/freshness checks.
 
 ## Load and gate
 
