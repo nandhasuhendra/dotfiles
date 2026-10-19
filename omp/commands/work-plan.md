@@ -11,13 +11,17 @@ description: Produce implementation task breakdown.
 
 - Dispatch tech-lead with the approved bundle. If author dispatch is unavailable, adopt its instructions and disclose it.
 - Inspect installed OpenSpec help/config/schema instructions; create or update its `tasks.md` format, preserving existing artifact content unless a reviewed change is needed.
+- Run shell commands through `rtk` per shared rules. Record actual OpenSpec, Ponytail, Codegraph, Context7 and RTK invocations in Evidence; keep raw failure output for gates.
 - Resolve/read `TASK-BREAKDOWN.md` through shared template rules and pass it to tech-lead. Use it as a handoff/content checklist within the installed OpenSpec task format, not a replacement schema.
 - Produce small ordered implementation and test tasks linked to `REQ-`/`TC-` IDs, affected files/callers, dependencies, acceptance evidence and rollout/rollback. Include independent verification and real smoke coverage, with Playwright for browser changes.
 - Read Ponytail and use confirmed source/Codegraph impact to choose the smallest complete implementation. Record dependency limitations, assumptions and blocking questions.
 - Record the full planning-bundle input manifest. Any changed task wording or upstream scope requires renewed affected review/approval; do not alter approved artifacts to force readiness.
-- Run installed OpenSpec validation as documented by its help and record the actual command/result. No application code, production configuration, migrations or implementation tests.
+- No application code, production configuration, migrations or implementation tests.
 
-## Handoff
+## Review and checkpoint
 
-- Record planning/validation evidence, risks and next gate in the planning artifacts.
-- Next: `/work-review $1 tasks`, then `/work-approve $1 tasks` binding the entire planning bundle. Stop before implementation until that explicit human approval is current.
+- After planning, run installed OpenSpec validation and record the actual result. Dispatch the independent tasks reviewer; repair CHANGES_REQUESTED once and re-review, then present findings if still failing.
+- On PASS, present the shared checkpoint with `tasks.md`, validation result, complete planning-bundle manifest and the options `approve`, `approve stop`, `reject: <reason>`, `revisit: <question/stage>`, `pause`.
+- `approve`: record tasks approval with the shared protocol, then continue to `/work-implement $1` in the same turn. `approve stop`: record and stop.
+- `reject` routes to tech-lead with the reason; `revisit` reopens the named plan/spec question and invalidates dependent records; `pause` points to `/work-resume $1`.
+- Do not require the human to run `/work-review` or `/work-approve` after this command.

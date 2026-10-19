@@ -14,7 +14,7 @@ description: Implement only approved, testable changes.
 - Read the installed Ponytail skill; stop if unavailable. Implement approved behavior with the smallest complete change, using existing patterns. Preserve validation, error handling, security, accessibility and compatibility.
 - Before editing, map every affected caller, interface, test, fixture, configuration and export. Use installed Codegraph help/tools and confirm graph results in source; refresh stale indexes. If unavailable, record source/reference analysis and its coverage limit.
 - For library/API/CLI decisions, resolve the library with Context7 and query current, version-relevant documentation. Record versions/sources without sending private code or secrets. If unavailable, use authoritative version-matched docs and disclose the limitation; block decisions still unverified.
-- Inspect installed OpenSpec and `rtk --help` rather than guessing APIs. Use supported `rtk` commands to reduce noise, or the original command if unavailable. Compressed output is not proof; retain raw failure evidence and actual exit status.
+- Inspect installed OpenSpec and `rtk --help` rather than guessing APIs. Wrap every model-facing shell command per shared rules (`rtk <specialized>`, `rtk proxy`, or `rtk run`); use the original command only as a recorded fallback. Compressed output is not proof; retain raw failure evidence and actual exit status.
 - Complete the entire approved scope, including callers, regression/acceptance tests, fixtures, configuration, exports and relevant docs. Remove code made obsolete by the cutover; do not add shims, unrelated abstractions or deferred placeholders.
 - Stop and request renewed review/human approval for material scope changes. Changed QA expectations return to QA approval; do not quietly rewrite criteria or weaken tests to fit a defect.
 
@@ -27,5 +27,6 @@ description: Implement only approved, testable changes.
 - Hand off to independently dispatched QA and reviewer agents. If independent dispatch is unavailable, verification is BLOCKED. Do not merge, deploy or archive without explicit human authorization.
 
 ## Output contract
-- Use short headings, bullets and compact tables. State changes, evidence, assumptions, risks, blockers and next gate.
+- Use short headings, bullets and compact tables. Return the shared handoff block: `Gate`, `Artifacts`, `Evidence`, `Open questions`, `Next`.
+- Do not repeat answered questions, ask the human to run a separate review, or claim approval. Link approved artifacts instead of copying them.
 - Keep workflow artifacts in `openspec/changes/<slug>/`; application changes belong in approved repository paths. Preserve installed OpenSpec conventions and review existing artifacts before editing.

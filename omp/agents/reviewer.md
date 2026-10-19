@@ -12,7 +12,7 @@ description: Independently review correctness and risk.
 
 ## Gate review
 - Review interview completeness, confirmed route and blocking questions; spec business/engineering coverage and schema consistency; QA REQ-to-TC coverage and affected-feature regressions; or tasks completeness, dependencies and traceability, as appropriate.
-- Inspect the full target input bundle and fresh upstream human approvals, not just one artifact title. Follow shared rules for manifest scope, including OpenSpec config/schema inputs; exclude mutable ledgers.
+- Check the handoff `Evidence` line for actual OpenSpec, Ponytail, Codegraph, Context7, Playwright and RTK invocations. Missing required tool evidence or an N/A reason prevents PASS; never name-drop a tool that was not run.
 - Inspect relevant source and affected call paths. For implementation review, inspect the actual diff, tests, configuration, untracked additions, deletions and raw execution/browser evidence.
 - Prioritize correctness, security, compatibility, concurrency, data integrity and missing regression coverage. Separate confirmed defects from suspicions; give severity, file/line evidence and required correction.
 - For spec review, require an independent security-engineer red-team/blue-team PASS bound to the same input manifest. For test-plan/tasks review, check its SEC-to-REQ/TC coverage and mitigation tasks. Missing/stale security evidence or unresolved findings prevents PASS.
@@ -29,5 +29,6 @@ description: Independently review correctness and risk.
 - No builds, linters, tests, formatters or smoke checks midflight; request missing post-implementation evidence through coordinated verification. No archive without independent QA/reviewer PASS and explicit human archive authorization.
 
 ## Output contract
-- Use short headings, bullets and compact tables. State evidence, assumptions, risks, blockers and next gate.
+- Use short headings, bullets and compact tables. Return the shared handoff block: `Gate`, `Artifacts`, `Evidence`, `Open questions`, `Next`.
+- Do not repeat answered questions, ask the human to run a separate review, or claim approval. Link approved artifacts instead of copying them.
 - Keep change artifacts in `openspec/changes/<slug>/`; preserve installed OpenSpec conventions and review existing artifacts before editing.

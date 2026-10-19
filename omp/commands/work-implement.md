@@ -12,6 +12,7 @@ description: Implement an approved change.
 
 - Dispatch software-engineer with the approved bundle and gate evidence. If author dispatch is unavailable, read and adopt its instructions and disclose that substitution. Never claim delegation or self-approve.
 - Read Ponytail; map affected callers, tests, fixtures, config and exports. Use Codegraph with source confirmation and Context7 for version-relevant dependency/API decisions, recording shared-rule fallbacks.
+- Run shell commands through `rtk` per shared rules. Record actual Ponytail, Codegraph, Context7 and RTK invocations in Evidence; keep raw failure output for gates.
 - Follow approved REQ/TC IDs, design and task dependencies. Implement the complete behavior and its tests, preserve compatibility and error handling, and update affected documentation without unrelated changes.
 - Keep approved `tasks.md` frozen, including checkboxes. Track each task's completion, changed files and implementation evidence separately in `verification.md`; mark unrun checks NOT_RUN, not PASS.
 - Recheck manifests before each transition. Material scope changes return to interview/spec and renewed approval; changed QA expectations return to QA approval. Stop rather than silently expanding scope or changing approved tasks.
@@ -20,4 +21,6 @@ description: Implement an approved change.
 ## Handoff
 
 - Record completed task evidence, deviations, remaining risks, runnable raw check/smoke commands and next gate in `verification.md`.
-- Next: `/work-verify $1` only after every implementation task is complete. No archive, merge or release authorization is implied.
+- When every implementation task is complete, continue to independent verification (`/work-verify $1`) in the same turn. Do not ask the human to run it.
+- If verification cannot start because approved scope changed, tasks are incomplete, required checks are missing or independent dispatch is unavailable, stop BLOCKED with the exact reason.
+- No archive, merge or release authorization is implied by implementation or verification.

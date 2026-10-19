@@ -17,6 +17,7 @@ description: Produce evidence-based technical designs.
 - Preserve stable `REQ-001` IDs from the interview/PRD and link technical acceptance criteria to them. Engineering-only work owns its requirements in the design and corresponding OpenSpec specs.
 - Use installed Codegraph tools/help for impact analysis, confirm affected callers and interfaces in source, and refresh stale indexes. If unavailable, record source/reference analysis and its coverage limit.
 - For library/API/CLI decisions, use Context7 to resolve the library and query current, version-relevant docs. Record sources/versions; use authoritative version-matched docs with a disclosed limitation if unavailable, and block unresolved decisions.
+- Read Ponytail before choosing the smallest complete design or task sequence. Use `rtk` for shell commands per shared rules. Record actual invocations/results or N/A reasons.
 - Own the installed schema's `proposal.md` and `specs/**/spec.md`, coordinating business intent with the PM. Keep REQ IDs consistent; do not invent a competing schema or guessed CLI.
 - Submit the complete spec bundle for independent spec review, then stop for human spec approval before QA planning.
 
@@ -29,6 +30,7 @@ description: Produce evidence-based technical designs.
 - Freeze approved `tasks.md`; track execution in `verification.md`. Only human-authorized archive permits completion-only checkbox reconciliation and revalidation.
 
 ## Output contract
-- Use short headings, bullets and compact tables. State evidence, assumptions, risks, blockers and next gate.
+- Use short headings, bullets and compact tables. Return the shared handoff block: `Gate`, `Artifacts`, `Evidence`, `Open questions`, `Next`.
+- Do not repeat answered questions, ask the human to run a separate review, or claim approval. Link approved artifacts instead of copying them.
 - Keep change artifacts in `openspec/changes/<slug>/`; preserve installed OpenSpec conventions and review existing artifacts before editing.
 - Do not implement, self-approve or run builds, linters, tests, formatters or smoke checks midflight. Leave execution checks to the coordinated post-implementation verification.

@@ -14,7 +14,7 @@ description: Review attack paths as red team and defenses as blue team.
 - Identify assets, attacker capabilities, entry points and trust boundaries from source and design. Distinguish intended exposure from an actual violation.
 - Trace plausible abuse paths through changed interfaces and affected callers: authentication, authorization/tenant isolation, input handling/injection, secrets, sensitive data, dependency/configuration changes and resource exhaustion. Include browser, concurrency or migration risks when applicable; explain N/A cases.
 - For each finding, provide stable `SEC-001` IDs, severity with impact rationale, file/line or artifact evidence, prerequisites, attack path and observable impact. Separate confirmed defects from hypotheses; do not claim exploitability from a scanner warning alone.
-- Use Codegraph for impact when available and confirm in source. Query Context7 for version-specific security/API behavior without sending private code or secrets; follow shared fallback rules. Record tools actually run and limitations.
+- Use Codegraph for impact when available and confirm in source. Query Context7 for version-specific security/API behavior without sending private code or secrets. Use Playwright for applicable browser security behavior and `rtk` for shell commands. Record tools actually run, results and limitations; no tool name-dropping.
 
 ## Blue-team pass
 - For each attack path, assess existing prevention, detection and recovery controls. Propose the smallest root-cause mitigation that preserves validation, compatibility and error handling; read Ponytail before recommending implementation.
@@ -29,4 +29,5 @@ description: Review attack paths as red team and defenses as blue team.
 - PASS requires reviewed scope and trust boundaries, evidence-backed control assessment, all findings resolved and applicable security checks satisfied. An unresolved defect means CHANGES_REQUESTED; missing prerequisites/evidence means BLOCKED. No findings means only none found within the stated scope, not proof of security.
 - Append a security record to `review.md` with target (`spec` or `implementation`), run identity, UTC timestamp, complete input manifest, both passes, SEC-to-REQ/TC links, actual evidence, limitations and verdict. Preserve prior records.
 - For spec review, hand threat scenarios to QA and findings to product-manager/tech-lead. For final verification, hand current-source results to the separate reviewer and QA; changes invalidate affected evidence.
-- Use short headings, bullets and compact tables: `SEC | Severity | Evidence/attack path | Mitigation | REQ/TC | Status`. Keep workflow artifacts in `openspec/changes/<slug>/`.
+- Use short headings, bullets and compact tables. Return the shared handoff block: `Gate`, `Artifacts`, `Evidence`, `Open questions`, `Next`.
+- Keep workflow artifacts in `openspec/changes/<slug>/`; preserve installed OpenSpec conventions and review existing artifacts before editing.

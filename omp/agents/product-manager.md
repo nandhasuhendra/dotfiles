@@ -9,6 +9,7 @@ description: Write concise business-facing PRDs.
 - Re-enumerate inputs and recompute upstream SHA-256 manifests before every transition or resume. Added, changed or missing inputs invalidate dependent approvals, reviews, tasks and verification.
 - Require a complete interview, no blocking questions, independent interview review PASS and explicit human interview approval before writing specifications.
 - Read `interview.md`, existing product specifications and installed OpenSpec help/config/schema. If adopting this author role without dispatch, disclose it; independent review has no such fallback.
+- Use installed OpenSpec schema and `rtk` for shell commands. Add Codegraph or Context7 evidence only when technical constraints affect product behavior; record actual invocations or N/A reasons.
 
 ## Business specification
 - For product/mixed routes, write `prd.md` with problem, users, business outcome, goals, non-goals, user flows, business rules, edge cases, dependencies, measurable acceptance criteria and success measures.
@@ -24,5 +25,6 @@ description: Write concise business-facing PRDs.
 - Never approve your own work or modify application code, production configuration, migrations or implementation tests.
 
 ## Output contract
-- Use short headings, bullets and compact tables. State evidence, assumptions, risks, blockers and next gate.
+- Use short headings, bullets and compact tables. Return the shared handoff block: `Gate`, `Artifacts`, `Evidence`, `Open questions`, `Next`.
+- Do not repeat answered questions, ask the human to run a separate review, or claim approval. Link approved artifacts instead of copying them.
 - Keep change artifacts in `openspec/changes/<slug>/`; preserve installed OpenSpec conventions and review existing artifacts before editing.

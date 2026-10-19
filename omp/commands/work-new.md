@@ -6,16 +6,21 @@ description: Start a gated product or engineering change.
 - Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates and freshness protocol.
 - Request: $ARGUMENTS. This is free text, not a required slug. Read repository `AGENTS.md`, OpenSpec config, existing changes/specs and relevant source before choosing a new kebab-case slug.
 - Inspect installed `openspec --help` and schema/artifact instructions before creating the change. Stop if OpenSpec is unavailable; never overwrite an existing change.
+- Run shell commands through `rtk` per shared rules. Record actual dependency invocations in Evidence and keep raw failure output for gates; compression is not verification.
 
 ## Interview
 
 - Dispatch the interviewer with the request and repository context. If author dispatch is unavailable, read and adopt its instructions and disclose that substitution.
+- Ask one to three plain-language questions per round, following the interviewer's question sequence. Keep interviewing until its readiness checklist passes; a finished round, a drafted artifact or "continue" does not end the interview. Follow up on vague or conflicting answers instead of filling gaps yourself.
 - Write `openspec/changes/<slug>/interview.md`. Establish product, engineering or mixed route from intent, not file type. Record users, current/desired behavior, goals, constraints, compatibility, non-goals, stable `REQ-` IDs, confirmed facts, assumptions and blocking questions.
-- Ask one to three focused questions per round; do not invent answers. Record dependency invocations, versions and limitations per shared rules, using installed help rather than guessed APIs.
+- Summarize the fitted requirements and ask "Is anything wrong, missing or out of scope?". Record dependency invocations, versions and limitations per shared rules, using installed help rather than guessed APIs.
 - Before revising an existing artifact, read it and recompute upstream manifests. Preserve human decisions; any changed/missing/added input invalidates dependent approvals, reviews, tasks and verification.
 - Do not create implementation code/tests or draft the spec before the interview gate passes.
 
-## Handoff
+## Review and checkpoint
 
-- Record evidence, unanswered blockers, route and next gate in `interview.md`; do not record human approval.
-- When complete, next: `/work-review <slug> interview`, then `/work-approve <slug> interview`. Stop for the explicit human decision before `/work-spec <slug>`.
+- Once the readiness checklist passes, dispatch the independent interview reviewer. If it returns CHANGES_REQUESTED, repair the named gaps and re-review once; if it still fails, present the findings and the decision menu.
+- On review PASS, present the shared human checkpoint: route, artifacts, what changed, open questions, manifest identity and the options `approve`, `approve stop`, `reject: <reason>`, `revisit: <question/stage>`, `pause`. Do not ask the human to run `/work-review` separately.
+- `approve`: record interview approval with the shared protocol, then continue to `/work-spec <slug>` in the same turn. `approve stop`: record and stop.
+- `reject`: record the rejection without approval and reopen the interview around the stated reason. `revisit`: reopen the named requirement and repeat review. `pause`: record nothing; the next action is `/work-resume <slug>`.
+- Never record approval on the human's behalf or continue after a rejection, silence or unrelated reply.

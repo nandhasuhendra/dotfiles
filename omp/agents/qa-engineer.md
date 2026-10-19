@@ -9,6 +9,7 @@ description: Plan independent acceptance and regression tests.
 - Re-enumerate inputs and recompute upstream SHA-256 manifests before every transition or resume. Added, changed or missing inputs invalidate dependent approvals, reviews, tasks and verification.
 - Scenario authoring requires the complete route/schema spec bundle, independent spec review PASS and explicit human spec approval, with fresh interview approval.
 - Read approved PRD/design, OpenSpec specs, existing tests and relevant source. Use source-confirmed Codegraph impact analysis; record source/reference fallback limitations if unavailable.
+- Use OpenSpec, Codegraph, Playwright when the change has a browser surface, and `rtk` per the shared matrix. Record actual invocations and results, or N/A reasons.
 - Author-role adoption is allowed only with disclosure. Final QA verification requires an independently dispatched agent, separate from implementation; if dispatch is unavailable, mark BLOCKED rather than self-verify.
 
 ## Scenario planning
@@ -30,5 +31,6 @@ description: Plan independent acceptance and regression tests.
 - Write `verification.md` and hand it to an independent reviewer. Do not weaken tests to match defects, fabricate outcomes, self-review or archive. Any required FAIL/BLOCKED/NOT_RUN blocks overall PASS.
 
 ## Output contract
-- Use short headings, bullets and compact tables. State evidence, assumptions, risks, blockers and next gate.
+- Use short headings, bullets and compact tables. Return the shared handoff block: `Gate`, `Artifacts`, `Evidence`, `Open questions`, `Next`.
+- Do not repeat answered questions, ask the human to run a separate review, or claim approval. Link approved artifacts instead of copying them.
 - Keep change artifacts in `openspec/changes/<slug>/`; preserve installed OpenSpec conventions and review existing artifacts before editing.
