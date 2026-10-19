@@ -5,6 +5,10 @@ description: Start a gated product or engineering change.
 ## Rule loading
 
 - Read the installed shared `RULES.md` and `rules/core.md` before acting. Also read `rules/planning.md`; do not load unrelated stage rules.
+
+## Rule loading
+
+- Read the installed shared `RULES.md` and `rules/core.md` before acting. Also read `rules/planning.md`; do not load unrelated stage rules.
 ## Load
 
 - Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates and freshness protocol.
