@@ -2,6 +2,10 @@
 
 Custom agents and slash commands for requirements, approval, QA and implementation. Shared policy: [RULES.md](RULES.md).
 
+## Context and token efficiency
+
+The workflow is evidence-first without requiring every agent to load every artifact. Agents enumerate and hash all gate-bound inputs, read the complete authoritative inputs required for their decision, and retrieve supporting material only when relevant. Handoffs pass artifact paths, manifest identities, stable REQ/TC IDs, concise findings and unresolved questions instead of copying whole documents. Independent reviewers still inspect the authoritative inputs, relevant source/diff and actual evidence; context reduction never relaxes approval, freshness, coverage or verification gates.
+
 ## Install
 
 From the dotfiles repository root:
@@ -151,71 +155,12 @@ Replace `change-slug` with the slug recorded by the interview. Each stage comman
 | Specify | `/work-spec change-slug` | PRD/design plus OpenSpec proposal and delta specs; security and reviewer PASS, then approval. |
 | QA plan | `/work-qa change-slug` | Positive, negative, boundary and regression scenarios; review, then approval. |
 | Plan | `/work-plan change-slug` | Tasks linked to REQ/TC IDs, OpenSpec validation and review, then approval. |
-| Implement | `/work-implement change-slug` | Implement approved tasks, then run independent verification automatically. |
-| Verify | `/work-verify change-slug` | QA, security-engineer and reviewer evidence per scenario; present archive authorization. |
-| Close | `/work-archive change-slug` | Requires verification PASS and explicit archive authorization. Does not authorize merge/deploy. |
+| Implement | `/work-implement change-slug` | Implement approved tasks; preserve scope and send to independent verification. |
+| Verify | `/work-verify change-slug` | Independent QA/security/reviewer checks and evidence; archive authorization checkpoint. |
+| Archive | `/work-archive change-slug` | Revalidate, archive only after explicit authorization. |
+| Review | `/work-review change-slug` | Review a pending gate or verification target. |
+| Approve | `/work-approve change-slug approve` | Record an explicitly supplied decision against the current manifest. |
+| Resume | `/work-resume change-slug` | Recheck manifests and resume at the first valid pending stage. |
+| View | `/work-view [change-slug]` | Read workflow artifacts in a mobile-friendly local browser. |
 
-Every checkpoint offers the same replies:
-
-| Reply | Effect |
-| --- | --- |
-| `approve` | Record the decision, then continue to the next stage. |
-| `approve stop` | Record and stop; resume later with `/work-resume change-slug`. |
-| `reject: <reason>` | Record rejection without approval and send the work back to its author. |
-| `revisit: <question/stage>` | Reopen that stage; changed inputs invalidate dependent records. |
-| `pause` | Write nothing; resume with `/work-resume change-slug`. |
-
-`/work-review change-slug <target>` is optional for a re-review or a standalone checkpoint. `/work-approve change-slug <target> [decision]` resumes a pending decision. `/work-status change-slug` shows one next action. Neither invocation nor silence counts as approval.
-
-## What makes a gate valid
-
-- `review.md` records independent PASS against actual input paths and SHA-256 digests.
-- `approvals.md` records the human decision and matching manifest. The agent recomputes it after confirmation and before every dependent transition.
-- Changed, added or deleted inputs invalidate their approval and dependent evidence. Old records remain history, not permission.
-- Approved `tasks.md` stays frozen during implementation. Execution progress goes in `verification.md`; OpenSpec checkbox completion is reconciled at authorized archive.
-- Verification identifies the actual source, including dirty/untracked changes, and records real commands, exit codes and browser observations.
-- No separate agent for required independent review/QA means BLOCKED, not self-certified PASS.
-- Security review uses two perspectives within one independent security-engineer run, not two approvals. Spec review assesses proposed defenses; final verification checks implemented defenses against real evidence. Missing security dispatch/evidence or unresolved findings blocks the gate.
-
-These gates are prompt-level policy, not executable access control. This configuration does not ship a gate script or write-blocking hook. OpenSpec validation checks schema/spec structure, not human approval or software correctness.
-
-## Readable artifacts
-
-All change artifacts live under `openspec/changes/<slug>/`. Use short sections, bullets, compact tables and paragraphs of at most three sentences. Keep confirmed facts separate from assumptions and blockers.
-
-A test scenario should fit in one row:
-
-| TC | REQ | Given | When | Then | Layer |
-| --- | --- | --- | --- | --- | --- |
-| TC-001 | REQ-001 | An existing authorized user | They submit valid input | The specified change persists and appears after reload | Integration/browser |
-
-This row illustrates the format, not a requirement for your application. Real scenarios must come from approved requirements and repository behavior.
-
-## Configuration changes
-
-- Replaced references to a nonexistent gate script with one explicit review/approval/freshness protocol.
-- Aligned all seven agents and twelve commands with the gated lifecycle and six dependency roles, including red-team/blue-team security review.
-- Fixed installation of workflow rules and handling of absent optional directories.
-- Replaced stale agent, template and MCP documentation with the current configuration.
-- Added dependency installation/verification and a staged, theme-native terminal UI with plain-text fallback and retained failure logs.
-- Added four reusable document templates, required installation and gated author/command integration; added semantic installer colors without changing plain-text behavior.
-
-## Verification
-
-- Clean-home Linux smoke installed OpenSpec, Codegraph, checksum-verified RTK, Ponytail and Playwright; Chromium rendered/read a page and Context7 completed a real MCP handshake.
-- Existing-install smoke reused working tools, installed missing tools, preserved existing rules in a backup and exposed all seven agents.
-- Earlier isolated regression checks covered backup collisions/idempotence, dependency-failure preservation and broken-shim replacement.
-- Terminal UI observed in a real 44-column PTY; redirected `NO_COLOR` and `TERM=dumb` output had no ANSI escapes. UI-only checks isolated external dependency commands; the separate installation smoke used real downloads and services.
-- Current template/color smoke installed all four templates, preserved an old template directory in backup and repeated without extra backups. Cyan/green/yellow statuses appeared in a 48-column PTY; missing-template failure showed red and stopped before dependency installation/config replacement. `NO_COLOR` and `TERM=dumb` stayed plain.
-- Template drafting smoke used actual OMP to instantiate four fictional draft documents: all three fixture requirements traced through design/QA/tasks, cases remained NOT_RUN, task checkboxes remained unchecked and no template tokens remained. No approvals or active workflow transitions were fabricated; disposable drafts were removed afterward.
-- All seven agent and twelve command frontmatter documents parsed. Actual OMP dispatch found `security-engineer`, which returned BLOCKED for missing spec/manifest inputs without probing systems or writing records.
-- Checkpoint smoke on a disposable OpenSpec workspace: `/work-review demo interview` dispatched an independent reviewer, which recorded INT-001 PASS with a matching SHA-256 manifest. Re-running the command reused that PASS and presented one menu (`approve`, `approve stop`, `reject`, `revisit`, `pause`) without recording approval. `/work-status` recommended the same single action; `/work-approve demo interview pause` wrote no approval.
-- Phone viewer smoke served a disposable `openspec/changes` fixture: index listing, rendered Markdown table, relative `.md` link, and rejection of traversal/non-Markdown paths passed.
-- Real Chromium rendered a Mermaid flowchart to `.mermaid svg` with zero console errors; the nonce policy allowed only the pinned jsDelivr module plus the inline renderer.
-- `/work-view demo` started a single-change viewer, returned HTTP 200, and `/work-view stop` stopped it. Wrapper `start`/`status`/`stop` also passed with state cleanup.
-- RTK smoke: `rtk proxy` preserved exit code 7, `rtk run` executed a pipeline and returned 2, and `rtk git`/`rtk grep` produced usable output. OMP selected the specialized `rtk git status --short --branch` route; an earlier smoke deliberately used `rtk proxy` for full output.
-- Tool-use rules and evidence requirements were updated in RULES, all agents and stage commands. They remain prompt-level instructions, not runtime enforcement.
-- The approve/reject/revisit transitions and full approval-to-archive happy path were not exercised, so approval recording and downstream continuation are not proven end-to-end. Application-specific security/browser scenarios and macOS installation were not run. Refusal and checkpoint smokes do not guarantee enforcement.
-- Checkpoint smoke fixture was disposable and uncommitted; its interview, review and workspace were removed from the repository context.
-
-Installation references: [OpenSpec](https://github.com/Fission-AI/OpenSpec), [Codegraph](https://github.com/colbymchenry/codegraph/blob/main/site/src/content/docs/getting-started/installation.md), [Ponytail](https://github.com/DietrichGebert/ponytail/blob/main/INSTALL.md), [Playwright MCP](https://github.com/microsoft/playwright-mcp), [RTK](https://github.com/rtk-ai/rtk/blob/develop/docs/guide/getting-started/installation.md).
+See [RULES.md](RULES.md) for approval freshness, evidence, tool fallbacks and safety constraints.
