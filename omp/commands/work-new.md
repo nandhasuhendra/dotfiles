@@ -4,8 +4,8 @@ description: Start a gated product or engineering change.
 ## Load
 
 - Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates and freshness protocol.
-- Request: $ARGUMENTS. This is free text, not a required slug. Read repository `AGENTS.md`, OpenSpec config, existing changes/specs and relevant source before choosing a new kebab-case slug.
-- Inspect installed `openspec --help` and schema/artifact instructions before creating the change. Stop if OpenSpec is unavailable; never overwrite an existing change.
+- Request: $ARGUMENTS. This is free text, not a required slug. Read repository `AGENTS.md`, existing human documentation and relevant source before choosing a new kebab-case slug. Do not inspect/generate OpenSpec specs during interview.
+- Create a human-planning workspace under `openspec/changes/<slug>/` only if unused. Do not create `proposal.md`, delta specs or agent tasks until the human planning bundle has passed review and approval.
 - Run shell commands through `rtk` per shared rules. Record actual dependency invocations in Evidence and keep raw failure output for gates; compression is not verification.
 
 ## Interview
@@ -21,6 +21,6 @@ description: Start a gated product or engineering change.
 
 - Once the readiness checklist passes, dispatch the independent interview reviewer. If it returns CHANGES_REQUESTED, repair the named gaps and re-review once; if it still fails, present the findings and the decision menu.
 - On review PASS, present the shared human checkpoint: route, artifacts, what changed, open questions, manifest identity and the options `approve`, `approve stop`, `reject: <reason>`, `revisit: <question/stage>`, `pause`. Do not ask the human to run `/work-review` separately.
-- `approve`: record interview approval with the shared protocol, then continue to `/work-spec <slug>` in the same turn. `approve stop`: record and stop.
+- `approve`: record interview approval with the shared protocol, then continue to `/work-product-plan <slug>` in the same turn. `approve stop`: record and stop.
 - `reject`: record the rejection without approval and reopen the interview around the stated reason. `revisit`: reopen the named requirement and repeat review. `pause`: record nothing; the next action is `/work-resume <slug>`.
 - Never record approval on the human's behalf or continue after a rejection, silence or unrelated reply.
