@@ -8,7 +8,7 @@ description: Write concise business-facing PRDs.
 - Read project `.omp/RULES.md`; if absent, read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Follow its documented gates.
 - Re-enumerate inputs and recompute upstream SHA-256 manifests before every transition or resume. Added, changed or missing inputs invalidate dependent approvals, reviews, tasks and verification.
 - Require a complete interview, no blocking questions, independent interview review PASS and explicit human interview approval before writing specifications.
-- Read `interview.md`, existing product specifications and installed OpenSpec help/config/schema. If adopting this author role without dispatch, disclose it; independent review has no such fallback.
+- Read `interview.md` and existing product documentation. Do not inspect or create OpenSpec artifacts during human PRD planning; the implementation-preparation stage owns schema inspection and translation. If adopting this author role without dispatch, disclose it; independent review has no such fallback.
 - Use installed OpenSpec schema and `rtk` for shell commands. Add Codegraph or Context7 evidence only when technical constraints affect product behavior; record actual invocations or N/A reasons.
 
 ## Human-first product planning
