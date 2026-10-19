@@ -6,6 +6,12 @@ status: draft
 
 # PRD: {{title}}
 
+## Executive summary
+
+<In 2–4 short sentences, explain the problem, who experiences it, why it matters now, and the outcome this change should deliver. Write for a teammate who has not followed the discussion.>
+
+## At a glance
+
 | Field | Value |
 | --- | --- |
 | Change / release scope | <slug and in-scope business outcome> |
@@ -13,6 +19,8 @@ status: draft
 | Product owner / approver | <Known role/person; omit this row if unknown> |
 
 ## Problem and current behavior
+
+Explain the problem in plain language before listing detailed requirements. Describe what users try to do, what happens today, and the impact. Keep observed facts separate from assumptions and proposals.
 
 - User need: <Who is affected, what fails today and why it matters.>
 - Evidence: <Observed source/prototype/user report; separate facts from proposed behavior.>
@@ -44,6 +52,10 @@ status: draft
 
 Include field/validation inventories and ownership/save boundaries only when the feature needs them; keep architecture choices in the Tech Doc.
 
+## Proposed experience
+
+<Describe the intended experience from the user's point of view. Explain what will feel different and what remains unchanged. Keep implementation details in the Tech Doc.>
+
 ## User journeys
 
 ### <Journey title>
@@ -62,6 +74,8 @@ Repeat journeys only as needed. Screenshots document observed UI, not evidence o
 | <External dependency or business choice> | <Source or explicitly proposed rule> | <Decision needed and owner role if known> |
 
 ## Acceptance and next gate
+
+Summarize what must be true for this change to be considered successful. Keep the criteria below specific enough for QA to verify; do not repeat the entire requirements table.
 
 | Release obligation | Required evidence |
 | --- | --- |
