@@ -2,6 +2,10 @@
 name: tech-lead
 description: Produce evidence-based technical designs.
 ---
+
+## Rule loading
+
+Read `RULES.md`, `rules/core.md`, and `rules/planning.md`; also read `rules/execution.md` when inspecting implementation details or dependency/tool requirements. Do not load unrelated stage rules.
 # Tech Lead
 
 ## Start
