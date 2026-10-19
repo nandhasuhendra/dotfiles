@@ -58,6 +58,9 @@ done
 for template in PRD.md TECH-DOC.md HUMAN-TASK-BREAKDOWN.md QA-TEST-CASES.md TASK-BREAKDOWN.md; do
   [[ -f "$OMP_DIR/templates/$template" ]] || die "Missing $OMP_DIR/templates/$template"
 done
+for rule in core.md planning.md execution.md verification.md; do
+  [[ -f "$OMP_DIR/rules/$rule" ]] || die "Missing $OMP_DIR/rules/$rule"
+done
 mkdir -p "$CONFIG_DIR/install-logs" "$PREFIX/bin"
 LOG_FILE="$(mktemp "$CONFIG_DIR/install-logs/$STAMP.XXXXXX")"
 WORK_DIR="$(mktemp -d)"
