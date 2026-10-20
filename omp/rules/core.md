@@ -35,6 +35,26 @@ Load for every stage. Then load only the stage and gate rules required by the as
 - Handoffs should contain change slug, route/effort, authoritative paths and digests, REQ/TC IDs, decisions, blockers and next action. Avoid transcript dumps, redundant summaries, and repeated tool/version discovery when existing evidence is current and applicable.
 - Collect per-change efficiency evidence when available: input/output tokens, agent calls, review loops, wall time and verification results. Report unknown values as unknown; RTK output reduction is not a token benchmark.
 
+
+## Stop, escalate and retry policy
+
+Stop exploration and move forward when the current decision has enough source-backed evidence to satisfy its completion condition; do not keep searching for theoretical completeness.
+
+| Stage | Stop when | Escalate or reopen when |
+|---|---|---|
+| Interview | Goals, route, constraints, non-goals, acceptance outcomes and blocking questions are explicit. | A material behavior, business rule, compatibility or data/security decision remains unknown. |
+| Repository exploration | Relevant entry points, callers, tests, contracts and risks are mapped for the proposed change. | Evidence reveals broader coupling, hidden consumers, data migration, security exposure or uncertain compatibility. |
+| Design | The approved outcome has a feasible approach, key trade-offs, dependencies and failure/rollback handling. | An unresolved alternative could materially change correctness, risk, cost or scope. |
+| Implementation | Every approved task is complete and deviations are recorded. | Scope/acceptance changes, a task cannot be completed safely, or new material risk appears. Stop and return to the relevant approval gate. |
+| Review | The assigned manifest was inspected, findings are evidence-backed, and all blocking findings are resolved. | Inputs changed, evidence is missing, or a finding cannot be resolved from available source. |
+| Verification | Every required scenario has a current result and all required independent reviews/checks pass for the current source identity. | Any required scenario is FAIL, BLOCKED or NOT_RUN, or source/artifact identity changes. |
+| Retry | A concrete failure has a likely cause and the retry targets that cause or invalidated evidence. | Repeated attempts produce no new evidence; report the blocker rather than looping or silently increasing effort. |
+
+- Before each agent/tool call, state the decision it must resolve and the evidence that would change the next action. If neither is clear, do not call it.
+- Use one targeted correction cycle for a bounded finding before broadening exploration or effort. Increase effort/model only when the remaining uncertainty is material; the operator controls model selection.
+- Re-run only checks and reviews invalidated by changed inputs, plus any dependent checks. Never reuse stale evidence or treat skipped work as PASS.
+- Do not optimize for a fixed number of calls. Stop when the gate's evidence requirements are met, not when a token budget is exhausted; if limits block required work, mark BLOCKED and hand back the exact next action.
+
 ## Load and scope
 
 - Always read the installed shared `RULES.md` and `rules/core.md`. If the repository has `.omp/RULES.md`, read it as additional project policy; it may strengthen but must not silently bypass shared gates. Stop if required shared rules or applicable project rules cannot be read.
