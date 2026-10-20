@@ -55,6 +55,16 @@ Stop exploration and move forward when the current decision has enough source-ba
 - Re-run only checks and reviews invalidated by changed inputs, plus any dependent checks. Never reuse stale evidence or treat skipped work as PASS.
 - Do not optimize for a fixed number of calls. Stop when the gate's evidence requirements are met, not when a token budget is exhausted; if limits block required work, mark BLOCKED and hand back the exact next action.
 
+
+## Caveman communication; human-quality artifacts
+
+- Use the bundled `skills/caveman/SKILL.md` communication style for routine agent-to-agent handoffs, tool status and conversational replies: answer first, remove ceremony, keep wording short, and preserve every material fact.
+- Shared core policy below is the lightweight operational form; do not repeatedly paste or reload the full skill when these rules are already in context. If the host supports skill activation, activate `caveman`; otherwise follow these rules directly.
+- Keep code, commands, paths, identifiers, numbers, units, errors, and required negations exact. Never trade away correctness, safety, traceability, uncertainty, or required evidence for fewer tokens.
+- **Do not use caveman style in persisted artifacts.** PRDs, Tech Docs, QA plans, task breakdowns, code/comments, commits, PRs, issues, approvals and other durable outputs use clear, professional prose. These outputs must stand alone for their intended human readers.
+- For human documentation, explain the problem and rationale before dense tables; define domain terms/acronyms; state decisions, trade-offs, assumptions and risks; use concise paragraphs, helpful headings and tables only when they improve comprehension. Remove filler, not meaning.
+- If brevity and clarity conflict, choose clarity. Use complete sentences for security warnings, irreversible actions, confusing situations, step sequences and questions/approval choices.
+
 ## Load and scope
 
 - Always read the installed shared `RULES.md` and `rules/core.md`. If the repository has `.omp/RULES.md`, read it as additional project policy; it may strengthen but must not silently bypass shared gates. Stop if required shared rules or applicable project rules cannot be read.
