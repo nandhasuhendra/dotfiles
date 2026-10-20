@@ -6,6 +6,21 @@ Custom agents and slash commands for human-first product/technical planning, Ope
 
 The workflow is evidence-first and cost-aware. One primary model authors each stage; use one independent reviewer at required gates, and invoke specialist agents only when risk requires them. Agents enumerate/hash gate-bound inputs, read authoritative inputs needed for their decision, and retrieve supporting material on demand. Handoffs pass paths, manifest identities, REQ/TC IDs and concise findings instead of duplicating documents. This reduces redundant model calls without relaxing human approvals, freshness, coverage or independent final verification.
 
+## Child-agent effort and delegation
+
+All seven workflow agents are configured with `thinking-level: low`, `advisor: false`, and `spawns: []`. This keeps them on the parent's model route by default, prevents nested delegation/advisor calls, and leaves orchestration and escalation to the main agent. A low-effort result is not automatically trusted: required independent reviews and verification still apply.
+
+Keep per-spawn effort overrides disabled unless intentionally needed. In the active OMP settings file (usually `$HOME/.omp/agent/config.yml`), the relevant setting is:
+
+```yaml
+task:
+  enableEffort: false
+```
+
+This setting is documented by OMP as disabled by default. If it is enabled, a task caller's `effort: hi` can override an agent's configured thinking level. Existing `task.agentModelOverrides` or `modelRoles` settings can also route agents to a different model, so review those if a child still consumes more than expected. Do not replace your entire config file just to apply this snippet.
+
+The main agent should escalate only after a concrete reason: unresolved ambiguity, conflicting evidence, significant implementation risk, or a security-sensitive change. First request a focused correction; use medium/high effort only when needed.
+
 ## Install
 
 From the dotfiles repository root:
