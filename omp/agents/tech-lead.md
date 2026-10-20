@@ -1,6 +1,9 @@
 ---
 name: tech-lead
 description: Produce evidence-based technical designs.
+thinking-level: low
+advisor: false
+spawns: []
 ---
 
 ## Rule loading
