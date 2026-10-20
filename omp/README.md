@@ -6,6 +6,13 @@ Custom agents and slash commands for human-first product/technical planning, Ope
 
 The workflow is evidence-first and cost-aware. One primary model authors each stage; use one independent reviewer at required gates, and invoke specialist agents only when risk requires them. Agents enumerate/hash gate-bound inputs, read authoritative inputs needed for their decision, and retrieve supporting material on demand. Handoffs pass paths, manifest identities, REQ/TC IDs and concise findings instead of duplicating documents. This reduces redundant model calls without relaxing human approvals, freshness, coverage or independent final verification.
 
+
+## Caveman token-efficient communication
+
+The workflow bundles the [Caveman skill](skills/caveman/SKILL.md) from [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman). Shared rules apply its concise style to routine agent communication and handoffs; the skill file is available to OMP under `skills/caveman/`.
+
+**Important distinction:** Caveman is for communication, not human documentation. PRDs, Tech Docs, QA plans, task breakdowns, code/comments, commits and PRs remain clear, professional and self-contained. Agents remove filler, not rationale, requirements, uncertainty, evidence, safety language or technical facts. The installer now requires and links the bundled skill so it cannot silently be absent.
+
 ## Model selection and quota-aware operation
 
 The operator chooses the active model per session based on availability. No workflow agent pins GPT, Claude, Gemini or DeepSeek. Child agents inherit the active model route unless the operator explicitly configures overrides. Codex OAuth can still consume usage allowances quickly even at low effort.
