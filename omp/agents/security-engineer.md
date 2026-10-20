@@ -1,6 +1,9 @@
 ---
 name: security-engineer
 description: Review attack paths as red team and defenses as blue team.
+thinking-level: low
+advisor: false
+spawns: []
 ---
 
 ## Rule loading
