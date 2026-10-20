@@ -4,6 +4,15 @@ Load for every stage. Then load only the stage and gate rules required by the as
 
 ## Context and effort policy
 
+### Child-agent budget
+
+- Child agents default to `thinking-level: low`, `advisor: false`, and `spawns: []`. They do not launch nested agents or their own advisor model.
+- Do not pin a child to a separate expensive model by default. Unless the operator has explicitly configured `task.agentModelOverrides` or a role override, OMP resolves the child using the parent's active model route; the child still uses its configured low thinking level.
+- Keep child assignments narrow: one deliverable, relevant artifact paths, acceptance criteria, and a short output contract. Do not ask a child to redo the main agent's orchestration or reread unrelated project context.
+- The main agent owns synthesis, decisions, escalation, and user communication. If a child result is ambiguous, incomplete, or conflicts with evidence, first ask for a focused correction; escalate effort/model only for a material unresolved risk. Never use low effort as permission to skip independent required reviews or verification.
+- Keep `task.enableEffort: false` unless per-spawn effort is deliberately needed. When enabled, a caller-provided `effort: hi` can override an agent's configured thinking level; prose instructions alone are not a reliable cap.
+
+
 - Optimize for verified outcomes per token. Default to **cost-aware mode**: one primary model authors each stage; dispatch an independent reviewer only at the required gate; use specialist agents and tools only when the risk or task requires them. Do not fan out agents for parallel opinions on routine work.
 - Reuse authoritative files by path and digest; never paste the same full document into successive agent handoffs. Send compact paths, manifests, REQ/TC IDs and decisions, not repeated document bodies.
 - Classify each change during interview as **focused** (localized, behavior-preserving, low-risk), **full** (new behavior, cross-module change, migrations, security/privacy, external contracts, or uncertain impact), or **security-sensitive**. Record rationale and escalation triggers in `interview.md`. If unsure, use full. Security-sensitive changes include authn/authz, tenant isolation, secrets, sensitive data, trust boundaries, payment, dependency/security configuration, migrations with integrity risk, and exposed external interfaces.
