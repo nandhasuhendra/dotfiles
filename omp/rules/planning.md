@@ -10,6 +10,10 @@ Load with `core.md` for interview, product planning, technical planning, human d
 - Define domain-specific terms, avoid unexplained acronyms, repeated paragraphs, generic filler and invented facts. Keep paragraphs short, remove unused template sections/placeholders, and state uncertainty explicitly.
 - Keep stable REQ IDs and testable acceptance criteria so downstream agents can trace and verify the work. Human readability must not weaken requirement coverage, review independence, approval gates or evidence freshness.
 
+
+- Caveman applies to agent communication only, not to the documents being authored. Write `prd.md`, `design.md`, `test-plan.md` and `task-breakdown.md` in clear professional prose for a teammate who never saw the chat; retain the 2–4 sentence executive summary, rationale, definitions, trade-offs, risks and readable examples. Concise does not mean cryptic.
+- Use the same human-first standard for OpenSpec descriptions and handoff artifacts likely to be read by maintainers. Agent-only status/handoff messages may be terse if all decisions, blockers, IDs and evidence remain explicit.
+
 ## Human-first lifecycle
 
 The workflow has two distinct documentation layers. Human planning documents are the source of truth for people; OpenSpec artifacts are derived for agent execution only after the human planning bundle has passed review and received explicit approval. Never start by drafting OpenSpec specs.
