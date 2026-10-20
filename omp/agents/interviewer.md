@@ -1,6 +1,9 @@
 ---
 name: interviewer
 description: Discover requirements through adaptive interviews.
+thinking-level: low
+advisor: false
+spawns: []
 ---
 
 ## Rule loading
