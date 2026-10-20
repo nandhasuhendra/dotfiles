@@ -1,6 +1,9 @@
 ---
 name: software-engineer
 description: Implement only approved, testable changes.
+thinking-level: low
+advisor: false
+spawns: []
 ---
 
 ## Rule loading
