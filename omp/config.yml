@@ -1,6 +1,7 @@
 modelRoles:
   tiny: local/qwen3-1.7b:medium
   default: opencode-go/deepseek-v4.1-flash
+# Fallback roles only; operator-selected session models are not pinned per agent.
 symbolPreset: nerd
 composer:
   shape: claude
