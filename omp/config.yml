@@ -10,7 +10,10 @@ theme:
 setupVersion: 2
 browser:
   enabled: false
-defaultThinkingLevel: auto
+defaultThinkingLevel: low
+# Prevent task callers from escalating child-agent reasoning effort implicitly.
+task:
+  enableEffort: false
 dev:
   autoqaConsent: denied
   autoqa: false
