@@ -31,7 +31,7 @@ bash omp/install-omp.sh
 
 Requires Linux or macOS, Node.js **20.19+**, npm, OMP, Git, curl and tar already on PATH. The installer installs missing workflow dependencies, verifies them, then replaces configuration. It never invokes `sudo` or edits your shell profile.
 
-Configuration goes into `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`. Existing `mcp.json`, `agents/`, `commands/`, `RULES.md` and `templates/` are moved to timestamped backups and replaced with current source links. Matching links remain unchanged. All five document templates are required and checked before dependency installation. Optional `skills/` and `extensions/` are linked only if present.
+Configuration goes into `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`. Existing `config.yml`, `mcp.json`, `agents/`, `commands/`, `RULES.md` and `templates/` are moved to timestamped backups and replaced with current source links. Matching links remain unchanged. All five document templates are required and checked before dependency installation. Optional `skills/` and `extensions/` are linked only if present.
 
 CLI packages go into `${NPM_CONFIG_PREFIX:-$HOME/.local}`; keep its `bin/` directory first on PATH when starting OMP. The installer prints the exact shell command. Chromium uses Playwright's managed browser cache; Ponytail uses OMP's user plugin store.
 

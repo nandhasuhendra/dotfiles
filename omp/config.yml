@@ -1,0 +1,23 @@
+modelRoles:
+  tiny: local/qwen3-1.7b:medium
+  default: opencode-go/deepseek-v4.1-flash
+symbolPreset: nerd
+composer:
+  shape: claude
+theme:
+  dark: dark-dracula
+  light: light-github
+setupVersion: 2
+browser:
+  enabled: false
+defaultThinkingLevel: auto
+dev:
+  autoqaConsent: denied
+  autoqa: false
+security:
+  enabled: true
+providers:
+  openai-codex:
+    codeMode: "off"
+telemetry:
+  otlpExportEnabled: false

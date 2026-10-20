@@ -178,7 +178,7 @@ link_config() {
 }
 
 stage 5 'Replace configuration'
-for item in mcp.json agents commands RULES.md templates; do
+for item in config.yml mcp.json agents commands RULES.md templates; do
   link_config "$item"
 done
 for item in skills extensions; do
