@@ -1,6 +1,9 @@
 ---
 name: qa-engineer
 description: Plan independent acceptance and regression tests.
+thinking-level: low
+advisor: false
+spawns: []
 ---
 
 ## Rule loading
