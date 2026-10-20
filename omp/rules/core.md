@@ -4,6 +4,17 @@ Load for every stage. Then load only the stage and gate rules required by the as
 
 ## Context and effort policy
 
+### Model-agnostic routing and delegation budget
+
+- Respect the operator-selected active model for each session; never force a provider/model in workflow prompts. Model availability and quotas may change between tasks. Subscription OAuth still has usage limits.
+- Before dispatch, prefer deterministic inspection, targeted searches and existing tests over agent calls unless independent judgment is required.
+- Preserve required independent gate reviews and final QA; batch related findings into one bounded review per gate, not speculative parallel reviews.
+- Each delegation specifies one outcome, exact artifact paths, relevant REQ/TC IDs, bounded source scope and a compact result. No broad repository tours or repeated full documents.
+- Split work by coherent deliverable only when it reduces repeated context. Parallel agents are not automatically cheaper.
+- If the active model is unavailable or quota-limited, report the blocker and let the operator switch models. Never silently switch to a paid provider.
+- After fixes, rerun invalidated reviews/checks against fresh manifests; do not repeat unaffected stages.
+- Do not truncate authoritative inputs or verification evidence to meet an arbitrary token budget.
+
 ### Child-agent budget
 
 - Child agents default to `thinking-level: low`, `advisor: false`, and `spawns: []`. They do not launch nested agents or their own advisor model.
