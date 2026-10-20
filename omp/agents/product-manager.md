@@ -1,6 +1,9 @@
 ---
 name: product-manager
 description: Write concise business-facing PRDs.
+thinking-level: low
+advisor: false
+spawns: []
 ---
 
 ## Rule loading
