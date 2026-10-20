@@ -4,6 +4,9 @@ Custom agents and slash commands for human-first product/technical planning, Ope
 
 ## Context and token efficiency
 
+The workflow must not spend tokens discovering its own configuration. Read only the active command/agent prompt, the short rule index, core rules and rules required for the current stage. Never read every agent, command, skill, template or rule file. OMP already supplies the active prompt; do not reopen it. Load skills and tool documentation only when the task needs them. Use paths, IDs and digests to reference artifacts; read full bodies only when required for the current decision or review. Reuse unchanged context and avoid repeating full documents in handoffs.
+
+
 The workflow is evidence-first and cost-aware. One primary model authors each stage; use one independent reviewer at required gates, and invoke specialist agents only when risk requires them. Agents enumerate/hash gate-bound inputs, read authoritative inputs needed for their decision, and retrieve supporting material on demand. Handoffs pass paths, manifest identities, REQ/TC IDs and concise findings instead of duplicating documents. This reduces redundant model calls without relaxing human approvals, freshness, coverage or independent final verification.
 
 
