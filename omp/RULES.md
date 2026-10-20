@@ -2,6 +2,15 @@
 
 Read this `RULES.md` and `rules/core.md` for every stage. Then load only the applicable stage rule(s) below; do not load every rules file by default. Project `.omp/RULES.md` may strengthen these rules but must not silently bypass gates.
 
+## Context-loading budget
+
+- Read only the active command/agent prompt, this index, core policy, and the stage/gate rules needed now. OMP already supplies the active prompt; never reopen it just to reread it.
+- Never enumerate/read all agents, commands, skills, templates, rules, or project docs as a ritual. Open another file only when the current decision needs it.
+- Skills and tools are opt-in by relevance. Do not read Caveman, Ponytail, tool help, or dependency docs when the current task does not need them.
+- For change artifacts, inspect paths, sizes and digests first. Read full bodies only for the specific requirements, decisions, evidence or review being performed; use links/IDs/manifests for the rest.
+- Reuse unchanged content already in context. Recompute identity/freshness cheaply; do not reread unchanged bodies merely to prove they still exist.
+- Do not paste rules, skills, prompts or documents into child-agent handoffs when they can read the canonical file by path. Pass the minimum paths, IDs, decisions and evidence needed.
+
 | Stage / command | Additional rules |
 |---|---|
 | Interview, `work-new`, product plan, tech plan, human doc review, OpenSpec preparation, QA planning, task planning | `rules/planning.md`; load `rules/gates.md` when handling approvals or transitions |
