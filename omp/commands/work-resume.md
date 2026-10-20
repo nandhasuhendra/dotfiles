@@ -7,7 +7,7 @@ description: Resume a change at its current gate.
 Read `RULES.md` and `rules/core.md`. Load `rules/gates.md` and the relevant stage rule only when checking or reopening a gate.
 ## Load and reconstruct
 
-- Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates and freshness protocol.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Apply its dependencies, artifact ownership, stricter gates and freshness protocol.
 - Change slug: $1. Read existing `openspec/changes/$1/` artifacts, repository instructions, append-only review/approval history, implementation evidence and current repository state. Do not overwrite existing work or initialize a missing change.
 - Re-enumerate inputs and recompute all upstream sorted path/SHA-256 manifests. Compare bytes and full path sets, including OpenSpec config/schema inputs. Changed, missing or added inputs invalidate dependent approvals/reviews/tasks/verification, even when old records say PASS.
 - Run manifest hashing and other shell checks through `rtk` per shared rules; preserve raw output and exit status.

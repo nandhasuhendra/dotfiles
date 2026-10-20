@@ -9,7 +9,7 @@ Load for every stage. Read only the active prompt, this file, and required stage
 - Delegate one outcome with exact paths, REQ/TC IDs, bounded scope and compact result. Do not ask agents to repeat orchestration or reread unrelated context.
 - Child agents use low thinking, no advisor, no nested spawns, and inherit the active route unless the operator configured overrides. Keep per-spawn effort disabled by default.
 - Use one primary author per stage, one independent reviewer at required gates, and specialists only for material risk. Parallel agents are not automatically cheaper.
-- Load tools/skills/docs only when relevant: Codegraph for nontrivial dependency impact; Context7 for version-sensitive external APIs; Playwright for browser behavior; Ponytail for implementation guidance; security specialist for security-sensitive scope. Never invoke a tool only to fill a checklist.
+- Load tools/skills/docs only when relevant: Codegraph for nontrivial dependency impact; Context7 for external documentation questions under the routing rules below; Playwright for browser behavior; Ponytail for implementation guidance; security specialist for security-sensitive scope. Never invoke a tool only to fill a checklist.
 - Reuse paths, IDs, digests and existing evidence instead of copying full documents into handoffs. Read full authoritative content needed for the decision; supporting context is on demand.
 - For unchanged artifacts already in context, verify identity/freshness without rereading their bodies. New agents must read the specific authoritative inputs needed for their own task.
 - Optimize verified outcomes per token. Record real tool calls/results; unknown cost metrics remain unknown. If quota blocks required work, report BLOCKED and let the operator choose a model.
@@ -47,11 +47,18 @@ Stop exploration and move forward when the current decision has enough source-ba
 
 ## Load and scope
 
-- Always read the installed shared `RULES.md` and `rules/core.md`. If the repository has `.omp/RULES.md`, read it as additional project policy; it may strengthen but must not silently bypass shared gates. Stop if required shared rules or applicable project rules cannot be read.
+- Resolve shared `RULES.md` and `rules/*.md` under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`. Always read shared `RULES.md` and `rules/core.md`, then applicable stage rules. Also read repository `.omp/RULES.md` when present; it adds policy rather than replacing shared gates. Stop if required shared or applicable project policy cannot be read.
 - Read repository `AGENTS.md`, relevant source and existing human documentation before proposing changes. Inspect OpenSpec config/schema during implementation preparation, after human planning approval.
 - Keep one change in `openspec/changes/<slug>/`. Use a kebab-case slug; never overwrite an existing change to start another.
 - Record route in `interview.md`: product (new/improved user-facing behavior), engineering (internal technical outcome), or mixed. Ask only when business intent cannot be established from the request.
 - No application code, production configuration, migrations, or implementation tests before the implementation gate. Reading source and running existing checks are allowed.
+
+## Universal tool routing
+
+- Prefer specialized file read/search/edit tools over shell equivalents. Route every model-facing shell command through RTK: supported `rtk <subcommand>` first; `rtk proxy <command> [args]` when unsupported, required flags are rejected or compression would hide needed detail; `rtk run '<shell command>'` for pipelines or compound shell syntax. Inspect installed help rather than guessing support.
+- Preserve actual exit status and full failure evidence; retain raw logs or rerunnable raw commands. If RTK is unavailable or unsuitable, run the original command and record the fallback reason, command and result. Internal script plumbing without agent-facing output may run natively. Compression and `rtk gain` output are not verification or total model-token benchmarks.
+- Use Context7 for documentation questions about external libraries, frameworks, SDKs, APIs, CLI tools or cloud services. Resolve the library ID, then query the specific relevant topic; an exact supplied Context7 ID permits querying directly. Match installed versions when supported and record returned sources/version limitations. Never send private code or secrets.
+- Reuse current applicable Context7 results rather than repeating queries. If retrieval is unavailable, use authoritative version-relevant documentation with a disclosed limitation; block material decisions that remain unresolved. Record actual invocations/results or a brief N/A reason, never tool name-dropping.
 
 ## Readability and evidence
 

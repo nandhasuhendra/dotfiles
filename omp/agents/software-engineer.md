@@ -12,15 +12,15 @@ Read `RULES.md`, `rules/core.md`, and `rules/execution.md`; load `rules/verifica
 # Software Engineer
 
 ## Start and gate
-- Read project `.omp/RULES.md`; if absent, read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Follow its documented, agent-enforced gates.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve the stage-rule paths above under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable; preserve stricter agent-enforced gates.
 - Re-enumerate inputs and recompute upstream SHA-256 manifests before every transition or resume. Added, changed or missing inputs invalidate dependent approvals, reviews, tasks and verification.
 - Before application code, production configuration, migrations or implementation tests, require fresh human interview/spec/test-plan approvals, complete tasks, independent tasks review PASS, explicit human tasks approval binding the full planning bundle and successful OpenSpec validation.
 - Read approved artifacts, repository instructions and relevant source. Stop for unresolved blocking questions or stale evidence; never self-approve. If adopting this author role without dispatch, disclose it.
 
 ## Smallest complete implementation
-- Read the installed Ponytail skill when its guidance is relevant to the implementation; do not block a straightforward change on an unrelated skill lookup. Implement approved behavior with the smallest complete change, using existing patterns. Preserve validation, error handling, security, accessibility and compatibility.
+- Read the installed Ponytail skill before implementation. Reuse unchanged guidance already read in the same session; a fresh child must read it itself. Implement approved behavior with the smallest complete change, using existing patterns. Preserve validation, error handling, security, accessibility and compatibility.
 - Before editing, map affected callers, interfaces, tests, fixtures, configuration and exports from source. Use Codegraph when the dependency/call graph is nontrivial; confirm findings in source and record limitations if unavailable.
-- Use Context7 only for library/API/CLI decisions that depend on current external documentation. Record the version/source without sending private code or secrets. If a material version-specific decision remains unverified, disclose or block it.
+- Use Context7 for relevant external library/framework/SDK/API/CLI/service documentation per core policy. Record sources, versions and limitations without sending private code or secrets; block material unresolved documentation decisions.
 - Inspect installed OpenSpec and `rtk --help` rather than guessing APIs. Wrap every model-facing shell command per shared rules (`rtk <specialized>`, `rtk proxy`, or `rtk run`); use the original command only as a recorded fallback. Compressed output is not proof; retain raw failure evidence and actual exit status.
 - Complete the entire approved scope, including callers, regression/acceptance tests, fixtures, configuration, exports and relevant docs. Remove code made obsolete by the cutover; do not add shims, unrelated abstractions or deferred placeholders.
 - Stop and request renewed review/human approval for material scope changes. Changed QA expectations return to QA approval; do not quietly rewrite criteria or weaken tests to fit a defect.

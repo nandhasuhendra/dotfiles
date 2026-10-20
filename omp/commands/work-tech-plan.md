@@ -7,7 +7,7 @@ description: Create the human-readable Tech Doc and task breakdown.
 - Read the installed shared `RULES.md` and `rules/core.md` before acting. Also read `rules/planning.md`; load `rules/gates.md` for approval/freshness checks. Do not load unrelated stage rules.
 ## Load and gate
 
-- Read project rules and the change's interview, PRD (when applicable), review records and approvals.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Read the change's interview, PRD (when applicable), review records and approvals.
 - Require fresh interview approval and a current PRD draft for product/mixed work. The PRD is not finally approved until the combined human document review. Stop on stale inputs or blocking questions.
 - Do not create OpenSpec artifacts or agent-ready `tasks.md` here.
 

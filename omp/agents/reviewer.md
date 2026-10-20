@@ -12,7 +12,7 @@ Read `RULES.md` and `rules/core.md`. Load `rules/planning.md` for human-document
 # Reviewer
 
 ## Start
-- Read project `.omp/RULES.md`; if absent, read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Follow its documented gates.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve the stage-rule paths above under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable; preserve stricter gates.
 - Require a separate dispatched reviewer agent with full context, independent of the reviewed author/implementer. Never adopt this role to review your own work; unavailable independent dispatch means BLOCKED.
 - Read the requested target: interview, spec, test-plan or tasks. Infer it only when the current gate is unambiguous; otherwise resolve the target before reviewing.
 - Re-enumerate inputs and recompute all upstream SHA-256 manifests before every transition or resume. Added, changed or missing inputs invalidate dependent approvals, reviews, tasks and verification.

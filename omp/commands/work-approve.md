@@ -7,12 +7,12 @@ description: Record a human decision after review.
 Read `RULES.md`, `rules/core.md`, and `rules/gates.md`. Load a stage-specific rule file only when the pending decision requires it.
 ## Load and gate
 
-- Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates, freshness protocol and human-checkpoint format.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Apply its dependencies, artifact ownership, stricter gates, freshness protocol and human-checkpoint format.
 - Change slug: $1. Target: $2. Accept only `interview`, `spec`, `test-plan` or `tasks`; `spec` means the complete route/schema bundle, not a standalone PRD/design.
 - Decision: `$3` plus any following words if supplied (`approve`, `approve stop`, `reject: <reason>`, `revisit: <question/stage>`, `pause`). Read existing artifacts, `approvals.md`, `review.md` and `verification.md`. Never overwrite their history.
 - Re-enumerate files and recompute all upstream SHA-256 manifests. Require earlier approvals/reviews current, no blocking questions and an independent target review PASS bound to the exact proposed input manifest.
 - Run manifest hashing and other shell checks through `rtk` per shared rules; preserve raw digest output, not a filtered summary.
-- If the target review is missing or stale, perform the review first (dispatch reviewer, plus security-engineer for `spec`) and present the checkpoint. If independent dispatch is unavailable, report BLOCKED; never self-review.
+- If the target review is missing or stale, dispatch the independent reviewer first; add a separate security-engineer for security-sensitive `spec` scope or a credible security risk, otherwise require the reviewer's security-N/A rationale. Present the checkpoint after required reviews. Missing required independent dispatch means BLOCKED; never self-review.
 
 ## Present the decision
 
@@ -24,4 +24,4 @@ Read `RULES.md`, `rules/core.md`, and `rules/gates.md`. Load a stage-specific ru
 
 - `approve`: recompute the manifest after the decision. If unchanged, append target, UTC timestamp, human decision quote, full manifest and matching review record to `approvals.md`; then continue to the next stage in the same turn unless `stop`. Changed inputs mean renewed review and confirmation.
 - `approve stop`: record the same way and stop. `reject: <reason>`: append the rejection as a decision without approval, route to the responsible author and stop. `revisit: <question/stage>`: reopen the named stage; changed inputs invalidate dependent records. `pause`: write nothing and point to `/work-resume $1`.
-- Next stages: interview → `/work-spec $1`; spec → `/work-qa $1`; test-plan → `/work-plan $1`; tasks → `/work-implement $1`. Do not archive, merge, release or skip another human gate.
+- Next stages: interview → `/work-product-plan $1`; spec → `/work-qa $1`; test-plan → `/work-plan $1`; tasks → `/work-implement $1`. Do not archive, merge, release or skip another human gate.

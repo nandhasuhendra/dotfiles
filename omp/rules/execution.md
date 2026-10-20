@@ -4,11 +4,11 @@ Load with `core.md` for implementation. Load `verification.md` for verification,
 
 ## Dependency use
 - OpenSpec owns the change lifecycle and schema. Inspect installed help/config/schema; never guess commands or bypass validation.
-- Ponytail: read its installed skill before implementation; choose the smallest complete solution while preserving validation, security, accessibility and error handling.
+- Ponytail: read its installed skill before implementation; reuse unchanged guidance already read in the same session, but a fresh child must read it itself. Choose the smallest complete solution while preserving validation, security, accessibility and error handling.
 - Codegraph: inspect affected callers/interfaces/regression surface when relevant; confirm findings in source and refresh stale indexes.
-- Context7: use version-relevant documentation for library/API/CLI decisions; record source/version and never send private code or secrets.
+- Context7: follow core's resolve/query, version/source, privacy and evidence-reuse policy for external documentation questions. Block material unresolved decisions.
 - Playwright: execute changed browser flows, error states, keyboard access and relevant viewports. Browser work without executable Playwright is BLOCKED, never simulated PASS.
-- RTK: wrap model-facing shell commands with a supported `rtk` route. Preserve exit status and full failure evidence; compression is not verification. If unavailable/unsuitable, run the original command and record the fallback.
+- RTK: follow core's universal shell-routing and fallback policy in every stage. Preserve exit status and full failure evidence; compression is not verification.
 
 ## Evidence
 Record actual invocations and outcomes, not just tool names. Mark inapplicable tools N/A with a reason. Keep raw logs or rerunnable commands for gate checks. Do not install dependencies, alter global settings, enable unsafe browser flags or send repository data externally without authorization.

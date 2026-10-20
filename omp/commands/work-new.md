@@ -7,7 +7,7 @@ description: Start a gated product or engineering change.
 - Read the installed shared `RULES.md` and `rules/core.md` before acting. Also read `rules/planning.md`; load `rules/gates.md` when recording approvals or transitioning stages. Do not load unrelated stage rules.
 ## Load
 
-- Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates and freshness protocol.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Apply its dependencies, artifact ownership, stricter gates and freshness protocol.
 - Request: $ARGUMENTS. This is free text, not a required slug. Read repository `AGENTS.md`, existing human documentation and relevant source before choosing a new kebab-case slug. Do not inspect/generate OpenSpec specs during interview.
 - Create a human-planning workspace under `openspec/changes/<slug>/` only if unused. Do not create `proposal.md`, delta specs or agent tasks until the human planning bundle has passed review and approval.
 - Inspect existing docs and relevant source first. Do not invoke dependency CLIs or run shell commands merely to complete the interview; if a shell command is genuinely needed, use `rtk` per shared rules and record its real result.

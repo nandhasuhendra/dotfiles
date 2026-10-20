@@ -7,7 +7,7 @@ description: Draft a human-readable PRD from the approved interview.
 - Read the installed shared `RULES.md` and `rules/core.md` before acting. Also read `rules/planning.md`; load `rules/gates.md` for approval/freshness checks. Do not load unrelated stage rules.
 ## Load and gate
 
-- Read project `.omp/RULES.md` or the installed global fallback and follow all gates.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable; preserve stricter gates.
 - Change slug: $1. Read `interview.md`, its review/approval records and manifest. Stop if independent interview review is not PASS, explicit human interview approval is missing, or the manifest is stale.
 - Do not generate OpenSpec specs in this stage. Human planning documents come first.
 

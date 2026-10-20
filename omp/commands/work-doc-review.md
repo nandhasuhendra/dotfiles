@@ -7,7 +7,7 @@ description: Independently review and approve the human planning documents befor
 - Read the installed shared `RULES.md` and `rules/core.md` before acting. Also read `rules/planning.md` and `rules/gates.md` for review, approval and freshness requirements; do not load unrelated stage rules.
 ## Scope
 
-- Read project rules and recompute manifests for interview, PRD, Tech Doc and human task breakdown.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Recompute manifests for interview, PRD, Tech Doc and human task breakdown.
 - This is the human-first review gate. Do not review OpenSpec specs as a substitute; they should not exist yet.
 
 ## Independent review

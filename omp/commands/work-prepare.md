@@ -7,7 +7,7 @@ description: Translate approved human planning documents into OpenSpec and agent
 - Read the installed shared `RULES.md` and `rules/core.md` before acting. Also read `rules/planning.md` and `rules/gates.md` for approval, review and freshness requirements; do not load unrelated stage rules.
 ## Load and gate
 
-- Read project rules and re-enumerate/hash the complete human planning bundle.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Re-enumerate/hash the complete human planning bundle.
 - Require independent human-document review PASS and explicit human planning approval bound to the exact current manifest. Stop if inputs changed, approval is stale, or a material question is unresolved.
 - Only now inspect installed OpenSpec help, config, schema and artifact instructions. Do not guess CLI commands or schema conventions.
 

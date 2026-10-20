@@ -7,7 +7,7 @@ Load `RULES.md`, `rules/core.md`, `rules/execution.md`, and `rules/gates.md` for
 
 ## Load and gate
 
-- Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates and freshness protocol.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Apply its dependencies, artifact ownership, stricter gates and freshness protocol.
 - Change slug: $1. Enumerate the change directory and repository instructions. Recompute manifests across every gate-bound input, but do not read every artifact body by default; read the complete approved requirements, design/specs, test plan, tasks and only the review/approval entries needed to establish current authorization. Retrieve other artifact bodies when a decision depends on them.
 - Require current human interview/spec/test-plan approvals, complete tasks, matching independent review PASS records and explicit human tasks approval binding the full planning bundle. No unresolved blocking questions may remain.
 - Inspect installed OpenSpec help/config and run its supported validation. Record the actual command/result; any failure, missing evidence or changed/missing/added input blocks implementation. Never substitute reviewer PASS for human approval.
@@ -15,7 +15,7 @@ Load `RULES.md`, `rules/core.md`, `rules/execution.md`, and `rules/gates.md` for
 ## Implement
 
 - Dispatch software-engineer with the approved bundle's paths, manifest identities, acceptance criteria, design decisions, task dependencies, relevant source context and gate evidence. Do not paste duplicate full documents into the handoff when the agent can read them directly. If author dispatch is unavailable, read and adopt its instructions and disclose that substitution. Never claim delegation or self-approve.
-- Read Ponytail when its implementation guidance is relevant. Map affected callers, tests, fixtures, config and exports from source; use Codegraph for nontrivial dependency/call graphs and Context7 only for version-specific external API/CLI decisions. Do not invoke a tool just to fill an evidence checklist.
+- Read the installed Ponytail skill before implementation; reuse unchanged guidance already read in the same session, but a fresh child must read it itself. Map affected callers, tests, fixtures, config and exports from source; use Codegraph for nontrivial dependency/call graphs and Context7 for relevant external documentation per core policy. Do not invoke a tool just to fill an evidence checklist.
 - Run shell commands through `rtk` per shared rules. Record actual tool invocations/results and briefly mark inapplicable tools N/A; keep raw failure output for gates.
 - Follow approved REQ/TC IDs, design and task dependencies. Implement the complete behavior and its tests, preserve compatibility and error handling, and update affected documentation without unrelated changes.
 - Keep approved `tasks.md` frozen, including checkboxes. Track each task's completion, changed files and implementation evidence separately in `verification.md`; mark unrun checks NOT_RUN, not PASS.

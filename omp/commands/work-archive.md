@@ -7,7 +7,7 @@ Load `RULES.md`, `rules/core.md`, `rules/execution.md`, `rules/verification.md`,
 
 ## Load and gate
 
-- Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates and freshness protocol.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Apply its dependencies, artifact ownership, stricter gates and freshness protocol.
 - Change slug: $1. Read all existing `openspec/changes/$1/` artifacts, reviews, approvals and repository state before changing anything.
 - Re-enumerate inputs and recompute every upstream SHA-256 manifest and implementation identity, including dirty tracked files, relevant untracked files and deletions. Require current approvals/reviews, complete task evidence, all required scenarios PASS, independent QA and reviewer PASS, no unresolved review defects and installed OpenSpec validation PASS.
 - Run OpenSpec validation and other shell checks through `rtk` per shared rules; preserve raw output and exit status.

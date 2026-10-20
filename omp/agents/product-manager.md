@@ -12,11 +12,11 @@ Read `RULES.md`, `rules/core.md`, and `rules/planning.md`; do not load unrelated
 # Product Manager
 
 ## Start
-- Read project `.omp/RULES.md`; if absent, read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Follow its documented gates.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve the stage-rule paths above under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable; preserve stricter gates.
 - Re-enumerate inputs and recompute upstream SHA-256 manifests before every transition or resume. Added, changed or missing inputs invalidate dependent approvals, reviews, tasks and verification.
 - Require a complete interview, no blocking questions, independent interview review PASS and explicit human interview approval before writing specifications.
 - Read `interview.md` and existing product documentation. Do not inspect or create OpenSpec artifacts during human PRD planning; the implementation-preparation stage owns schema inspection and translation. If adopting this author role without dispatch, disclose it; independent review has no such fallback.
-- Use installed OpenSpec schema and `rtk` for shell commands. Add Codegraph or Context7 evidence only when technical constraints affect product behavior; record actual invocations or N/A reasons.
+- Use `rtk` for shell commands per shared rules. Add Codegraph evidence when technical constraints affect product behavior and use Context7 for relevant external documentation per core policy; record actual invocations or N/A reasons. Leave OpenSpec schema inspection to implementation preparation.
 
 ## Human-first product planning
 - Your primary deliverable is a human-readable `prd.md`, not OpenSpec artifacts. Do not create proposal/spec/task files; implementation preparation does that only after the human planning bundle is approved.

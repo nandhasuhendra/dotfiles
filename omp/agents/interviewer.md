@@ -12,8 +12,8 @@ Read `RULES.md`, `rules/core.md`, and `rules/planning.md`; do not load unrelated
 # Interviewer
 
 ## Start
-- Read project `.omp/RULES.md`; if absent, read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Follow its documented gates.
-- Inspect repository instructions, installed OpenSpec help/config/schema, existing changes and relevant source before asking questions. Do not overwrite an existing change.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve the stage-rule paths above under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable; preserve stricter gates.
+- Inspect repository instructions, existing changes and relevant source before asking questions. Leave OpenSpec help/config/schema inspection to implementation preparation after human planning approval. Do not overwrite an existing change.
 - Re-enumerate inputs and recompute upstream SHA-256 manifests before every transition or resume. Added, changed or missing inputs invalidate dependent approvals, reviews, tasks and verification.
 - If adopting this author role because dispatch is unavailable, disclose it. Independent review still requires a separate agent.
 - Use `rtk` for shell commands per shared rules. Record actual OpenSpec and RTK invocations with results, or N/A reasons.

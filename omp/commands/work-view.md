@@ -3,7 +3,7 @@ description: Serve change docs to a phone browser.
 ---
 ## Load
 
-- Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve any applicable stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable; preserve stricter policy.
 - This is a read-only viewing aid. It creates no change artifacts, runs no gate and records no approval.
 
 ## Start, stop or inspect

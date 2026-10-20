@@ -7,7 +7,7 @@ Read `RULES.md`, `rules/core.md`, and `rules/gates.md` for gate freshness and ap
 
 ## Load and inspect
 
-- Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates and freshness protocol.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Apply its dependencies, artifact ownership, stricter gates and freshness protocol.
 - Change slug: $1. Read existing `openspec/changes/$1/` artifacts, append-only approvals/reviews, verification evidence and repository state. If missing, report that fact; do not initialize a replacement.
 - Re-enumerate all route/schema inputs and recompute each gate's sorted path/SHA-256 manifest with real hashing tools. Compare complete path sets as well as bytes so added/missing files invalidate dependent approvals, reviews, tasks and verification.
 - Check each human decision and matching independent target review, unresolved blockers, required artifacts, validation evidence and task completion evidence. Approved `tasks.md` stays frozen; use `verification.md` for execution completion.

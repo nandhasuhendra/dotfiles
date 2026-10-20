@@ -1,6 +1,6 @@
 # OMP workflow rules entry point
 
-Read this `RULES.md` and `rules/core.md` for every stage. Then load only the applicable stage rule(s) below; do not load every rules file by default. Project `.omp/RULES.md` may strengthen these rules but must not silently bypass gates.
+Shared policy base: `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`. Resolve this `RULES.md` and every shared `rules/*.md` path below against that base, never the working directory. Always read the shared entrypoint and `rules/core.md`, then only the applicable stage rules. Also read repository `.omp/RULES.md` when present: it supplements shared policy and may strengthen, never bypass, its gates. Stop if any required shared or applicable project policy cannot be read.
 
 ## Context-loading budget
 

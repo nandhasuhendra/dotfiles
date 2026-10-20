@@ -7,7 +7,7 @@ Load `RULES.md`, `rules/core.md`, `rules/execution.md`, `rules/verification.md`,
 
 ## Load and gate
 
-- Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates and freshness protocol.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Apply its dependencies, artifact ownership, stricter gates and freshness protocol.
 - Change slug: $1. Enumerate all gate-bound artifacts and recompute every upstream SHA-256 manifest. Read the complete approved requirements/spec bundle, test plan and tasks; read the approval/review records and implementation evidence needed to establish freshness and authorization. Retrieve supporting documents on demand rather than loading every artifact body by default.
 - Require current interview/spec/test-plan/tasks human approvals and independent review PASS records, all implementation tasks complete in `verification.md`, approved scope preserved and runnable checks available. Missing or stale evidence blocks verification.
 - Keep approved `tasks.md` frozen. Record source identity as HEAD plus a digest manifest of changed tracked and relevant untracked files, explicitly including deletions; outside Git use a full relevant-source manifest. HEAD alone is insufficient.

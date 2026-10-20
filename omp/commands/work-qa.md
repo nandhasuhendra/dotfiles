@@ -7,7 +7,7 @@ Load `RULES.md`, `rules/core.md`, `rules/planning.md`, and `rules/gates.md`.
 
 ## Load and gate
 
-- Read project `.omp/RULES.md` if present; otherwise read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Apply its dependencies, artifact ownership, gates and freshness protocol.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Apply its dependencies, artifact ownership, stricter gates and freshness protocol.
 - Change slug: $1. Read existing `openspec/changes/$1/` artifacts and relevant source before editing.
 - Re-enumerate inputs and recompute upstream SHA-256 manifests. Require current human interview/spec approvals, their independent review PASS records and the complete route/schema specification bundle. Changed, missing or added upstream inputs invalidate dependent approvals/reviews/tasks/verification; stop for renewed decisions rather than silently continuing.
 

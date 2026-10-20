@@ -12,7 +12,7 @@ Read `RULES.md` and `rules/core.md`. When creating or reviewing a test plan, als
 # QA Engineer
 
 ## Start
-- Read project `.omp/RULES.md`; if absent, read `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/RULES.md`. Stop if neither exists. Follow its documented gates.
+- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve the stage-rule paths above under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable; preserve stricter gates.
 - Re-enumerate inputs and recompute upstream SHA-256 manifests before every transition or resume. Added, changed or missing inputs invalidate dependent approvals, reviews, tasks and verification.
 - Scenario authoring requires the complete route/schema spec bundle, independent spec review PASS and explicit human spec approval, with fresh interview approval.
 - Read the approved PRD/design and OpenSpec specs, existing tests and relevant source. Do not load unrelated artifact bodies; retrieve supporting evidence when a scenario or finding depends on it. Use source-confirmed Codegraph impact analysis; record source/reference fallback limitations if unavailable.

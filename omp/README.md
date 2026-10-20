@@ -49,13 +49,13 @@ bash omp/install-omp.sh
 
 Requires Linux or macOS, Node.js **20.19+**, npm, OMP, Git, curl and tar already on PATH. The installer installs missing workflow dependencies, verifies them, then replaces configuration. It never invokes `sudo` or edits your shell profile.
 
-Configuration goes into `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`. Existing `config.yml`, `mcp.json`, `agents/`, `commands/`, `RULES.md` and `templates/` are moved to timestamped backups and replaced with current source links. Matching links remain unchanged. All five document templates are required and checked before dependency installation. Optional `skills/` and `extensions/` are linked only if present.
+Configuration goes into `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`. Existing `config.yml`, `mcp.json`, `agents/`, `commands/`, `RULES.md`, `rules/` and `templates/` are moved to timestamped backups and replaced with current source links. Matching links remain unchanged. All five document templates and all five stage-rule files are required and checked before dependency installation. The bundled `skills/caveman/` is required and linked; optional `extensions/` is linked only if present.
 
 CLI packages go into `${NPM_CONFIG_PREFIX:-$HOME/.local}`; keep its `bin/` directory first on PATH when starting OMP. The installer prints the exact shell command. Chromium uses Playwright's managed browser cache; Ponytail uses OMP's user plugin store.
 
 The terminal UI shows five real stages with text labels and terminal-palette colors: cyan for stages/running work, green for ready/success, yellow for backups/notices and red for errors. Color is supplementary, not the only status signal. Redirected output, `TERM=dumb` and `NO_COLOR` produce plain text. Full command logs are retained under `<config-dir>/install-logs/`; a failed dependency check stops before configuration replacement.
 
-Start a new OMP session after installation. Commands explicitly load project `.omp/RULES.md` or the installed global rules. A project override must preserve the gates.
+Start a new OMP session after installation. Every agent and command loads installed shared policy first, then project `.omp/RULES.md` when present. Shared `RULES.md` and `rules/*.md` resolve under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, not the working directory. Project policy is additive; unreadable required policy blocks execution.
 
 ## Dependencies
 
@@ -73,8 +73,8 @@ Only Playwright and Context7 need the MCP entries supplied here. Installed tools
 Check actual invocations before starting:
 
 ```bash
-openspec --help
-codegraph --help
+rtk proxy openspec --help
+rtk proxy codegraph --help
 rtk --help
 ```
 
@@ -90,16 +90,23 @@ Every model-facing shell command goes through `rtk`:
 | `rtk proxy <command> [args]` | Specialized route rejects required flags, hides needed failure detail, or the command is unsupported. |
 | `rtk run '<shell command>'` | Pipelines, redirection or compound shell syntax. |
 
-File read/search/edit tools remain preferred over shell. Internal script plumbing that produces no agent-facing output may run natively. Preserve exit status and raw failure output; RTK compression is not verification. If `rtk` is unavailable, run the original command and record the fallback. `rtk gain -p` reports adoption or savings, not correctness.
+File read/search/edit tools remain preferred over shell. Internal script plumbing that produces no agent-facing output may run natively. Preserve exit status and raw failure output; RTK compression is not verification. If RTK is unavailable or unsuitable, run the original command and record the fallback reason, command and result. `rtk gain -p` reports adoption or output reduction, not correctness or total model-token savings. Universal routing lives in `rules/core.md`, so it applies during planning as well as execution.
+
+### Context7 and Ponytail
+
+Use Context7 for relevant external library/framework/SDK/API/CLI/service documentation questions: resolve the library ID, then query the specific topic. An exact supplied Context7 ID skips resolution. Match installed versions when supported, record sources/version limitations, never send private code or secrets, and reuse current applicable results. If unavailable, disclose authoritative-doc fallbacks; material unresolved decisions block progress. An enabled MCP entry or successful initialize handshake alone is not proof of documentation retrieval.
+
+Read installed Ponytail before implementation. Reuse unchanged guidance already read in the same session; fresh children must read it themselves. Neither rule requires unrelated tools to run at every stage.
+
 
 ### Use by stage
 
 | Stage | Use when relevant | Evidence |
 | --- | --- | --- |
 | Interview | Repository instructions and existing docs; OpenSpec only if needed to clarify workflow constraints | Confirmed facts and blockers |
-| Spec | OpenSpec for schema/validation; Codegraph for nontrivial impact; Context7 for version-specific API questions | Actual results and limitations |
+| Spec | OpenSpec for schema/validation; Codegraph for nontrivial impact; Context7 for external documentation questions | Actual results and limitations |
 | QA | Existing tests/source always; Playwright for browser behavior; Codegraph for nontrivial dependency impact | Regression surface and runnable scenarios |
-| Implement | Ponytail for implementation approach; Codegraph for nontrivial callers; Context7 for external API/version questions | Smallest solution and relevant command results |
+| Implement | Ponytail before implementation; Codegraph for nontrivial callers; Context7 for external documentation questions | Smallest solution and relevant command results |
 | Verify | OpenSpec validation; actual project tests; Playwright for browser changes | Commands, exit codes and observed outcomes |
 | Security | Security-engineer only for security-sensitive scope or a credible risk | Attack paths, mitigations and evidence |
 
@@ -266,6 +273,8 @@ This row illustrates the format, not a requirement for your application. Real sc
 
 ## Configuration changes
 
+- Repaired modular `rules/` deployment and made installed shared policy mandatory before additive project policy across all seven roles and fifteen commands.
+- Centralized universal RTK routing and Context7 resolve/query evidence in core policy; made Ponytail mandatory before implementation with unchanged same-session reuse.
 - Replaced references to a nonexistent gate script with one explicit review/approval/freshness protocol.
 - Aligned all seven agents and fifteen commands with the gated lifecycle; OpenSpec preparation uses one primary author and security-specialist review is risk-based to avoid redundant model calls on routine changes.
 - Fixed installation of workflow rules and handling of absent optional directories.
@@ -275,6 +284,8 @@ This row illustrates the format, not a requirement for your application. Real sc
 
 ## Verification
 
+- Agent-tool-policy repair: `rtk proxy bash omp/tests/install-rules.sh` exercised the actual deployment block in temporary directories. Fresh install, sentinel preservation, occupied backup collision and matching-link repeat passed; all five installed rule files were readable. No dependency setup or live installation ran.
+- Installer/regression Bash syntax and strict OpenSpec validation passed. A raw `rtk proxy` failure probe preserved stderr marker `OMP_RTK_FAILURE_PROBE` and exit 7. Context7 resolve/query retrieval is recorded in `openspec/changes/align-agent-tool-policy/interview.md`; this proves parent-session retrieval, not future child availability.
 - Clean-home Linux smoke installed OpenSpec, Codegraph, checksum-verified RTK, Ponytail and Playwright; Chromium rendered/read a page and Context7 completed a real MCP handshake.
 - Existing-install smoke reused working tools, installed missing tools, preserved existing rules in a backup and exposed all seven agents.
 - Earlier isolated regression checks covered backup collisions/idempotence, dependency-failure preservation and broken-shim replacement.
