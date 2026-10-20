@@ -52,7 +52,7 @@ for tool in node npm omp curl git tar; do
 done
 node -e 'const [major, minor] = process.versions.node.split(".").map(Number); process.exit(major > 20 || (major === 20 && minor >= 19) ? 0 : 1)' \
   || die 'Node.js 20.19 or newer is required. Select a supported Node version and rerun.'
-for item in mcp.json agents commands RULES.md rules templates; do
+for item in mcp.json agents commands RULES.md rules templates skills; do
   [[ -e "$OMP_DIR/$item" ]] || die "Missing $OMP_DIR/$item"
 done
 for template in PRD.md TECH-DOC.md HUMAN-TASK-BREAKDOWN.md QA-TEST-CASES.md TASK-BREAKDOWN.md; do
@@ -61,6 +61,7 @@ done
 for rule in core.md planning.md gates.md execution.md verification.md; do
   [[ -f "$OMP_DIR/rules/$rule" ]] || die "Missing $OMP_DIR/rules/$rule"
 done
+[[ -f "$OMP_DIR/skills/caveman/SKILL.md" ]] || die 'Missing bundled Caveman skill at omp/skills/caveman/SKILL.md'
 mkdir -p "$CONFIG_DIR/install-logs" "$PREFIX/bin"
 LOG_FILE="$(mktemp "$CONFIG_DIR/install-logs/$STAMP.XXXXXX")"
 WORK_DIR="$(mktemp -d)"
