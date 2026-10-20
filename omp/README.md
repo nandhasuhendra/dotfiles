@@ -6,6 +6,14 @@ Custom agents and slash commands for human-first product/technical planning, Ope
 
 The workflow is evidence-first and cost-aware. One primary model authors each stage; use one independent reviewer at required gates, and invoke specialist agents only when risk requires them. Agents enumerate/hash gate-bound inputs, read authoritative inputs needed for their decision, and retrieve supporting material on demand. Handoffs pass paths, manifest identities, REQ/TC IDs and concise findings instead of duplicating documents. This reduces redundant model calls without relaxing human approvals, freshness, coverage or independent final verification.
 
+## Model selection and quota-aware operation
+
+The operator chooses the active model per session based on availability. No workflow agent pins GPT, Claude, Gemini or DeepSeek. Child agents inherit the active model route unless the operator explicitly configures overrides. Codex OAuth can still consume usage allowances quickly even at low effort.
+
+Prefer deterministic inspection to delegation when independent judgment is unnecessary. Required independent reviewers and QA remain separate, but receive narrowly scoped objectives and artifact paths rather than repeated document bodies. If a provider is quota-limited, request an operator model switch instead of silently charging a different provider.
+
+`defaultThinkingLevel: low` and `task.enableEffort: false` reduce default reasoning consumption; raise main effort manually for difficult work. These are not hard cost limits.
+
 ## Child-agent effort and delegation
 
 All seven workflow agents are configured with `thinking-level: low`, `advisor: false`, and `spawns: []`. This keeps them on the parent's model route by default, prevents nested delegation/advisor calls, and leaves orchestration and escalation to the main agent. A low-effort result is not automatically trusted: required independent reviews and verification still apply.
