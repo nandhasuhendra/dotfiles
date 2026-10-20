@@ -1,6 +1,9 @@
 ---
 name: reviewer
 description: Independently review correctness and risk.
+thinking-level: low
+advisor: false
+spawns: []
 ---
 
 ## Rule loading
