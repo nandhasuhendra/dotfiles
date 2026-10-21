@@ -1,6 +1,3 @@
-modelRoles:
-  default: openrouter/minimax/minimax-m3.1-flash:free
-# Fallback roles only; operator-selected session models are not pinned per agent.
 symbolPreset: nerd
 composer:
   shape: claude
@@ -11,9 +8,55 @@ setupVersion: 2
 browser:
   enabled: false
 defaultThinkingLevel: low
-# Prevent task callers from escalating child-agent reasoning effort implicitly.
 task:
+  # Prevent task callers from escalating child-agent reasoning effort implicitly.
   enableEffort: false
+  # Route the review/QA/spec-authoring stages off the quota-limited providers
+  # (openai-codex 5h exhausted, google-antigravity 5h at 95.8%, opencode-zen
+  # free-tier 429) onto free models with no 5h window. Retarget by editing one
+  # modelRoles entry below; delete this block to restore inheritance of the
+  # operator-selected session model.
+  agentModelOverrides:
+    reviewer: "@review_tier"
+    qa-engineer: "@review_tier"
+    security-engineer: "@review_tier"
+    security-reviewer: "@review_tier"
+    tech-lead: "@doc_tier"
+    interviewer: "@doc_tier"
+    product-manager: "@doc_tier"
+modelRoles:
+  # Fallback roles only; operator-selected session models are not pinned per agent.
+  # Concrete selectors live here so one edit retargets the whole tier.
+  # Every selector below was verified to answer a request on 2026-10-21.
+  review_tier: openrouter/minimax/minimax-m3.1-flash:free
+  doc_tier: openrouter/thinkingmachines/inkling:free
+retry:
+  # Must be a list of selector strings. Used only when the primary fails.
+  fallbackChains:
+    review_tier:
+      - openrouter/thinkingmachines/inkling:free
+      - openrouter/thinkingmachines/inkling-small:free
+    doc_tier:
+      - openrouter/minimax/minimax-m3.1-flash:free
+      - openrouter/thinkingmachines/inkling-small:free
+compaction:
+  # Cap the live context. Measured 24h: 61.7% of requests carried >100k prompt
+  # tokens (p50 131k, p90 620k, max 852k) and 1.02B of 1.13B tokens were
+  # re-sent cached context, so the live window is the dominant token driver.
+  # Safe for every model in play (all >= 1M context).
+  thresholdTokens: 200000
+  modelThresholds:
+    # The 200k-window opencode-zen models: base 120k -> trigger ~96k, keeping the
+    # request inside the window after the 20k retained-recent budget.
+    "opencode-zen/deepseek-v4.1-flash-free": 120000
+    "opencode-zen/glm-5.3-flash-free": 120000
+    "opencode-zen/mimo-v2.6-flash-free": 120000
+    "opencode-zen/big-pickle": 120000
+find:
+  # The judge role resolves to openrouter/typesafe/jev-1.14, which answers 402
+  # (no credits). Every find call failed: 43 failed requests in 24h and a tool
+  # that can never succeed. Re-enable once a judge route has credit.
+  enabled: off
 dev:
   autoqaConsent: denied
   autoqa: false

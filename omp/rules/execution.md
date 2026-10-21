@@ -17,4 +17,6 @@ Record actual invocations and outcomes, not just tool names. Mark inapplicable t
 - Read complete authoritative inputs required for the current decision; scope source exploration to relevant callers, tests, fixtures, configuration and exports, then expand when evidence warrants it.
 - Handoffs should carry slug, route/effort, paths and digests, REQ/TC IDs, decisions, blockers and next action—not transcript dumps or repeated full documents.
 - Reuse unchanged evidence only after checking identity/freshness. A digest proves identity, not comprehension; independent reviewers must inspect authoritative inputs themselves.
+- Scope a re-review or re-verification to the delta: the changed artifact, the prior findings and the inputs they depend on. A first review still reads every authoritative input it is bound to.
+- Each tool call is one provider request that re-sends the whole context, and tool results dominate the request count. Batch independent reads and greps into one call, and do not re-read a file whose content you already hold.
 - Track input/output tokens, agent calls, review loops, elapsed time and verification outcomes when available. Report unknowns as unknown; RTK output reduction is not a token benchmark.
