@@ -1,85 +1,197 @@
 ---
-title: "{{title}}: Technical Document"
+title: "{{title}}: Technical Specification"
 type: technical-doc
-status: draft
+status: draft # draft | review | approved | in-progress | completed
+created: {{date}}
+updated: {{date}}
+related:
+  - <prd-reference>
+tags:
+  - sdlc/technical-doc
+  - <module>
+  - backend
+  - frontend
+  - multi-tenant
 ---
 
 # Technical Document: {{title}}
 
-## Executive summary
+Authoring guidance: reuse existing architecture/design material and approved interview decisions. Preserve relevant technical detail; adapt or omit inapplicable database, GraphQL, tenant, backend/frontend and diagram sections with reasons. The examples describe possible concerns, not a required stack or architecture. Inspect actual callers, tests, contracts and affected regressions before choosing a solution.
 
-<In 2–4 short sentences, explain the proposed technical change, why it is needed, and its most important impact or trade-off. Write for an engineer who has not followed the discussion.>
-
-## At a glance
+This design and human milestones join the interview and applicable PRD in the `human-planning` review/approval bundle. Read-only installed-schema preflight may identify decisions early, but generating specs waits for that approval. Derive proposal/specs, complete QA coverage and schema tasks together for `execution` approval before code; link the [canonical gate protocol](../rules/gates.md) rather than adding checkpoints here.
 
 | Field | Value |
-| --- | --- |
-| Change / route | <slug; engineering, product or mixed> |
-| Scope | <Technical outcome and explicit non-goals> |
-| Inputs | <Existing interview, PRD if applicable, specs and source references> |
-| Baseline | <Inspected repository/revision; distinguish observed behavior from proposals> |
+| :--- | :--- |
+| Feature / scope | <Capabilities, entities and operational boundaries> |
+| Target repositories | <Actual repositories, languages and installed versions, with source paths> |
+| Author / role | <Role; never invent a person> |
+| Product reference | [<PRD>](<relative link>) |
+| Architecture references | <Links to current-state architecture and any target plan> |
+| Status boundary | <What is observed today versus proposed; no implementation or runtime claim> |
 
-## Context and current behavior
+## 1. Summary and Scope
 
-Explain the existing system and the problem in plain language. Start with the end-to-end behavior, then use source references and tables for details that need precision.
+<2–4 sentences: the technical change, why it is needed, and the main trade-off.>
 
-| Area | Observed behavior / evidence | Required change / REQ |
-| --- | --- | --- |
-| <Affected boundary> | <Source path/symbol or actual observation> | <Target invariant; REQ-001> |
+### 1.1 Core Engineering Principles
 
-## Goals and acceptance
+1. **Lifecycle management:** state transitions over destructive operations; physical deletion only with explicit approval.
+2. **Atomic aggregate persistence:** related mutations commit in one transaction; partial commits rejected.
+3. **Tenant/company isolation:** runtime isolation at the database layer plus application checks; composite keys prevent pointer hijacking.
+4. **Modular architecture:** backend domain → application → adapter; frontend module boundaries; ports owned by consumers.
+5. **Replaceable boundaries:** external engines/providers behind narrow ports; no implementation types in domain/application.
 
-| REQ | Technical outcome | Observable acceptance |
-| --- | --- | --- |
-| REQ-001 | <Outcome; reuse existing IDs> | <Measurable success and failure behavior> |
+### 1.2 System Context and Boundaries
 
-## Design overview
+```mermaid
+flowchart TB
+  Client["<Client / transport>"] --> App["<Application use case>"]
+  App --> Port["<Consumer-owned port>"]
+  Port --> Adapter["<Infrastructure adapter>"]
+  Adapter --> DB["<PostgreSQL / external system>"]
+```
 
-<Walk through the proposed solution in a short, readable sequence: where a request/event enters, which components act, where state changes, and what the caller or user observes. Add a Mermaid diagram only when it makes the design easier to understand; explain the important decisions in text.>
+<Explain trust boundaries, who may call what, and what is explicitly out of the boundary.>
 
-## Decisions and alternatives
+### 1.3 Workflow and Sequence
 
-| Decision | Chosen approach / why | Alternative / tradeoff |
-| --- | --- | --- |
-| <Decision> | <Smallest complete approach using existing patterns> | <Rejected alternative and concrete cost> |
+```mermaid
+sequenceDiagram
+  participant C as <Caller>
+  participant A as <Application>
+  participant S as <Store / adapter>
+  C->>A: <request>
+  A->>S: <transactional write>
+  S-->>A: <commit>
+  A-->>C: <observable outcome>
+```
 
-## Design and impact
+### 1.4 Entity-Relationship Diagram (Feature Scope)
 
-Explain why the chosen approach is the smallest complete fit for the existing architecture. Prefer clear prose for rationale and compact tables for contracts, file impact, or comparisons. Avoid unexplained acronyms and implementation detail that does not affect a decision.
+```mermaid
+erDiagram
+  <ENTITY_A> {
+    uuid id PK
+    uuid tenant_id FK
+  }
+  <ENTITY_B> {
+    uuid id PK
+    uuid <entity_a>_id FK
+  }
+  <ENTITY_A> ||--o{ <ENTITY_B> : "owns"
+```
 
-- Flow: <Entry point, trust boundary, state change and returned outcome; diagram only if useful.>
-- Affected surface: <Callers, modules, tests, fixtures, configuration, exports and dependencies.>
+## 2. Database Schema & Migrations
 
-| Interface / data | Current contract | Proposed change | Compatibility / failure handling |
-| --- | --- | --- | --- |
-| <API, CLI, event, schema or state> | <Actual signature/shape> | <Exact delta and validation> | <Consumer impact, error and data-loss handling> |
+### 2.1 Existing Schema Baseline
 
-## Security and reliability
+<Inspected migrations, tables, columns, constraints and policies. Cite paths. State what does not exist.>
 
-| Risk / SEC reference | Prevention / recovery | Verification obligation |
-| --- | --- | --- |
-| <Evidence-backed risk or hypothesis> | <Trust-boundary control; rollback or safe failure> | <Abuse case plus legitimate-path control> |
+### 2.2 Target Tables and Migration Plan
 
-Record concurrency, resource limits, privacy and observability when relevant; explain N/A rather than imposing a stack.
+<Proposed DDL, explicitly marked proposed and not applied. Follow the owning repository's migration convention (module order, up-only when that is the policy); do not invent down scripts.>
 
-## Migration, rollout and rollback
+```sql
+-- Proposed migration: <module>/<version>_<name>.up.sql
+CREATE TABLE <table> (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id uuid NOT NULL REFERENCES <tenant_table>(id)
+);
+```
 
-| Phase | Action / prerequisite | Success evidence / stop condition |
-| --- | --- | --- |
-| Prepare | <Compatibility, data/backfill and environment needs; N/A with reason if none> | <Readiness evidence> |
-| Roll out | <Ordering and authorized operator action> | <Health/correctness signal and stop threshold> |
-| Roll back | <Recovery steps, data limitations and authorization> | <Observable restored state> |
+<Privilege/role impact, RLS policy decision, index rationale, and migration ordering with provisioning.>
 
-## Verification handoff
+### 2.3 Concurrency Control & Database Safeguards
 
-| REQ / risk | Check and layer | Required environment / evidence |
-| --- | --- | --- |
-| REQ-001 | <Proposed test or smoke behavior; QA assigns TC IDs later> | <Actual supported command if known, fixture and expected result> |
+1. **Compare-and-set / optimistic concurrency:** <exact predicate>.
+2. **Locks:** <row/advisory lock keys and ordering>.
+3. **Idempotency:** <unique constraints and duplicate suppression>.
+4. **Dependency guards:** <what blocks a transition>.
+5. **Fail-closed checks:** <what stops startup instead of silently degrading>.
 
-## Open decisions and next gate
+## 3. GraphQL API Specification
 
-| Question / assumption | Impact | Blocking? / decision needed |
-| --- | --- | --- |
-| <Unresolved decision, or explicitly none> | <Scope, compatibility, security or data impact> | <Yes/no with reason> |
+### 3.1 Queries
 
-Next: independent security/spec review, then explicit human spec approval before QA authoring. Draft status and planned checks are not approval or execution evidence.
+```graphql
+extend type Query {
+  <query>(<args>): <Type> <existing repository authorization directive, if applicable>
+}
+```
+
+### 3.2 Mutations
+
+```graphql
+extend type Mutation {
+  <mutation>(input: <Input>!): <Payload>! <existing repository authorization directive, if applicable>
+}
+```
+
+<Document removals/renames as breaking, error semantics, nullability and caller impact. Mark `N/A — reason` when there is no API change.>
+
+## 4. Backend Implementation Architecture
+
+### 4.1 Service Layer
+
+<Use cases, transaction boundaries, authorization, validation, audit and failure classification. Cite real paths.>
+
+### 4.2 Adapters and Queries
+
+<Repository/adapter contracts, parameterized SQL, generated-query ownership, error mapping and driver isolation.>
+
+### 4.3 Background Execution and Operations
+
+<When applicable: enqueue/relay/worker lifecycle, execution identity, retry and ambiguity policy, shutdown, operator recovery, retention. Otherwise `N/A — reason`.>
+
+## 5. Frontend Architecture & Modular Integration
+
+### 5.1 Route Mapping and Adapters
+
+<Routes owned by which module, data source (API vs fixture), and cutover impact.>
+
+### 5.2 Component Architecture & UX Standards
+
+<Screens/components changed, loading/empty/error behavior, accessibility, and what must not change.>
+
+## 6. Multi-Tenant Security & Permission Guards
+
+<Database isolation, application authorization, privileged versus restricted pools, worker/operator authority, sensitive-data handling in payloads and logs.>
+
+| Risk | Prevention / recovery | Verification obligation |
+| :--- | :--- | :--- |
+| <Risk> | <Control> | <Negative and positive check> |
+
+## 7. Verification & Testing Strategy
+
+### 7.1 Backend Automated Verification
+
+```
+<Repository-supported command and required environment; use a container only if project policy requires it>
+```
+
+<Transactional, concurrency, isolation, failure-injection and recovery cases. Mark every check `NOT_RUN` until executed.>
+
+### 7.2 Frontend Automated Verification
+
+```
+<exact command>
+```
+
+<Contract/type/component checks and actual changed-flow Playwright smoke, including error states, keyboard/focus and relevant viewports. Mark unavailable browser evidence BLOCKED, not simulated PASS.>
+
+Coordinate targeted author checks at stable checkpoints without racing shared edits. These results do not replace separate final QA and reviewer runs or risk-required security specialist evidence. Record actual commands/exits and current-source results in `verification.md`; required FAIL/BLOCKED/NOT_RUN prevents a review-ready handoff.
+
+## 8. Rollout, Rollback and Open Decisions
+
+| Phase / decision | Action or question | Evidence or blocking status |
+| :--- | :--- | :--- |
+| Prepare | <dependency, migration, provisioning order> | <readiness signal> |
+| Roll out | <ordering and operator action> | <health/correctness signal> |
+| Roll back | <recovery steps and data limits> | <restored state> |
+| Open decision | <unresolved choice> | <blocking? owner> |
+
+## 9. Related Documents
+
+- [PRD](<relative link>)
+- [Task Breakdown](<relative link>)
+- <Runbook / architecture reference>

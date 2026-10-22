@@ -31,6 +31,30 @@ Use the smallest verification set that proves the approved behavior and protects
 - When specialist review is required, record attack paths, evidence, mitigations and current-source verdict in review artifacts. Missing required security evidence or unresolved findings blocks PASS. Otherwise, the independent reviewer records why specialist review is N/A.
 - Do not claim a dependency/tool ran without a successful invocation. Mark tools N/A with a reason when they do not materially apply to the task.
 
+## Review-ready handoff
+
+- Finish with readable planning documents, code-change scope, REQ/TC outcomes, regression/browser/security evidence or justified N/A, independent verdicts, current manifests, remaining risks and a concrete review path.
+- Required FAIL/BLOCKED/NOT_RUN, stale evidence or blocking defects prevent review-ready status. Schema validation and author assertions are not independent behavioral proof.
+- Preview/review does not require a PR, deployment or archive. Report review-ready independently of acceptance; only an explicit human acceptance closes that measure. Leave external delivery for a separate request.
+
+## Correction-cycle accounting
+
+Use a compact section in existing `verification.md`, not a new telemetry service or mandatory tool call. Record actual evidence when available; keep raw revisits visible instead of optimizing the classification.
+
+Field set (keep the names stable across the plan and evidence):
+
+- `raw revisits` — every human correction/revisit prompt, including ones excluded from the avoidable subtotal.
+- `avoidable revisits` — excludes only revisits evidenced as new scope or changed preference; unknown cause stays countable and labelled.
+- `raw total tokens` — all recorded workflow usage (parent, subagents, QA, review, retries) in the provider's units, or `unknown` with the missing coverage stated.
+- `avoidable subtotal` — tokens in full cycles started by avoidable revisits; never presented as a complete total when requests are unknown.
+- `first-pass acceptance` — yes / no / unknown, closed only by an explicit later human acceptance; silence and review-ready are not acceptance.
+- `elapsed time` — start to review-ready, and start to explicit acceptance where known.
+- `evidence coverage` — which cycles/requests have attributable records, and what remains unknown.
+
+Each revisit also records its category (requirement/planning gap, implementation defect, verification gap, new scope, changed preference, clarification, unknown), the affected REQ/TC, prompt/event and provider request IDs, and its cycle boundary from the correction prompt through repairs and re-review. Count each request once across parent/children/cycles; keep input, output and cache components separate without double-counting cache already included in input. Duplicate usage IDs are not counted twice.
+
+Preserve risk, route/model, sample and measurement boundaries for like-for-like comparison. Fixture arithmetic proves accounting behavior, not real savings; historical aggregates, RTK output reduction and schema checks are not savings evidence. Missing baseline or attribution is a stated limit, not zero.
+
 ## Archive
 - Archive only after all required scenarios pass, current independent QA/reviewer verdicts pass, applicable security review passes, OpenSpec validation passes, no blocking defects remain, and explicit human archive authorization matches current manifests.
 - Archive authorization does not authorize merge, release or deployment. Never infer authorization from silence, a generic “continue”, or a previous decision for changed inputs.

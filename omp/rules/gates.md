@@ -6,7 +6,7 @@ Load when creating, reviewing, approving, transitioning, verifying, or archiving
 
 | Artifact | Owner | Minimum content |
 | --- | --- | --- |
-| `interview.md` | interviewer | Route, current/desired behavior, users, goals, constraints, non-goals, facts, assumptions, blocking questions, dependency readiness. |
+| `interview.md` | primary planning author using interviewer role | Source-backed decisions, selected options/rationale, users/journeys, current/desired behavior, REQ IDs, acceptance, non-goals, risks and resolved/blocking questions. |
 | `prd.md` | product-manager | Human-readable product/mixed route: executive summary, user problem, desired experience, business rules, stable REQ IDs, measurable acceptance and success measures. |
 | `design.md` | tech-lead | Human-readable technical design: current/proposed behavior, architecture rationale, alternatives, REQ IDs, impact, contracts, failure/security risks, rollout/rollback. |
 | OpenSpec artifacts | tech-lead; product-manager consulted only for unresolved product interpretation | Installed schema's proposal and delta specs reflecting approved intent; design when required. Link REQ IDs; do not maintain competing requirements. |
@@ -17,7 +17,7 @@ Load when creating, reviewing, approving, transitioning, verifying, or archiving
 | `approvals.md` | orchestrator | Append-only human decisions binding exact artifact/input digests; never write approval on a human's behalf. |
 | `verification.md` | qa-engineer + reviewer | Per TC/REQ result and real command/browser evidence, dependency invocations/results, implementation identity, regressions, review findings, remaining risks. |
 
-- Product route requires PRD; engineering route requires design; mixed requires both. Schema-required design is still required on product work. Human approval covers the entire spec bundle, not just the PRD title.
+- Product route requires PRD; engineering route requires design; mixed requires both. Record applicable N/A before review. Product work still needs design for material technical decisions or schema requirements. Approve the whole bundle, not a document title.
 - Questions affecting scope, expected behavior, compatibility, security or data integrity block approval. Explicitly accepted nonblocking assumptions remain visible.
 - Authors may use their role instructions directly if dispatch is unavailable and disclose it. Required independent gate review and final QA verification must be separate from the author/implementer; no self-review fallback. Use a separate security-engineer run only for security-sensitive changes or when a reviewer identifies a credible security risk. For routine low-risk changes, the independent reviewer checks security relevance and records why specialist review is N/A. If a required independent reviewer or QA run is unavailable, mark BLOCKED.
 
@@ -25,40 +25,44 @@ Load when creating, reviewing, approving, transitioning, verifying, or archiving
 
 These are agent-enforced gates, not a runtime access-control mechanism. There is no `scripts/workflow_gate.py`; do not call it or claim automated enforcement.
 
-1. Build a sorted manifest of relative artifact paths and SHA-256 file digests. Use real hashing tools, such as `sha256sum` on Linux or `shasum -a 256` on macOS. Never invent hashes.
-2. Bind interview approval to `interview.md`; human planning approval to interview plus `prd.md`, `design.md` when applicable, and `task-breakdown.md`; spec approval to the human planning bundle plus all route/schema specification inputs (including proposal and every delta spec); test-plan approval to those inputs plus `test-plan.md`; tasks approval to all previous inputs plus `tasks.md`. Include OpenSpec config/schema inputs used by the change. Exclude the mutable approval/review/evidence ledgers themselves.
-3. Reviewer records PASS against the same input manifest for that gate. Show the human artifact paths, review findings, short scope/risk summary and manifest before asking approval.
-4. After an explicit human decision, recompute the manifest. If unchanged, append target, UTC timestamp, human decision reference/quote, manifest and matching review record to `approvals.md`. If changed during the decision, ask again. Never modify historical decisions.
-5. Before proceeding or resuming, re-enumerate files and recompute every upstream manifest. Changed bytes, missing files or new specification inputs invalidate that gate and all dependent approvals/reviews/tasks/verification. Treat prior records as historical, not current authority.
-6. Freeze approved `tasks.md` content. Track execution completion and evidence separately in `verification.md` so checkbox edits do not silently invalidate task approval. Reconcile OpenSpec task checkboxes only after verification and human archive authorization; record that completion-only reconciliation and rerun validation. Any task wording/scope change requires renewed task review/approval.
-7. Bind final verification to current source: record HEAD plus a digest manifest of changed tracked and relevant untracked files (including deletions), or a full relevant-source manifest outside Git. HEAD alone does not identify a dirty worktree. Source/test/config changes invalidate verification; rerun affected checks and independent review.
+1. Build a sorted, complete path/SHA-256 manifest with real hashing tools. `human-planning` binds `interview.md`, applicable `prd.md`/`design.md`, and `task-breakdown.md`. `execution` binds that entire bundle plus proposal, every delta spec, `test-plan.md`, `tasks.md`, and relevant installed OpenSpec configuration/schema inputs. Exclude mutable ledgers and project authoring guides; retain guide identities as supporting source context, not self-invalidating approval dependencies.
+2. An independent reviewer records PASS for the same bundle manifest. Show artifact paths, findings, scope/risk and manifest before using built-in `ask` for approve/approve stop/revisit/pause. If unavailable, disclose it and await a numbered explicit response. A tool invocation, silence, generic “continue” or another target's approval is not consent.
+3. Record only a decision made at this presented checkpoint and bound to the manifest just shown. A free-text directive such as “implement this”, “proceed on your own”, “go ahead” or “you have my approval” never binds an approval, even when it explicitly asks for implementation; state the missing obligation and the single command that obtains it. Never write an approval from prose, from a previous decision for different inputs, or on the operator's behalf. Schema overrides such as `skip_specs` never substitute for a bundle or its approval.
+4. Recompute/re-enumerate inputs after the real decision. If unchanged, append target, UTC timestamp, decision reference/quote, manifest and matching review reference to `approvals.md`. If changed, disclose the delta and ask again. Never rewrite history.
+5. Before transition/resume, recompute upstream manifests, including added/missing inputs. Relevant changed bytes invalidate the affected bundle and its dependents; preserve historical records. Changes to project authoring guides alone do not regenerate approved content. A guide change that requires an artifact-content/schema change follows ordinary re-review/reapproval.
+6. Freeze approved task wording and checkboxes; track execution in `verification.md`. Reconcile completion-only checkboxes only on explicit archive authorization after verification, record it and rerun validation. Task-scope changes require renewed execution review/approval.
+7. Bind verification to HEAD plus current changed tracked/relevant untracked/deleted-file digests, or a full relevant-source manifest outside Git. HEAD alone does not identify dirty source. Changed source/test/config invalidates affected verification; rerun affected checks and independent delta review.
+8. Reuse exact unchanged evidence. A commit containing identical verified bytes may be rebound only with proof that source/test/config inputs and relevant tool/runtime context are equivalent; record old/new identity and mapping. A new hash, HEAD or schema PASS alone is not behavioral proof. New reviewers still inspect the authoritative inputs needed for their judgment.
 
 ## Gates
 
 Every transition rechecks all upstream evidence. Missing, stale, FAIL, BLOCKED or NOT_RUN evidence never means PASS. Review PASS is not human approval. OpenSpec readiness is not human approval either.
 
-| Next action | Required evidence |
+| Operation | Required evidence / boundary |
 | --- | --- |
-| Product planning (`work-product-plan`) | Interview complete, independent interview review PASS and human interview approval. |
-| Technical planning (`work-tech-plan`) | Interview approved; PRD draft/product context available; technical questions resolved; design and human task breakdown complete. |
-| Human document review (`work-doc-review`) | Independent review of the complete human planning bundle PASS and explicit human approval of its manifest. |
-| Implementation preparation (`work-prepare`) | Human planning bundle approved and fresh; generate OpenSpec artifacts and validate fidelity before spec review. |
-| Write QA scenarios (`work-qa`) | Human planning bundle approved; OpenSpec preparation complete, independent spec review PASS (plus security-engineer PASS when risk requires it) and explicit human approval of generated specs. |
-| Plan tasks (`work-plan`) | Every REQ covered by QA scenarios, independent test-plan review PASS, explicit human test-plan approval. |
-| Implement (`work-implement`) | Fresh interview/spec/test-plan approvals, complete tasks, independent tasks review PASS, human tasks approval binding the full planning bundle, successful OpenSpec validation. |
-| Verify (`work-verify`) | Implementation tasks complete; approved scope preserved; current source identity, test changes and runnable checks available. |
-| Archive (`work-archive`) | All required scenarios PASS, no unresolved review defects, OpenSpec validation PASS, independent QA and reviewer PASS for current source, explicit human archive authorization. Merge/release requires its own authorization. |
+| Interview, product/technical planning | Current-state investigation and aligned material decisions; author one human bundle. No separate interview approval or derived specs yet. |
+| `work-doc-review` / `human-planning` approval | Independent complete human-bundle PASS, no blocking unknowns, explicit approval of its exact manifest. |
+| `work-prepare`, `work-qa`, `work-plan` | Fresh human-planning approval before any derived artifact; contribute specs, scenarios and tasks to one execution bundle. No intermediate human approvals. |
+| `execution` approval | Complete fresh human/execution inputs, independent execution-bundle PASS, security PASS when required, full REQ/TC/task coverage, successful installed-schema validation, explicit human approval. |
+| `work-implement` | Fresh human-planning and execution approvals; implement only approved scope. No legacy target alias grants this permission. |
+| `work-verify` | Tasks complete, approved scope preserved, current source/checks available; separate independent QA and reviewer examine actual behavior/evidence. |
+| Review-ready | Every required scenario PASS, fresh independent QA/reviewer PASS, required security PASS and OpenSpec validation PASS, no blocking defect; readable docs/code/test/QA/risk handoff. No human acceptance inferred. |
+| `work-archive` | Review-ready evidence plus separate explicit human archive authorization matching current manifests. PR, deployment, merge and release remain separately requested. |
 
-- Each stage command runs its required independent review, repairs findings within approved scope, then presents one checkpoint. Avoid duplicate review runs: reuse a PASS only when the exact input manifest is unchanged; the human does not need to run a separate review command.
-- Re-review after a repair is delta-scoped: review the changed artifact, the prior review's findings and only the inputs those depend on. Keep the prior PASS for the unchanged surface and record the reused manifest identity. Continue the existing reviewer instead of spawning a fresh one so it keeps the context it already read. Bound the loop: if the same finding class survives two re-reviews, stop repairing and report it to the human instead of re-dispatching.
-- Stop at every human approval boundary. Do not chain past a pending decision, infer approval from silence, or treat a generic "continue" as approval of undisclosed content.
-- Material scope changes return to interview/spec. Changed QA expectations return to QA approval. Repair code within approved scope, then repeat affected verification.
-- For security-sensitive specs, require a separate `security-engineer` red-team/blue-team assessment of the same input manifest before the reviewer can PASS; QA must cover its threat scenarios. For routine low-risk specs, the independent reviewer checks the change classification and records a concise security-N/A rationale.
-- Final verification always requires independent QA and reviewer PASS. Add a fresh security-engineer PASS bound to the current source/planning manifests only for security-sensitive changes or when a credible security issue is found. Missing required specialist evidence or unresolved findings blocks the gate. Record applicable security results in `review.md` and reference them from `verification.md`; no extra human approval target.
+- Keep one continuing author/reviewer where practical; do not dispatch a new role merely to rewrite equivalent material. Each pre-build bundle gets one independent review and one human checkpoint, not one per constituent file.
+- Re-review repairs only in the changed artifact, prior findings and dependent inputs; reuse proven-unchanged PASS coverage with its identity. Continue the existing reviewer when available. If the same finding class survives two re-reviews, surface it rather than loop.
+- Stop at pending approval. An explicit custom-role invocation authorizes only that role's work, not a lifecycle transition. Status/view remain inspection-only.
+- Material intent/scope changes return to human planning; changed spec/QA/task content returns to execution review/approval. Repair code within approved behavior, then repeat affected verification. Never alter expectations to fit defects.
+- Required security review is a separate security-engineer red-team/blue-team run for sensitive scope or credible findings, bound to current inputs and covered by QA threat scenarios. Otherwise the independent reviewer records a specific security-N/A rationale. Reassess at final verification.
+- Final QA and reviewer must be independent of implementers and each other; missing required independent evidence blocks readiness. Same operator-authorized model in separate runs is allowed; no silent paid escalation.
+
+## Legacy changes
+
+Preserve old artifacts/decisions. Enumerate their actual inputs and map coverage to each new bundle. Reuse only matching unchanged evidence; independently review missing/changed coverage and present an explicit human decision on the proposed mapping/manifest before a new-bundle transition. An old interview/spec/QA/tasks target is not an alias for `human-planning` or `execution`. Status/resume explain the next unmet obligation; they never auto-implement. A change already authorized under the old gates must finish those recorded obligations unless this reviewed mapping is explicitly approved; this workflow cannot self-bypass its own redesign.
 
 ## Human checkpoints
 
-Every stage ends with exactly one checkpoint, not a chain of questions. Keep it scannable:
+Each of the two pre-build bundles has one checkpoint after independent PASS. Role-only draft work does not force a lifecycle checkpoint. Keep it scannable:
 
 ```text
 Stage: <stage> | review: <PASS/CHANGES_REQUESTED/BLOCKED>
@@ -75,7 +79,7 @@ Decision: approve | approve stop | reject: <reason> | revisit: <question/stage> 
 - `pause`: record nothing and point to `/work-resume <slug>`.
 - One explicit reply is enough. Do not ask for the same decision twice; do not make the human re-run review after a PASS unless inputs changed.
 - Show artifact paths, a one-line scope/risk summary, review findings and the manifest identity before asking. Invocation, silence, "continue" or an earlier approval is not a decision.
-- `work-doc-review` reviews the human planning bundle before OpenSpec; `work-review` performs later independent gate reviews and presents this checkpoint. `work-approve` resumes a pending decision or records one supplied after a review.
+- `work-doc-review` handles the human bundle; `work-review` handles an explicitly assigned independent review. `work-approve` accepts only `human-planning`, `execution`, or separately requested `archive`, verifies prerequisites and records the actual decision. No legacy-target aliases.
 
 ## Agent handoffs
 

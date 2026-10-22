@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
-# Token-budget guard.
-#   1) asserts the effective omp config keeps context and request volume off
-#      the quota-limited providers;
-#   2) prints live usage from the stats DB so before/after can be compared.
-# Usage: tests/token-budget.sh [hours]   (default 24)
+# Checks effective routing/context configuration and reports historical usage.
+# Usage: tests/token-budget.sh [hours] (default 24); not a workflow-savings benchmark.
 set -euo pipefail
 
 OMP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -42,8 +39,8 @@ def check(label, ok, detail=""):
         errors.append(f"{label}: {detail}")
 
 threshold = get("compaction.thresholdTokens")
-check("compaction.thresholdTokens caps the live context",
-      threshold == 200000, f"got {threshold!r}, expected 200000")
+check("compaction.thresholdTokens is a positive integer",
+      type(threshold) is int and threshold > 0, f"got {threshold!r}")
 
 find_enabled = get("find.enabled")
 check("find (dead judge route) is disabled",

@@ -1,26 +1,25 @@
 ---
-description: Draft a human-readable PRD from the approved interview.
+description: Draft a human-readable PRD from the confirmed interview.
 ---
 
 ## Rule loading
 
-- Read the installed shared `RULES.md` and `rules/core.md` before acting. Also read `rules/planning.md`; load `rules/gates.md` for approval/freshness checks. Do not load unrelated stage rules.
+- Read installed shared `RULES.md` and apply its activation check there. Read `rules/core.md` and `rules/planning.md`; load `rules/gates.md` only for bundle decisions. Resolve paths under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`; stop if required policy is unreadable.
+
 ## Load and gate
 
-- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable; preserve stricter gates.
-- Change slug: $1. Read `interview.md`, its review/approval records and manifest. Stop if independent interview review is not PASS, explicit human interview approval is missing, or the manifest is stale.
-- Do not generate OpenSpec specs in this stage. Human planning documents come first.
+- Change slug: $1. Read `interview.md` and the repository context; stop if material questions are blocking or the interview is incomplete.
+- Do not generate OpenSpec specs in this stage: human planning documents come first and are approved together as `human-planning`.
 
 ## Write the PRD
 
 - Dispatch `product-manager`; if dispatch is unavailable, follow its role instructions and disclose the substitution.
-- For product/mixed work, write `prd.md` from the confirmed interview and evidence. For engineering-only work, explain in `interview.md` why a PRD is not applicable; do not invent business requirements.
-- Follow `PRD.md`. Write for a teammate who did not join the interview: executive summary, user problem, current behavior, proposed experience, goals, non-goals, journeys, business rules, risks and measurable acceptance.
-- Preserve stable REQ IDs. Distinguish facts, assumptions, proposals and unresolved questions. Keep technical architecture out unless needed to explain a user-visible constraint.
-- Remove unused sections and placeholders. Do not author OpenSpec `proposal.md`, delta specs, agent tasks or implementation code.
+- For product/mixed work write `prd.md` from confirmed interview evidence and source, following `PRD.md` through shared template resolution. For engineering-only work record PRD N/A in the human bundle; do not invent business requirements.
+- Write for a teammate who did not join the interview: executive summary, user problem, current behavior, proposed experience, goals, non-goals, journeys, business rules, risks and measurable acceptance. Remove placeholders and unused sections.
+- Preserve stable REQ IDs and distinct facts, assumptions and unresolved questions. Keep implementation architecture out unless needed to explain a user-visible constraint.
+- Never continue into derived specifications, tasks or code.
 
-## Review and checkpoint
+## Handoff
 
-- Run a readability and completeness self-check. Record any unresolved questions in the document rather than hiding them.
-- Present the PRD path, summary, assumptions and blockers as a draft handoff. Do not request final human approval here; PRD and Tech Doc are reviewed together after technical planning.
-- If no material product question blocks technical design, continue to `/work-tech-plan $1`. If a decision is needed to proceed, ask the human and record the answer in `interview.md` before continuing.
+- Continue to `/work-tech-plan $1` when no material product question blocks technical design. If a decision is needed, ask the operator, record the answer in `interview.md`, and then continue.
+- The human bundle is reviewed and approved once at `/work-doc-review $1`; do not request a separate PRD review or approval.

@@ -9,11 +9,11 @@ status: draft
 | Field | Value |
 | --- | --- |
 | Change | <slug> |
-| Approved inputs | <Applicable PRD/design/spec paths and test-plan approval references> |
+| Inputs | <Approved human-planning manifest plus pending schema/spec/QA paths; no separate QA approval> |
 | Delivery outcome | <Smallest complete, independently verifiable change> |
 | Sequencing | <Dependency order and why; do not impose backend/frontend or CRUD ordering> |
 
-Keep the installed OpenSpec schema's headings and numbered task-checkbox grammar. The checklist below is a shape example, not approved work; freeze the resulting plan after human approval and track execution in `verification.md`.
+Reuse approved human milestones, REQ IDs and TC scenarios instead of inventing a competing plan. Installed OpenSpec schema headings and numbered task-checkbox grammar take precedence over this shape example. Tasks join the entire execution bundle for independent review, schema validation and explicit `execution` approval before implementation, as defined by the [canonical gate protocol](../rules/gates.md). Freeze approved wording/boxes and track progress in `verification.md`.
 
 ## 1. Implementation and verification
 
@@ -66,6 +66,6 @@ Repeat the detail block for each checklist task. Keep details short enough to ha
 | --- | --- | --- | --- |
 | <ID> | <IDs> | <IDs> | <None or explicit gap> |
 
-- Include a runnable smoke path and independent QA/security/review handoff; all approved behavior and affected-feature regressions must be covered.
-- Planned commands and unchecked tasks are not execution results. Keep actual commands, exit codes and current-source evidence in `verification.md`.
-- Next: independent tasks review, OpenSpec validation and explicit human tasks approval binding the entire planning bundle before implementation.
+- Include a runnable changed-path smoke and separate final QA/reviewer handoffs; risk-required security specialist evidence, all approved requirements and affected-feature regressions must be covered.
+- Targeted author checks are permitted at coordinated stable checkpoints without shared-edit races; they do not replace independent QA. Planned commands and unchecked tasks are not results. Keep actual commands, exit codes and current-source evidence in `verification.md`.
+- Next: independently review and validate the complete human/schema/spec/QA/task execution bundle, then request `execution` approval of its current immutable manifest. No standalone tasks approval. Required FAIL/BLOCKED/NOT_RUN or unresolved blocking findings prevent readiness; finish at review-ready, not archive or implicit acceptance.

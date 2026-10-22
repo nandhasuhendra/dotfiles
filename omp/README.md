@@ -2,6 +2,12 @@
 
 Custom agents and slash commands for human-first product/technical planning, OpenSpec preparation, QA and implementation. Shared policy: [RULES.md](RULES.md).
 
+## Explicit opt-in and scope
+
+The workflow activates before loading lifecycle core/stage/gate policy, only for a custom `/work-*` command, an explicit custom-agent request, or an explicit workflow request. Ordinary questions, unrelated work, repository presence, path/tool mentions and internal helper dispatch do not activate planning or approvals. Ordinary safety, relevant skills and verification still apply.
+
+Activation belongs to the requested operation/change, not the entire session. A direct role performs only its assigned work; `/work-status` and `/work-view` are read-only and do not start planning. Explicit invocation is not approval and cannot bypass an active change's transition prerequisites. See [activation policy](RULES.md) and the canonical [gate protocol](rules/gates.md).
+
 ## Context and token efficiency
 
 The workflow must not spend tokens discovering its own configuration. Read only the active command/agent prompt, the short rule index, core rules and rules required for the current stage. Never read every agent, command, skill, template or rule file. OMP already supplies the active prompt; do not reopen it. Load skills and tool documentation only when the task needs them. Use paths, IDs and digests to reference artifacts; read full bodies only when required for the current decision or review. Reuse unchanged context and avoid repeating full documents in handoffs.
@@ -18,9 +24,9 @@ The workflow bundles the [Caveman skill](skills/caveman/SKILL.md) from [JuliusBr
 
 ## Model selection and quota-aware operation
 
-The operator chooses the active model per session based on availability. No workflow agent pins GPT, Claude, Gemini or DeepSeek. Child agents inherit the active model route unless the operator explicitly configures overrides. Codex OAuth can still consume usage allowances quickly even at low effort.
+The operator chooses the active model per session based on availability. No workflow agent pins a provider or silently switches to a paid route. Child agents inherit the active route unless the operator explicitly configures overrides; workflow work does not authorize persistent settings changes.
 
-Prefer deterministic inspection to delegation when independent judgment is unnecessary. Required independent reviewers and QA remain separate, but receive narrowly scoped objectives and artifact paths rather than repeated document bodies. If a provider is quota-limited, request an operator model switch instead of silently charging a different provider.
+Independent review and final QA require separate runs, not different models. Correctly routed author, reviewer and QA runs may use the same operator-authorized free model. Required unavailable dispatch or coverage is BLOCKED/NOT_RUN, never inferred capability; request an operator routing decision rather than silently choosing another provider.
 
 `defaultThinkingLevel: low` and `task.enableEffort: false` reduce default reasoning consumption; raise main effort manually for difficult work. These are not hard cost limits.
 
@@ -55,7 +61,7 @@ CLI packages go into `${NPM_CONFIG_PREFIX:-$HOME/.local}`; keep its `bin/` direc
 
 The terminal UI shows five real stages with text labels and terminal-palette colors: cyan for stages/running work, green for ready/success, yellow for backups/notices and red for errors. Color is supplementary, not the only status signal. Redirected output, `TERM=dumb` and `NO_COLOR` produce plain text. Full command logs are retained under `<config-dir>/install-logs/`; a failed dependency check stops before configuration replacement.
 
-Start a new OMP session after installation. Every agent and command loads installed shared policy first, then project `.omp/RULES.md` when present. Shared `RULES.md` and `rules/*.md` resolve under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, not the working directory. Project policy is additive; unreadable required policy blocks execution.
+Start a new OMP session after installation. Explicitly activated operations load the applicable installed shared policy first, then project `.omp/RULES.md` when present. Shared `RULES.md` and `rules/*.md` resolve under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, not the working directory. Project policy is additive; unreadable required policy blocks the operation.
 
 ## Dependencies
 
@@ -96,18 +102,17 @@ File read/search/edit tools remain preferred over shell. Internal script plumbin
 
 Use Context7 for relevant external library/framework/SDK/API/CLI/service documentation questions: resolve the library ID, then query the specific topic. An exact supplied Context7 ID skips resolution. Match installed versions when supported, record sources/version limitations, never send private code or secrets, and reuse current applicable results. If unavailable, disclose authoritative-doc fallbacks; material unresolved decisions block progress. An enabled MCP entry or successful initialize handshake alone is not proof of documentation retrieval.
 
-Read installed Ponytail before implementation. Reuse unchanged guidance already read in the same session; fresh children must read it themselves. Neither rule requires unrelated tools to run at every stage.
+Read installed Ponytail before implementation for the smallest complete solution. Caveman is required for conversation, not human documents; use relevant Antislop variants for prose, comments or UI without unrelated UI setup. Prefer available language-server symbol intelligence and Codegraph for nontrivial impact, confirming callers and regression scope in source. Reuse unchanged guidance already read in the same session; fresh children read their needed inputs. No tool runs merely to fill a checklist.
 
 
 ### Use by stage
 
 | Stage | Use when relevant | Evidence |
 | --- | --- | --- |
-| Interview | Repository instructions and existing docs; OpenSpec only if needed to clarify workflow constraints | Confirmed facts and blockers |
-| Spec | OpenSpec for schema/validation; Codegraph for nontrivial impact; Context7 for external documentation questions | Actual results and limitations |
-| QA | Existing tests/source always; Playwright for browser behavior; Codegraph for nontrivial dependency impact | Regression surface and runnable scenarios |
-| Implement | Ponytail before implementation; Codegraph for nontrivial callers; Context7 for external documentation questions | Smallest solution and relevant command results |
-| Verify | OpenSpec validation; actual project tests; Playwright for browser changes | Commands, exit codes and observed outcomes |
+| Discovery/human planning | Repository instructions, current source/callers/tests/docs; read-only schema preflight if needed | Confirmed facts, decisions, rationale and blockers |
+| Execution preparation | Installed OpenSpec schema/validation; Codegraph/LSP for nontrivial impact; Context7 for external documentation questions | Linked specs, QA scenarios and schema tasks; actual results and limitations |
+| Implement | Ponytail; relevant source intelligence and external docs; targeted checks at coordinated stable checkpoints | Smallest complete solution; author evidence is not independent QA |
+| Verify | OpenSpec validation; actual project tests and changed-path smoke; actual Playwright for browser changes | Commands, exit codes, observed outcomes and independent QA/reviewer verdicts |
 | Security | Security-engineer only for security-sensitive scope or a credible risk | Attack paths, mitigations and evidence |
 
 Do not invoke a tool solely to fill an evidence checklist. Record each actual invocation and result; mark genuinely inapplicable tools N/A with a short reason. Never claim a tool ran when it did not.
@@ -122,9 +127,9 @@ Installation boundaries:
 
 ### Modular shared rules
 
-- `RULES.md` is a short policy index; every stage reads `rules/core.md`.
-- Planning stages load `rules/planning.md`; gate/approval transitions load `rules/gates.md`; implementation loads `rules/execution.md`; verification/security/archive load `rules/execution.md` and `rules/verification.md`.
-- Agents load only the rules relevant to their assigned task. Do not read every stage rule by default.
+- `RULES.md` decides activation before loading workflow-specific rules.
+- Activated operations load core and only their applicable stage rules; approval transitions use the canonical protocol in `rules/gates.md`.
+- Direct roles load policy relevant to assigned work, not a complete planning pipeline. Status/view remain read-only.
 
 ## Efficiency and adaptive effort
 
@@ -134,19 +139,23 @@ Both modes preserve human approval, required gate review, OpenSpec validation, Q
 
 ## Human-first command sequence
 
-| Step | Command | Output and gate |
-| --- | --- | --- |
-| 1. Interview | `/work-new <request>` | Gather requirements and approve the interview. No OpenSpec specs yet. |
-| 2. Product planning | `/work-product-plan <slug>` | Draft human-readable `prd.md` when applicable; final review happens with the Tech Doc. |
-| 3. Technical planning | `/work-tech-plan <slug>` | Human-readable `design.md` and `task-breakdown.md`. |
-| 4. Human document review | `/work-doc-review <slug>` | Independent review and approval of the complete human planning bundle. |
-| 5. Implementation preparation | `/work-prepare <slug>` | Translate approved docs into OpenSpec artifacts, validate REQ traceability, review and approve. |
-| 6. QA planning | `/work-qa <slug>` | Agent-ready scenarios derived from approved requirements; review and approval. |
-| 7. Agent task planning | `/work-plan <slug>` | OpenSpec-compatible `tasks.md` linked to REQ/TC IDs; review and approval. |
-| 8. Build and verify | `/work-implement <slug>` then verification | Implement approved tasks; verify real evidence, regressions and security. |
-| 9. Complete | `/work-archive <slug>` | Requires final verification and explicit archive authorization; merge/release remains separate. |
+There are exactly two routine pre-build approval targets: `human-planning` and `execution`. [Canonical gates](rules/gates.md) define manifests, review/decision handling and transitions; the sequence below is a navigation guide, not another protocol.
 
-**Important:** `task-breakdown.md` is for people; `tasks.md` is the agent-ready execution checklist. Human planning docs are the source of truth. If OpenSpec preparation discovers an unresolved material decision or changes approved intent, return to planning and re-review.
+| Step | Command | Output and boundary |
+| --- | --- | --- |
+| Discover | `/work-new <request>` | Inspect current source/docs/tests, use built-in `ask` for material choices and record interview decisions. Interview confirmation is not a separate approval gate. |
+| Human planning | `/work-product-plan <slug>` when applicable; `/work-tech-plan <slug>` | Reuse/update applicable PRD, design and human task breakdown proportionally. Read-only schema preflight is allowed; no generated specs yet. |
+| Human checkpoint | `/work-doc-review <slug>` | Independently review interview plus applicable PRD/design and human task breakdown together; request `human-planning` approval of the immutable input manifest. |
+| Execution preparation | `/work-prepare <slug>` | After human approval, derive schema proposal/specs, QA plan and executable tasks together. `/work-qa` and `/work-plan` populate this bundle, without separate approval checkpoints. |
+| Execution checkpoint | `/work-review <slug> execution`; `/work-approve <slug> execution` | Independent full-bundle review, risk-required security review, successful schema validation and explicit `execution` approval before code. |
+| Implement | `/work-implement <slug>` | Complete approved tasks/callers/tests/docs; coordinate targeted checks at stable checkpoints without racing shared edits. |
+| Independently verify | `/work-verify <slug>` | Separate QA and final reviewer runs, plus risk-required security specialist; current actual results and changed-path smoke. |
+| Finish | Review-ready handoff | Present documents, changes, evidence, identities and remaining risks; await human review/acceptance without taking external actions. |
+| Optional administration | Explicit `/work-archive <slug>` request | Separate archive authorization and current prerequisites; never implicit PR, merge, release or deployment permission. |
+
+`task-breakdown.md` is the human milestone plan; schema `tasks.md` is its linked executable checklist, not a second competing plan. Human documents remain authoritative. Material gaps or contradictions discovered during preparation reopen affected planning rather than silently adding behavior.
+
+Inspect source before asking questions. Present concrete consequences, options and a recommendation through built-in `ask`, support custom input, challenge risky choices with source-backed evidence, and record the selected rationale automatically. If `ask` is unavailable, disclose that and use numbered questions. Do not repeat settled questions without material new evidence or changed intent.
 
 ## Document templates
 
@@ -154,15 +163,15 @@ Both modes preserve human approval, required gate review, OpenSpec validation, Q
 | --- | --- | --- |
 | [PRD](templates/PRD.md) | `prd.md` / product-manager | `/work-product-plan <slug>` |
 | [Tech Doc](templates/TECH-DOC.md) | `design.md` / tech-lead | `/work-tech-plan <slug>` |
-| [QA Test Case Scenarios](templates/QA-TEST-CASES.md) | `test-plan.md` / qa-engineer | `/work-qa <slug>` after spec approval |
+| [QA Test Case Scenarios](templates/QA-TEST-CASES.md) | `test-plan.md` / qa-engineer | Execution preparation after `human-planning` approval |
 | [Human Task Breakdown](templates/HUMAN-TASK-BREAKDOWN.md) | `task-breakdown.md` / tech-lead | `/work-tech-plan <slug>` |
-| [Agent Task Checklist](templates/TASK-BREAKDOWN.md) | `tasks.md` / tech-lead | `/work-plan <slug>` after QA-plan approval |
+| [Agent Task Checklist](templates/TASK-BREAKDOWN.md) | `tasks.md` / tech-lead | Execution preparation alongside QA, before `execution` approval |
 
 Adapted from the supplied EVA document templates and embedded QA scenarios, retaining structure rather than EVA-specific repositories, frameworks, tenant policies or CRUD ordering. They use short sections, observable acceptance criteria and stable REQ/TC/SEC/task links.
 
-Authors read project `.omp/templates/<filename>` first, then the installed `templates/` directory as fallback. Missing templates block authoring. Re-run the installer to expose the supplied templates; do not overwrite approved artifacts by copying blank templates into a change.
+Reuse existing source-backed human documents and milestones before drafting new ones. Read project `.omp/templates/<filename>` first, then installed `templates/` as fallback when a template is needed; missing optional scaffolding does not block a complete existing document. Keep applicable professional detail and mark inapplicable concerns with reasons instead of forcing application-specific sections.
 
-OpenSpec's installed schema controls required headings and checkbox syntax for its artifacts; these templates supply the content checklist. Replace example rows/tokens, retain explicit unknowns as blockers, and link real evidence only. QA plans remain specifications: execution results go into `verification.md`.
+The installed OpenSpec schema takes precedence for required headings and checkbox grammar. Templates guide content, not mandatory duplicate artifacts/checklists. Preserve complete REQ/TC/security and affected-feature regression coverage; planned commands and examples are not runtime evidence. QA execution results and progress belong in existing `verification.md`, not the frozen approved plan.
 
 ## Read on your phone
 
@@ -191,71 +200,37 @@ Open the printed `http://<laptop-lan-ip>:8765/` on a phone connected to the same
 
 | Agent | Responsibility |
 | --- | --- |
-| interviewer | Ask 1–3 plain-language questions per round; keep interviewing until readiness passes, then request explicit approval. |
+| interviewer | Inspect source first; use built-in `ask` for concrete choices, challenge with evidence, and record decisions/rationale without repeating settled questions. |
 | product-manager | Convert product requirements into a business-facing PRD with measurable REQ IDs. |
-| tech-lead | Write the human Tech Doc and task breakdown, then derive agent-ready OpenSpec tasks after QA planning. |
-| qa-engineer | Write traceable TC scenarios after spec approval; independently verify implementation later. |
+| tech-lead | Reuse/write human design and milestones, then derive schema specs/tasks alongside QA in combined execution preparation. |
+| qa-engineer | Populate traceable QA scenarios in execution preparation; independently verify implementation in a separate run later. |
 | security-engineer | Red-team attack-path analysis and blue-team defenses, mitigations and security regression checks. |
 | reviewer | Independently review gate inputs and final changes, with concrete evidence. |
 | software-engineer | Implement only the approved, reviewed and testable scope. |
 
 Product work requires `prd.md`; engineering work requires `design.md`; mixed work requires both. OpenSpec schema-required artifacts still apply. Extra technical design is required when a product change needs technical decisions.
 
-### Agent flow
+### Ownership and review
 
-| Stage | Author | Independent check | Handoff |
-| --- | --- | --- | --- |
-| Interview | interviewer | reviewer | `interview.md` + checkpoint |
-| Product planning | product-manager | independent reviewer | human `prd.md` + checkpoint |
-| Technical planning | tech-lead | independent review in next gate | human `design.md` + `task-breakdown.md` |
-| Human document review | reviewer | orchestrator checkpoint | approved human source-of-truth bundle |
-| Implementation preparation | tech-lead | reviewer; security-engineer when applicable | OpenSpec proposal/spec bundle + REQ mapping + checkpoint |
-| QA | qa-engineer | reviewer | `test-plan.md` + checkpoint |
-| Plan | tech-lead | reviewer + OpenSpec validation | `tasks.md` + checkpoint |
-| Implement | software-engineer | none midflight | source/tests + task evidence |
-| Verify | qa-engineer | reviewer; security-engineer when applicable | `verification.md` + archive checkpoint |
-| Archive | orchestrator | OpenSpec validation | archived change |
+A continuing informed author may carry related authoring stages forward using digest-current inputs. Independent reviewers inspect their own authoritative inputs; final QA and final reviewer are separate runs from implementers and each other. Security-sensitive scope or credible risk requires a security specialist; otherwise record why it is inapplicable.
 
-Every author returns the shared handoff block from `RULES.md`. The orchestrator runs the review, presents one checkpoint and records the human reply; no author records approval.
+Targeted author checks may run once owned inputs are stable and no shared-edit race exists. Record real failures and repairs; these checks do not self-certify QA. Final readiness requires current required scenarios, changed-path smoke and independent verdicts, with no unresolved blocking finding. Required FAIL/BLOCKED/NOT_RUN prevents readiness.
 
-## Command sequence
+Every author returns `Gate`, `Artifacts`, `Evidence`, `Open questions`, `Next`. The orchestrator applies the [canonical gate protocol](rules/gates.md), presents the actual bundle and records only an explicit human decision. `/work-review <slug> <target>` and `/work-approve <slug> <target>` use `human-planning` or `execution`; administrative `archive` remains separate. `/work-status` reports evidence/freshness, blocker and one next action; `/work-resume` rechecks prerequisites rather than inferring approval.
 
-Replace `change-slug` with the slug recorded by the interview. Each stage command authors the work, runs its independent review, then presents one checkpoint. Reply once; you do not need a separate review command.
+### Approval identity and legacy work
 
-| Step | Command | Result / checkpoint |
-| --- | --- | --- |
-| Interview | `/work-new <request>` | Ask adaptive questions until requirements fit; write `interview.md`, review, then ask for approval. |
-| Product planning | `/work-product-plan change-slug` | Draft human PRD; final approval is in the combined review. |
-| Technical planning | `/work-tech-plan change-slug` | Human Tech Doc and task breakdown. |
-| Human doc review | `/work-doc-review change-slug` | Independent review and approval of human docs. |
-| Implementation prep | `/work-prepare change-slug` | Translate approved docs to OpenSpec specs; validate and review. |
-| QA plan | `/work-qa change-slug` | Positive, negative, boundary and regression scenarios; review, then approval. |
-| Plan | `/work-plan change-slug` | Tasks linked to REQ/TC IDs, OpenSpec validation and review, then approval. |
-| Implement | `/work-implement change-slug` | Implement approved tasks, then run independent verification automatically. |
-| Verify | `/work-verify change-slug` | Independent QA and reviewer evidence; security specialist when risk warrants; present archive authorization. |
-| Close | `/work-archive change-slug` | Requires verification PASS and explicit archive authorization. Does not authorize merge/deploy. |
+Human-planning inputs are the interview, applicable PRD/design and human task breakdown. Execution inputs include that approved bundle, change configuration and installed schema inputs, proposal/specifications, QA plan and schema tasks. Reviews and decisions bind immutable sorted path/SHA-256 manifests; mutable ledgers, execution progress and project authoring guides such as `omp/templates/` stay outside normative approval inputs. Record supporting guide/source identities separately.
 
-Every checkpoint offers the same replies:
+Added, deleted or changed relevant inputs invalidate affected and dependent approval/evidence. Retain append-only history; reuse unchanged evidence only after proving freshness/equivalence. Freeze approved task wording and boxes during implementation; record progress in `verification.md`. Final source identity includes relevant dirty/untracked/deleted files, not HEAD alone.
 
-| Reply | Effect |
-| --- | --- |
-| `approve` | Record the decision, then continue to the next stage. |
-| `approve stop` | Record and stop; resume later with `/work-resume change-slug`. |
-| `reject: <reason>` | Record rejection without approval and send the work back to its author. |
-| `revisit: <question/stage>` | Reopen that stage; changed inputs invalidate dependent records. |
-| `pause` | Write nothing; resume with `/work-resume change-slug`. |
+Legacy approvals do not alias new targets. Inspect current artifacts/history, independently review coverage and the proposed mapping, then obtain an explicit human decision binding the mapped current bundle. Incomplete human coverage returns to human planning; incomplete derived coverage returns to execution preparation. Preserve old records and never infer implementation permission from old target names.
 
-`/work-review change-slug <target>` is optional for a re-review or a standalone checkpoint. `/work-approve change-slug <target> [decision]` resumes a pending decision. `/work-status change-slug` shows one next action. Neither invocation nor silence counts as approval.
+### Review-ready is not acceptance
 
-## What makes a gate valid
+The final package links documents, changed behavior/contracts/files, task completion, actual commands/exits, TC outcomes, independent findings, current planning/source identities and risks. Agent readiness does not establish human acceptance. Only explicit human acceptance closes acceptance accounting; silence, an approval to build or a review-ready verdict does not.
 
-- `review.md` records independent PASS against actual input paths and SHA-256 digests.
-- `approvals.md` records the human decision and matching manifest. The agent recomputes it after confirmation and before every dependent transition.
-- Changed, added or deleted inputs invalidate their approval and dependent evidence. Old records remain history, not permission.
-- Approved `tasks.md` stays frozen during implementation. Execution progress goes in `verification.md`; OpenSpec checkbox completion is reconciled at authorized archive.
-- Verification identifies the actual source, including dirty/untracked changes, and records real commands, exit codes and browser observations.
-- No separate agent for required independent review/QA means BLOCKED, not self-certified PASS.
-- Security review uses two perspectives within one independent security-engineer run, not two approvals. Spec review assesses proposed defenses; final verification checks implemented defenses against real evidence. Missing security dispatch/evidence or unresolved findings blocks the gate.
+PR creation, archive, deployment, merge and release require separate requests and authorization. Missing independent dispatch/evidence blocks readiness rather than permitting self-review.
 
 These gates are prompt-level policy, not executable access control. This configuration does not ship a gate script or write-blocking hook. OpenSpec validation checks schema/spec structure, not human approval or software correctness.
 
@@ -271,6 +246,14 @@ A test scenario should fit in one row:
 
 This row illustrates the format, not a requirement for your application. Real scenarios must come from approved requirements and repository behavior.
 
+### Correction and usage accounting
+
+Use a compact metric section inside the existing change `verification.md`; no extra template, parser, telemetry service or dashboard is required. This is a record shape, not a claim that runtime capture exists. Use available evidence and write `unknown` when attribution or a baseline is unavailable.
+
+The canonical field set, classification and counting rules live in `rules/verification.md` under "Correction-cycle accounting": `raw revisits`, `avoidable revisits`, `raw total tokens`, `avoidable subtotal`, `first-pass acceptance`, `elapsed time`, `evidence coverage`. Record each revisit's category, affected REQ/TC, prompt and request IDs, and cycle boundary; count each provider request once.
+
+RTK output reduction measures neither full-cycle model tokens nor correction savings. Preserve necessary questions and raw corrections rather than optimizing the apparent prompt count. Separate same-model runs can be independent; model/provider differences alone do not prove independence.
+
 ## Configuration changes
 
 - Repaired modular `rules/` deployment and made installed shared policy mandatory before additive project policy across all seven roles and fifteen commands.
@@ -282,7 +265,9 @@ This row illustrates the format, not a requirement for your application. Real sc
 - Added dependency installation/verification and a staged, theme-native terminal UI with plain-text fallback and retained failure logs.
 - Added four reusable document templates, required installation and gated author/command integration; added semantic installer colors without changing plain-text behavior.
 
-## Verification
+## Historical verification
+
+These observations concern earlier revisions and fixtures, not proof of the revised two-bundle workflow. Legacy target names below are historical commands, not supported aliases or current approval authority. Current change evidence belongs in its `verification.md`; this documentation update adds no runtime result.
 
 - Agent-tool-policy repair: `rtk proxy bash omp/tests/install-rules.sh` exercised the actual deployment block in temporary directories. Fresh install, sentinel preservation, occupied backup collision and matching-link repeat passed; all five installed rule files were readable. No dependency setup or live installation ran.
 - Installer/regression Bash syntax and strict OpenSpec validation passed. A raw `rtk proxy` failure probe preserved stderr marker `OMP_RTK_FAILURE_PROBE` and exit 7. Context7 resolve/query retrieval is recorded in `openspec/changes/align-agent-tool-policy/interview.md`; this proves parent-session retrieval, not future child availability.

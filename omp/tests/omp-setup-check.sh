@@ -1,12 +1,7 @@
 #!/usr/bin/env bash
-# Live functional check of the omp setup in a FRESH process (what a restart loads).
-# Static config assertions live in tests/token-budget.sh; this script proves behaviour.
-#
-#   bash tests/omp-setup-check.sh [parent-model-selector]
-#
-# Default parent = the provider the reviewer tier must NOT run on. Override it with
-# a quota-limited provider (e.g. openai-codex/gpt-6.1-sol) to prove review traffic
-# is kept off that provider's 5h window.
+# Checks a fresh runtime and configured reviewer routing; makes real model requests.
+# Usage: tests/omp-setup-check.sh [parent-model-selector]
+# Separate reviewer runs may use the same configured model as their parent.
 set -uo pipefail
 
 OMP_BIN=${OMP_BIN:-$(command -v omp || echo "$HOME/.local/bin/omp")}
@@ -44,6 +39,8 @@ fi
 # --- A. fresh process: tool registry + effective session state -----------------
 printf '%s\n' '{"id":"1","type":"get_state"}' \
   | timeout 180 "$OMP_BIN" --mode rpc --no-ui --model "$PARENT" > "$WORKDIR/rpc.jsonl" 2>"$WORKDIR/rpc.err"
+rpc_status=$?
+[ "$rpc_status" -eq 0 ] || fail "fresh RPC process exited $rpc_status (see $WORKDIR/rpc.err)"
 python3 - "$WORKDIR/rpc.jsonl" > "$WORKDIR/state.txt" <<'PY'
 import json, sys
 for line in open(sys.argv[1]):
@@ -83,6 +80,8 @@ fi
 ( cd "$WORKDIR" && timeout 420 "$OMP_BIN" -p --model "$PARENT" \
     "Call the task tool exactly once with context=\"routing check\", tasks=[{agent: \"reviewer\", task: \"Reply with exactly OK.\", solutionSpace: \"one reply: OK\"}]. After it returns, wait for the spawned agent to finish with the wait tool, then reply DONE." \
     </dev/null > "$WORKDIR/run.out" 2>"$WORKDIR/run.err" )
+run_status=$?
+[ "$run_status" -eq 0 ] || fail "reviewer dispatch process exited $run_status (see $WORKDIR/run.err)"
 python3 - "$STATS_DB" "$WORKDIR" "$review_provider" "$review_model" "$parent_provider" "$parent_model" <<'PY'
 import sqlite3, sys, time, os
 db, workdir, want_provider, want_model, parent_provider, parent_model = sys.argv[1:7]
@@ -107,15 +106,11 @@ if not rows:
     sys.exit(1)
 for provider, model, tin, tout, reason in rows:
     print(f"  subagent request: {provider}/{model} in={tin} out={tout} stop={reason}")
-leak = [r for r in rows if (r[0], r[1]) == (parent_provider, parent_model)]
-if leak:
-    print(f"FAIL reviewer subagent inherited the parent model {parent_provider}/{parent_model}")
+off_tier = [r for r in rows if (r[0], r[1]) != (want_provider, want_model)]
+if off_tier:
+    print(f"FAIL reviewer requests did not all use review_tier {want_provider}/{want_model}")
     sys.exit(1)
-on_tier = [r for r in rows if r[0] == want_provider and r[1] == want_model]
-if not on_tier:
-    print(f"FAIL no reviewer subagent request on review_tier {want_provider}/{want_model}")
-    sys.exit(1)
-print(f"PASS reviewer subagent ran on {want_provider}/{want_model} (not on parent provider {parent_provider})")
+print(f"PASS separate reviewer requests used configured review_tier {want_provider}/{want_model}")
 PY
 [ $? -eq 0 ] || fail=1
 

@@ -1,32 +1,31 @@
 ---
-description: Review artifacts and present the human decision.
+description: Independently review a human-planning or execution bundle.
 ---
 
 ## Rule loading
 
-Read `RULES.md` and `rules/core.md`; load `rules/gates.md` and only the stage rule(s) relevant to the review target.
+- Read installed shared `RULES.md` and apply its activation check there. Read `rules/core.md` and `rules/gates.md`; load `rules/planning.md` for bundle reviews, plus `rules/verification.md` when the assigned review includes final evidence. Resolve paths under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`; stop if required policy is unreadable.
+
 ## Load and gate
 
-- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Apply its dependencies, artifact ownership, stricter gates and freshness protocol.
-- Change slug: $1. Optional target: $2 (`interview`, `spec`, `test-plan`, `tasks`). Infer the current target only when existing artifacts and fresh approvals identify it unambiguously; otherwise ask which target, without inventing readiness.
-- Read existing change artifacts, reviews and approvals under `openspec/changes/$1/`. Re-enumerate inputs and recompute upstream SHA-256 manifests. Require the preceding target approvals/reviews to be current before reviewing a dependent gate; the target itself does not require approval yet.
-- Check completeness, unresolved blocking questions and route/schema requirements. Changed/missing/added inputs invalidate dependent records, regardless of prior PASS or file timestamps.
-- If a current matching review PASS already exists for this target and manifest, skip the dispatch and present the checkpoint. Re-run only when inputs changed, the target changed, or the human asks for a re-review.
+- Change slug: $1. Optional target: $2, one of `human-planning` or `execution`. Final implementation review runs inside `/work-verify`; do not review a legacy `interview`/`spec`/`test-plan`/`tasks` target as if it were a bundle.
+- Infer the target only when existing artifacts and fresh decisions identify it unambiguously; otherwise ask which bundle, without inventing readiness.
+- Read the change artifacts, reviews and approvals. Recompute the target's sorted path/SHA-256 manifest per `rules/gates.md`, including added and missing paths. Upstream prerequisite approvals must be current; the target itself is not yet approved.
+- If a current matching PASS exists for the same target and manifest, reuse it and skip dispatch. Re-review only when inputs, target or findings changed.
 
 ## Independent review
 
-- Build the target's complete sorted relative-path/SHA-256 manifest exactly as shared rules require for its approval, including upstream and OpenSpec config/schema inputs; exclude mutable ledgers.
-- For security-sensitive `spec` reviews or a credible security risk, first dispatch an independent security-engineer with the same manifest for red-team attack paths and blue-team controls. Require its fresh PASS before reviewer PASS; missing required dispatch or unresolved findings blocks approval. Otherwise the reviewer records a security-N/A rationale. For `test-plan` and `tasks`, require recorded security-scenario and mitigation coverage when applicable.
-- Dispatch a separate reviewer agent with the target, full artifact/source context, manifest, author identities, security assessment, previous findings and gate criteria. It must be independent of the reviewed authors and security run. No self-review or role-adoption fallback: if dispatch or independence is unavailable, append BLOCKED with the reason.
-- Require completeness/consistency, REQ traceability, compatibility/security risks and evidence-based findings. For specs check route-required PRD/design plus proposal/delta specs; for QA check every REQ's scenarios/regressions; for tasks check executable dependencies, TC coverage, approved scope and OpenSpec validation evidence.
-- Run agent shell commands through `rtk` per shared rules. Check the handoff Evidence line for actual OpenSpec, Ponytail, Codegraph, Context7, Playwright and RTK invocations; missing required evidence or N/A reasons prevents PASS.
-- Re-enumerate and recompute inputs when review returns. If they changed, retain the result only as historical evidence and request a fresh review; do not label it a current PASS.
-- Append a record to `review.md`: target, reviewer identity/run, UTC timestamp, full input manifest, PASS/CHANGES_REQUESTED/BLOCKED, concrete file/line findings, unresolved risks and next gate. Preserve prior records.
+- Dispatch a separate reviewer run independent of the authors, implementation, QA and security run. No self-review or role-adoption fallback: if dispatch or independence is unavailable, append BLOCKED with the reason.
+- `human-planning`: `interview.md`, applicable `prd.md`/`design.md` and `task-breakdown.md` together. `execution`: that complete human bundle, proposal, every delta spec, `test-plan.md`, `tasks.md` and OpenSpec config/schema inputs.
+- Review fidelity to approved human intent, REQ/TC/task traceability, complete coverage, feasibility and dependencies, compatibility/security/regression work, visible open decisions and successful installed-schema validation evidence for `execution`.
+- Check the handoff for actual OpenSpec, Ponytail, Codegraph/LSP, Context7, Playwright and RTK invocations; a missing required invocation or N/A reason prevents PASS. Do not rerun tools only to populate evidence.
+- For security-sensitive scope or a credible finding, require a separate security-engineer PASS bound to the same manifest; otherwise the reviewer records a specific N/A rationale.
+- Require correct source-backed reasoning, not summaries alone. Separate confirmed defects from suspicions and give file/line or artifact evidence.
+- Append one record to `review.md`: target, reviewer identity/run, UTC timestamp, complete input manifest, findings, risks and PASS/CHANGES_REQUESTED/BLOCKED. Preserve prior records and never edit author artifacts to force a pass.
+- Recompute manifests after review; changed inputs keep the result only as historical evidence and require affected re-review.
 
-## Present and record
+## Handoff
 
-- On PASS, present the shared human checkpoint: target, artifacts, what changed, findings/risks, manifest identity and the options `approve`, `approve stop`, `reject: <reason>`, `revisit: <question/stage>`, `pause`.
-- `approve`: record the decision with the approval protocol, then continue to the next stage in the same turn. Interview → `/work-product-plan $1`; spec → `/work-qa $1`; test-plan → `/work-plan $1`; tasks → `/work-implement $1`.
-- `approve stop`: record and stop. `reject`: record without approval and route to the responsible author. `revisit`: reopen the named stage and invalidate dependent records. `pause`: record nothing and point to `/work-resume $1`.
-- On CHANGES_REQUESTED, route findings to the author, allow one repair and re-review, then present the findings with the same decision menu if it still fails. Never treat the review command's invocation as approval.
-- `work-approve` remains available for resuming a pending decision, but this command must not send the human away to run it after a PASS.
+- On PASS, present the review result and manifest identity, then name the single decision command: `/work-approve $1 human-planning` or `/work-approve $1 execution`. Do not record the decision here and do not treat this command's invocation as approval.
+- On CHANGES_REQUESTED, route findings to the owning author, allow one repair cycle on the changed inputs, and re-review; then present the findings if it still fails.
+- On BLOCKED, state the exact missing prerequisite. Never advance a stage, archive, merge or deploy.

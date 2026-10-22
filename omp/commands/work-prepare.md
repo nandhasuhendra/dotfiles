@@ -4,25 +4,22 @@ description: Translate approved human planning documents into OpenSpec and agent
 
 ## Rule loading
 
-- Read the installed shared `RULES.md` and `rules/core.md` before acting. Also read `rules/planning.md` and `rules/gates.md` for approval, review and freshness requirements; do not load unrelated stage rules.
+- Read installed shared `RULES.md` and apply its activation check there. Read `rules/core.md`, `rules/planning.md` and `rules/gates.md`; do not load unrelated stage rules. Resolve paths under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`; stop if required policy is unreadable.
+
 ## Load and gate
 
-- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Re-enumerate/hash the complete human planning bundle.
-- Require independent human-document review PASS and explicit human planning approval bound to the exact current manifest. Stop if inputs changed, approval is stale, or a material question is unresolved.
-- Only now inspect installed OpenSpec help, config, schema and artifact instructions. Do not guess CLI commands or schema conventions.
+- Change slug: $1. Recompute the human-planning manifest and require fresh `human-planning` approval bound to the exact current inputs. Stop if inputs changed, the decision is stale or a material question is unresolved.
+- Only now inspect installed OpenSpec help, config, schema and artifact instructions; never guess CLI commands or conventions.
 
-## Prepare agent specifications
+## Prepare derived specifications
 
-- Read the approved `interview.md`, `prd.md` when applicable, `design.md` when applicable, and `task-breakdown.md` in full.
-- Use tech-lead as the single primary author to translate approved intent into the installed OpenSpec schema's `proposal.md`, delta `specs/**/spec.md`, and required design artifacts. Consult product-manager only if a material product-requirement interpretation remains, and stop for human clarification rather than inventing intent. These are derived execution specifications, not replacements for human documents.
-- Preserve approved REQ IDs, acceptance criteria, scope, non-goals, assumptions and decisions. Link every agent requirement to its human source. Do not silently add scope, remove criteria or change technical decisions.
-- If the schema requires details not settled in human documents, stop and return to planning; do not invent material behavior.
-- Validate using the installed OpenSpec command discovered from actual help. Record invocation, exit status and full failure evidence. Do not create agent implementation tasks in this stage.
-- Map each human REQ to its OpenSpec spec/requirement and identify any intentionally N/A mappings with reasons. Check for lost, added or contradicted requirements.
+- Read the approved human bundle in full and translate it with `tech-lead` as the single primary author into the installed schema's `proposal.md`, delta `specs/**/spec.md` and any required design artifact.
+- Preserve approved REQ IDs, acceptance criteria, scope, non-goals, assumptions and decisions; link every requirement to its human source. Do not add scope, drop criteria or change technical decisions.
+- Consult `product-manager` only for an unresolved product-requirement interpretation; stop for the operator rather than inventing intent. A material decision missing from approved human intent reopens planning.
+- Validate with the installed OpenSpec command discovered from real help and record the invocation, exit status and failure evidence.
+- Do not create schema `tasks.md` or `test-plan.md` here; `/work-qa` and `/work-plan` complete the same execution bundle.
 
-## Review and checkpoint
+## Handoff
 
-- Dispatch one independent spec reviewer against the current prepared bundle and human-source manifest. Dispatch security-engineer only when `interview.md` classifies the change as security-sensitive or the reviewer identifies a credible security risk; otherwise the reviewer records a brief security-applicability assessment and why specialist review is N/A.
-- Repair findings once within approved intent; any material change to human intent returns to planning and requires renewed human document approval. Do not launch parallel agents for redundant opinions. Do not launch parallel agents for redundant opinions.
-- On PASS, show human-source documents, derived OpenSpec artifacts, REQ mapping, validation evidence, review verdicts and manifest.
-- Require explicit human approval of the derived specification bundle before continuing to `/work-qa $1`. This does not replace human planning approval.
+- Continue to `/work-qa $1`. The derived specs join the execution bundle; there is no separate specification bundle approval.
+- Report derived artifact paths, REQ-to-spec mapping including intentional N/A cases, and validation evidence. Note any human bundle that must be reopened.

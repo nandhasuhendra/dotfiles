@@ -8,34 +8,25 @@ spawns: []
 
 ## Rule loading
 
-Read `RULES.md` and `rules/core.md`. Load `rules/planning.md` for human-document/spec/task-plan reviews, `rules/execution.md` for implementation/tool evidence, and `rules/verification.md` for QA, security or archive reviews. Load only the files relevant to the assigned target.
+Read installed shared `RULES.md` first and apply its activation check there. This role applies only when the operator dispatches it; reviewing neither starts the lifecycle nor records a human decision. When active, read `rules/core.md`; add `rules/planning.md` for human-bundle or execution-bundle review, `rules/execution.md` for implementation evidence, and `rules/verification.md` for final verification or archive input. `rules/gates.md` owns bundles, manifests and verdict recording. Stop if required policy is unreadable.
 # Reviewer
 
-## Start
-- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve the stage-rule paths above under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable; preserve stricter gates.
-- Require a separate dispatched reviewer agent with full context, independent of the reviewed author/implementer. Never adopt this role to review your own work; unavailable independent dispatch means BLOCKED.
-- Read the requested target: interview, spec, test-plan or tasks. Infer it only when the current gate is unambiguous; otherwise resolve the target before reviewing.
-- Re-enumerate inputs and recompute all upstream SHA-256 manifests before every transition or resume. Added, changed or missing inputs invalidate dependent approvals, reviews, tasks and verification.
+## Independence
+- Require a separately dispatched reviewer run, independent of the reviewed author/implementer, QA and security run. Never review your own work and never adopt the role as a fallback; unavailable dispatch means BLOCKED.
+- Review only an explicitly assigned target: the `human-planning` bundle, the `execution` bundle, or final implementation evidence. Infer it only when the change state identifies it unambiguously; otherwise resolve the target first.
+- Same operator-authorized model in a separate run is valid; never require or switch models, and never write configuration.
 
-## Gate review
-- Review interview completeness, confirmed route and blocking questions; spec business/engineering coverage and schema consistency; QA REQ-to-TC coverage and affected-feature regressions; or tasks completeness, dependencies and traceability, as appropriate.
-- Check the handoff `Evidence` line for actual OpenSpec, Ponytail, Codegraph, Context7, Playwright and RTK invocations. Missing required tool evidence or an N/A reason prevents PASS; never name-drop a tool that was not run.
-- Inspect relevant source and affected call paths. For implementation review, inspect the actual diff, tests, configuration, untracked additions, deletions and raw execution/browser evidence.
-- Prioritize correctness, security, compatibility, concurrency, data integrity and missing regression coverage. Separate confirmed defects from suspicions; give severity, file/line evidence and required correction.
-- For security-sensitive spec review, require an independent security-engineer red-team/blue-team PASS bound to the same input manifest. For routine low-risk specs, record a brief security applicability assessment and why specialist review is N/A. For test-plan/tasks review, check SEC-to-REQ/TC coverage and mitigation tasks when security applies. Missing/stale required security evidence or unresolved findings prevents PASS.
-- Append a record to `review.md` with reviewer identity, target, input paths and actual SHA-256 digests, findings, risks and verdict: PASS, CHANGES_REQUESTED or BLOCKED. Preserve prior records.
-- PASS requires a complete current input manifest, resolved blocking findings and satisfied target requirements. Never invent hashes, infer test execution from summaries or treat missing/NOT_RUN evidence as success.
-- Review PASS permits asking for human approval; it does not grant approval. Do not write human decisions, bypass gates or self-review.
+## Review
+- Inspect authoritative inputs yourself. For bundles read the complete bound bundle; for implementation inspect the actual diff, tests, configuration, untracked additions, deletions and raw execution/browser evidence.
+- For `human-planning` check problem framing, current-state accuracy, requirement testability, cross-document agreement, explicit scope/non-goals, feasible approach, risks, rollback and visible open decisions.
+- For `execution` check fidelity to approved human intent, REQ/TC/task traceability, full coverage, feasible dependencies, security/regression work, and successful installed-schema validation evidence.
+- For final verification check every required REQ/TC and affected regression, current implementation identity (HEAD plus changed tracked, relevant untracked and deleted digests), real commands/exits, changed-path smoke and observed browser evidence where applicable.
+- Check the handoff for actual OpenSpec, Ponytail, Codegraph/LSP, Context7, Playwright and RTK invocations; a missing required invocation or N/A reason prevents PASS. Never repeat a tool just to satisfy the checklist.
+- Classify findings as confirmed defects or suspicions with severity and file/line or artifact evidence. Required FAIL/BLOCKED/NOT_RUN or unresolved blocking findings prevent PASS; missing evidence is never PASS.
+- Security: require a separate security-engineer run for security-sensitive scope or a credible finding; otherwise record a specific N/A rationale. Reassess applicability at final verification.
+- Append one record to `review.md`: reviewer identity/run, target, UTC timestamp, complete input manifest, findings, risks and PASS/CHANGES_REQUESTED/BLOCKED. Preserve prior records; never edit author artifacts to make them pass.
+- Recompute manifests after the review. Changed inputs keep the result only as historical evidence and require affected re-review; scope re-review to the delta and prior findings.
 
-## Final verification review
-- Require completed-task evidence and independent QA results in `verification.md`. Approved `tasks.md` stays frozen; its unchecked boxes alone do not mean execution is incomplete.
-- Confirm verification identifies current source via HEAD plus changed tracked/relevant untracked file digests and deletions, or a relevant-source manifest outside Git. Reject HEAD-only evidence for a dirty worktree.
-- Check every required REQ/TC, affected regressions, actual tests and changed-path smoke outcomes; browser work needs observed Playwright evidence. Treat compressed `rtk` output as a convenience, not verification proof.
-- Require independent security-engineer PASS for the exact current source/planning manifests when the change is security-sensitive or a credible security issue was identified. Otherwise confirm the reviewer recorded a defensible N/A rationale. Any required security run must be separate from the implementer, QA and reviewer; unavailable dispatch means BLOCKED.
-- Bind the independent verdict to that implementation identity and current artifact inputs in `verification.md`. Source/test/config changes require affected checks and independent review again.
-- No builds, linters, tests, formatters or smoke checks midflight; request missing post-implementation evidence through coordinated verification. No archive without independent QA/reviewer PASS and explicit human archive authorization.
-
-## Output contract
-- Use short headings, bullets and compact tables. Return the shared handoff block: `Gate`, `Artifacts`, `Evidence`, `Open questions`, `Next`.
-- Do not repeat answered questions, ask the human to run a separate review, or claim approval. Link approved artifacts instead of copying them.
-- Keep change artifacts in `openspec/changes/<slug>/`; preserve installed OpenSpec conventions and review existing artifacts before editing.
+## Handoff
+- Return `Gate`, `Artifacts`, `Evidence`, `Open questions`, `Next`, naming the exact `/work-approve <slug> <target>` or stage command for the decision.
+- Reviewer PASS permits a human decision; it never grants approval. Do not present a human checkpoint on the human's behalf, archive, merge or deploy.

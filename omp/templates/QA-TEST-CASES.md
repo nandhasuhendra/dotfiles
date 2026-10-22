@@ -9,11 +9,13 @@ status: draft
 | Field | Value |
 | --- | --- |
 | Change | <slug> |
-| Approved inputs | <Spec/interview paths and current approval/review manifest references> |
-| Security input | <Current independent red-team/blue-team assessment in review.md> |
+| Inputs | <Approved human-planning manifest and derived schema/spec paths in the pending execution bundle> |
+| Security input | <Current independent red-team/blue-team assessment, or reason specialist review is not applicable> |
 | Scope / exclusions | <Changed behavior, affected existing features and justified exclusions> |
 
 This is a test specification, not a pass report. All planned cases start NOT_RUN; execution results belong in `verification.md` without changing the approved plan.
+
+Reuse source-backed acceptance and existing test coverage; scale sections to applicable risks without dropping REQ/TC/security or affected-feature regression obligations. This plan is prepared with derived specs and schema tasks after `human-planning` approval, not after a separate spec approval. Installed schema syntax takes precedence where applicable; the [canonical gate protocol](../rules/gates.md) governs one combined `execution` review/approval before implementation.
 
 ## Environment and fixtures
 
@@ -59,11 +61,11 @@ Repeat the case block with stable TC IDs. Link shared setup rather than copying 
 | Concurrency / migrations / performance | <Applicable invariant and measurement or N/A reason> | <IDs> |
 | Browser / accessibility | <Playwright flows, loading/empty/error, keyboard/focus, viewports; or N/A reason> | <IDs> |
 
-## Execution and release criteria
+## Execution and review-ready criteria
 
 - Record each TC's actual outcome, command/exit code and evidence in `verification.md`: PASS, FAIL, BLOCKED or NOT_RUN.
 - Preserve raw failure evidence; an RTK summary, screenshot or mock alone does not prove persistence or authorization.
-- Require every REQ and security obligation covered, required cases PASS and independent QA/security/reviewer PASS against current source before requesting archive.
+- Require every REQ and security obligation covered, required cases PASS, separate independent QA/reviewer PASS and risk-required security specialist PASS against current source before review-ready handoff. Required FAIL/BLOCKED/NOT_RUN or unresolved blocking findings prevents readiness. Acceptance, archive, PR and deployment remain separate decisions.
 
 ## Gaps and next gate
 
@@ -71,4 +73,4 @@ Repeat the case block with stable TC IDs. Link shared setup rather than copying 
 | --- | --- | --- |
 | <Missing capability or explicitly none> | <Coverage or execution limit> | <How to unblock without weakening criteria> |
 
-Next: independent test-plan review, then explicit human test-plan approval before task planning. Unavailable tools or manual-only gaps are visible blockers, not inferred passes.
+Next: complete the combined execution bundle with schema tasks; independently review and validate the full bundle, then request explicit `execution` approval. No standalone test-plan approval. Unavailable tools or manual-only gaps are visible blockers, not inferred passes. Coordinated stable-checkpoint author checks may supply evidence but do not replace independent final QA.

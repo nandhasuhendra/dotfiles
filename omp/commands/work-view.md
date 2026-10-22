@@ -3,8 +3,7 @@ description: Serve change docs to a phone browser.
 ---
 ## Load
 
-- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve any applicable stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable; preserve stricter policy.
-- This is a read-only viewing aid. It creates no change artifacts, runs no gate and records no approval.
+- Read installed shared `RULES.md` and apply its activation check there. This is a read-only viewing aid: it creates no artifacts, runs no gate, records no approval and does not start or advance planning. Resolve paths under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`; stop if required policy is unreadable.
 
 ## Start, stop or inspect
 
@@ -18,6 +17,6 @@ description: Serve change docs to a phone browser.
 - Otherwise require `openspec/changes` in the current project. If `$1` is set, serve only `openspec/changes/$1` after confirming it exists; if it does not, list the available changes and stop. With no slug, serve all changes.
 - Run `"$VIEWER" start "$ROOT" "$HOST" "$PORT"` in the background via the wrapper. Never bind publicly or expose the port through a tunnel without explicit authorization.
 - Report the actual `Local:` and `Phone:` URLs from the output, the fact that the page is read-only, and how to stop it: `/work-view stop`.
-- Run agent-facing shell checks through `rtk` per shared rules. The wrapper's internal control flow (PID checks, `nohup`, `kill`, `curl` readiness) is native plumbing and is exempt; keep its failures visible.
-- Mermaid fences render in the browser through the pinned jsDelivr module. If the CDN is unreachable, the source code block remains visible; report that fallback rather than claiming a rendered diagram.
-- If the viewer fails, show the log path and the actual failure. Do not retry with another port without telling the human.
+- Run agent-facing shell checks through `rtk` per shared rules. The wrapper's internal control flow (PID checks, `nohup`, `kill`, `curl` readiness) is native plumbing and exempt; keep its failures visible.
+- Mermaid fences render in the browser through the pinned jsDelivr module. If the CDN is unreachable, the source block remains visible; report that fallback rather than claiming a rendered diagram.
+- If the viewer fails, show the log path and the actual failure. Do not retry with another port without telling the operator.

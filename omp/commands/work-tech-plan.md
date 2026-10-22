@@ -4,23 +4,23 @@ description: Create the human-readable Tech Doc and task breakdown.
 
 ## Rule loading
 
-- Read the installed shared `RULES.md` and `rules/core.md` before acting. Also read `rules/planning.md`; load `rules/gates.md` for approval/freshness checks. Do not load unrelated stage rules.
+- Read installed shared `RULES.md` and apply its activation check there. Read `rules/core.md` and `rules/planning.md`; load `rules/execution.md` only when implementation details are needed for impact analysis. Load `rules/gates.md` for decisions. Resolve paths under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`; stop if required policy is unreadable.
+
 ## Load and gate
 
-- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Read the change's interview, PRD (when applicable), review records and approvals.
-- Require fresh interview approval and a current PRD draft for product/mixed work. The PRD is not finally approved until the combined human document review. Stop on stale inputs or blocking questions.
-- Do not create OpenSpec artifacts or agent-ready `tasks.md` here.
+- Change slug: $1. Read the change's `interview.md`, applicable `prd.md` and relevant source/repository instructions. Stop on blocking questions or an incomplete interview.
+- Do not create OpenSpec artifacts, delta specs or schema `tasks.md` here; execution preparation owns them after `human-planning` approval.
 
 ## Technical planning
 
 - Dispatch `tech-lead`; disclose if adopting the role directly.
-- Read `TECH-DOC.md` and `HUMAN-TASK-BREAKDOWN.md`. Inspect source, repository instructions and relevant architecture to ground claims in the actual project.
-- Write `design.md` for engineering/mixed work and for product work that needs technical decisions. Explain current behavior, proposed architecture, flow, rationale, alternatives, contracts, data impact, failure modes, security, compatibility, rollout and rollback in plain language.
-- Write `task-breakdown.md` as a human-readable sequence of milestones/work packages, dependencies, affected areas, risks and completion outcomes. For focused engineering changes, keep design and breakdown proportional (short, specific sections; N/A with reasons for irrelevant concerns), while retaining compatibility, rollback, risk and measurable acceptance. Escalate to full if impact analysis reveals broader scope or uncertainty. Do not make schema-specific checkboxes the primary presentation.
-- Link stable REQ IDs to relevant design decisions and work packages. Avoid repeating the entire PRD. Surface decisions that require the human.
-- Keep OpenSpec proposal/spec/task files absent until the human planning bundle is reviewed and approved.
+- Resolve `TECH-DOC.md` and `HUMAN-TASK-BREAKDOWN.md` through shared template resolution.
+- Write `design.md` for engineering/mixed work and for product work needing technical decisions: current behavior, proposed architecture and flow, rationale, alternatives, contracts, data impact, failure modes, security, compatibility, rollout and rollback, with a 2–4 sentence executive summary.
+- Write `task-breakdown.md` as a readable milestone/work-package sequence with dependencies, affected areas, risks and completion outcomes. Keep a focused change proportional and escalate to full when impact analysis widens scope.
+- Link stable REQ IDs to decisions and work packages; surface decisions that need the operator. Avoid repeating the PRD and avoid schema-specific checkboxes as the primary presentation.
+- Use Codegraph/LSP for non-obvious impact and confirm in source; record coverage limits if unavailable. Use Context7 for relevant external documentation per core policy.
 
 ## Handoff
 
-- Report documents created, source references inspected, assumptions and blocking questions.
-- Continue to `/work-doc-review $1` only when documents are complete and no material question remains. Otherwise stop and ask for clarification.
+- Continue to `/work-doc-review $1` when both documents are complete and no material question remains; otherwise stop and ask.
+- The applicable human bundle is reviewed and approved once as `human-planning`; do not request a separate design or task-breakdown approval.

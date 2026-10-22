@@ -1,86 +1,153 @@
 ---
 title: "{{title}}"
 type: prd
-status: draft
+status: draft # draft | review | approved | in-progress | completed | rejected
+created: {{date}}
+updated: {{date}}
+tags:
+  - sdlc/prd
+  - <topic>
 ---
 
-# PRD: {{title}}
+# Product Requirements Document (PRD): {{title}}
 
-## Executive summary
+Authoring guidance: reuse existing source-backed product material and preserve its professional detail. Scale this document to the actual change; the sections and shared criteria below are prompts, not mandatory application scaffolding. Keep relevant REQ IDs, journeys, security and regression obligations; omit inapplicable examples with a reason rather than inventing features.
 
-<In 2–4 short sentences, explain the problem, who experiences it, why it matters now, and the outcome this change should deliver. Write for a teammate who has not followed the discussion.>
-
-## At a glance
+Record confirmed facts, assumptions and selected decision rationale from the interview without repeating settled questions. This document joins the interview, applicable design and human task breakdown in the `human-planning` bundle under the [canonical gate protocol](../rules/gates.md). No generated specs precede that approval; implementation requires the later combined `execution` approval. Frontmatter status alone is not approval or evidence.
 
 | Field | Value |
-| --- | --- |
-| Change / release scope | <slug and in-scope business outcome> |
-| Inputs | <Confirmed interview and existing product/spec references> |
-| Product owner / approver | <Known role/person; omit this row if unknown> |
+| :--- | :--- |
+| Release scope | <In-scope capabilities and operational boundaries; what ships and what is explicitly review-only> |
+| Status | Draft for product review; requirements describe the target, not shipped functionality |
+| Product owner / approver | <Name or TBD — never invent one> |
+| Project / feature | <Module / feature> |
+| Prototype / mockup source | <Repository, branch, commit, route, or `N/A — reason`> |
+| Screenshot provenance | <Viewport, browser, running environment, capture date, what the images show; or `N/A — reason`> |
+| Related technical document | [<Tech Doc>](<relative link>) |
 
-## Problem and current behavior
+## 1. Executive summary
 
-Explain the problem in plain language before listing detailed requirements. Describe what users try to do, what happens today, and the impact. Keep observed facts separate from assumptions and proposals.
+<2–4 sentences: the problem, who has it, the target outcome, and the most important trade-off. Write for a teammate who did not see the discussion.>
 
-- User need: <Who is affected, what fails today and why it matters.>
-- Evidence: <Observed source/prototype/user report; separate facts from proposed behavior.>
+### 1.1 Observed Prototype versus Required Behavior
 
-| Area | Current behavior / evidence | Required behavior |
-| --- | --- | --- |
-| <Feature area> | <Actual observation or explicitly unknown baseline> | <Release outcome> |
+| Area | Observed current / prototype behavior | Required for this release |
+| :--- | :--- | :--- |
+| <Area> | <Actual observation or `N/A — reason`> | <Target behavior and boundary> |
 
-## Goals and success measures
+### 1.2 UI Changes for Review
 
-| Goal | Baseline / source | Target / observable success |
-| --- | --- | --- |
-| <Business outcome> | <Verified baseline or not measured> | <Confirmed measure; label unapproved targets as proposals> |
+<Name the visual authority (branch/commit or existing screens), what stays unchanged, and the screens a reviewer must inspect. State that captures do not prove production behavior. Use `N/A — backend-only change` when true.>
 
-## Users and scope
+## 2. Problem and evidence
 
-| Persona | Need | Allowed actions / boundary |
-| --- | --- | --- |
-| <User role> | <Goal and context> | <Product-level access expectation> |
+<Plain-language problem, current workaround, impact, and evidence. Separate observed facts from hypotheses and unmeasured baselines. Cite source paths or captures; never invent metrics, incidents or customers.>
 
-- In scope: <Capabilities and boundaries for this change.>
-- Non-goals: <Explicit exclusions; do not add deferred features by default.>
+## 3. Target Users & Personas
 
-## Requirements and business rules
+| Persona | Need | Access expectation |
+| :--- | :--- | :--- |
+| <Role> | <Need and context> | <Read/write/administrative boundary> |
 
-| REQ | Requirement / invariant | Observable acceptance |
-| --- | --- | --- |
-| REQ-001 | <One testable capability or business rule; preserve existing IDs> | <Given context, when action, then outcome; include failure boundary> |
+## 4. Goals and measures of success
 
-Include field/validation inventories and ownership/save boundaries only when the feature needs them; keep architecture choices in the Tech Doc.
+| Objective | Release measure / observable outcome |
+| :--- | :--- |
+| <Objective> | <Testable outcome; label proposed targets; no invented numbers> |
 
-## Proposed experience
+## 5. Scope & Requirements
 
-<Describe the intended experience from the user's point of view. Explain what will feel different and what remains unchanged. Keep implementation details in the Tech Doc.>
+### 5.1 In Scope: Must (Functional Requirements)
 
-## User journeys
+- **FR-01** (REQ-001): <Capability with stable requirement ID>
+- **FR-02** (REQ-002): <Capability>
 
-### <Journey title>
+### 5.2 Association Model & Save Boundaries
 
-- Persona and goal: <Starting situation, intended action and business outcome.>
-- Flow: <Ordered business actions and resulting state.>
-- Acceptance: <REQ IDs and independently testable success, rejection and recovery criteria.>
-- UI reference, if applicable: <Existing route/mockup/capture and provenance; omit if none.>
+| Record / Entity | Ownership / cardinality | Invariant |
+| :--- | :--- | :--- |
+| <Record> | <Ownership and cardinality> | <Identity, lifecycle, atomic commit rule> |
 
-Repeat journeys only as needed. Screenshots document observed UI, not evidence of backend correctness; never invent assets or links.
+### 5.3 Field Inventory & Target Validation
 
-## Dependencies, assumptions and risks
+<Complete field inventory when forms or payloads change. Use `N/A — reason` when the change adds no fields.>
 
-| Dependency / decision | Confirmed fact or assumption | Impact / blocking question |
-| --- | --- | --- |
-| <External dependency or business choice> | <Source or explicitly proposed rule> | <Decision needed and owner role if known> |
+| Section / payload | Fields | Target rules and validation |
+| :--- | :--- | :--- |
+| <Section> | <Fields> | <Required/optional, format, bounds, uniqueness scope> |
 
-## Acceptance and next gate
+### 5.4 Shared Acceptance Criteria
 
-Summarize what must be true for this change to be considered successful. Keep the criteria below specific enough for QA to verify; do not repeat the entire requirements table.
+- **AC-S01**: Require an authenticated, authorized context; reject missing/foreign scope without data exposure.
+- **AC-S02**: Reject foreign-tenant and cross-boundary identifiers without revealing existence.
+- **AC-S03**: Read-only actors cannot mutate through UI or direct operations.
+- **AC-S04**: <Change-specific cross-cutting criterion, or justify omission.>
+- **AC-S05**: Prevent repeat submission; on failure preserve input and show specific errors.
+- **AC-S06**: Mutations that must be atomic commit fully or roll back fully.
+- **AC-S07**: Detect stale writes before overwriting newer data.
+- **AC-S08**: Programmatic labels, keyboard operation, visible focus and announced errors.
+- **AC-S09**: Record actor and time through structured audit; redact sensitive data from logs.
+- **AC-S10**: Distinct loading, empty, zero-match and failure states.
 
-| Release obligation | Required evidence |
-| --- | --- |
-| Functional acceptance | <REQ IDs and persisted/observable outcomes to hand to QA> |
-| Existing behavior | <Compatibility and affected-feature regressions> |
-| Safety / access / accessibility | <Relevant business constraints; explain N/A> |
+### 5.5 Out of Scope
 
-Next: independent security/spec review, then explicit human spec approval before QA scenarios. Review/approval records live in `review.md` and `approvals.md`; this draft does not grant approval.
+- <Explicit non-goal or deferred capability>
+- <Prohibited action, e.g. physical deletion>
+
+## 6. User Journeys, User Stories & Acceptance Criteria
+
+```mermaid
+flowchart TD
+    A[<Entry point>] --> B[<Action>]
+    B --> C[<Outcome>]
+    B --> D[<Failure / recovery>]
+```
+
+### US-XXX-01: <Story title>
+
+As an <authorized persona>, I want to <action> so that <outcome>.
+
+Page: `<route>` (or `N/A — no user-facing screen`).
+
+![<Screenshot description>](<relative asset path>)
+
+Acceptance criteria:
+
+1. **AC-01.1**: <Given, when, then observable outcome.>
+2. **AC-01.2**: <Negative, validation or denial outcome.>
+3. **AC-01.3**: <Boundary: empty, stale, concurrent or recovery.>
+
+## 7. Assumptions, Risks & Decisions
+
+### 7.1 Product Review Assumptions
+
+| Decision / area | Proposed default | Risk / review needed |
+| :--- | :--- | :--- |
+| <Decision> | <Rule; label proposals> | <What changes if rejected> |
+
+### 7.2 Dependencies & Implementation Boundaries
+
+| Dependency / risk | Impact | Handling strategy |
+| :--- | :--- | :--- |
+| <Dependency> | H/M/L | <Isolation, compatibility or fallback guard> |
+
+## 8. Acceptance & Release Checklist
+
+| Verification scenario | Required evidence before release |
+| :--- | :--- |
+| Functional end-to-end | <REQ IDs and persisted outcomes> |
+| Failure and rollback | <Forced failure leaves no partial state> |
+| Isolation and access | <Negative cross-tenant and unauthorized cases> |
+| Concurrency and recovery | <Crash, retry, stale-write behavior> |
+| Compatibility | <Affected existing behavior and regressions> |
+
+### 8.1 Verification Performed for This PRD
+
+- <What was actually inspected or captured, with environment and date.>
+- <What remains unrun; never imply verification that did not happen.>
+
+## 9. Related Documents
+
+- [Technical Specification](<relative link>)
+- [Task Breakdown](<relative link>)
+- <Architecture, ADR or runbook reference>

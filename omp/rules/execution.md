@@ -9,14 +9,22 @@ Load with `core.md` for implementation. Load `verification.md` for verification,
 - Context7: follow core's resolve/query, version/source, privacy and evidence-reuse policy for external documentation questions. Block material unresolved decisions.
 - Playwright: execute changed browser flows, error states, keyboard access and relevant viewports. Browser work without executable Playwright is BLOCKED, never simulated PASS.
 - RTK: follow core's universal shell-routing and fallback policy in every stage. Preserve exit status and full failure evidence; compression is not verification.
+- Antislop: read only the matching code/prose/UI/accessibility/responsive guidance. Do not start unrelated setup, asset searches or audits for non-UI work.
 
 ## Evidence
 Record actual invocations and outcomes, not just tool names. Mark inapplicable tools N/A with a reason. Keep raw logs or rerunnable commands for gate checks. Do not install dependencies, alter global settings, enable unsafe browser flags or send repository data externally without authorization.
+
+## Stable-checkpoint feedback
+
+- Run the narrow compiler, contract, unit or changed-path smoke check once an owned slice and its required dependencies are stable; do not wait for every task to finish to discover cheap failures.
+- Do not run checks against files another agent is actively mutating. One integration owner coordinates shared surfaces; wait for a stable checkpoint or use an isolated source snapshot and record its identity.
+- Preserve failures, fix the root cause within approved scope, and repeat only invalidated/dependent checks. Retain a small behavioral regression test for uncertain nontrivial logic, not prompt-text or wiring assertions.
+- Author checks are development feedback, never independent QA/review. Final integration checks and separate current-source QA/reviewer verdicts remain required.
 
 ## Context efficiency
 - Read complete authoritative inputs required for the current decision; scope source exploration to relevant callers, tests, fixtures, configuration and exports, then expand when evidence warrants it.
 - Handoffs should carry slug, route/effort, paths and digests, REQ/TC IDs, decisions, blockers and next action—not transcript dumps or repeated full documents.
 - Reuse unchanged evidence only after checking identity/freshness. A digest proves identity, not comprehension; independent reviewers must inspect authoritative inputs themselves.
 - Scope a re-review or re-verification to the delta: the changed artifact, the prior findings and the inputs they depend on. A first review still reads every authoritative input it is bound to.
-- Each tool call is one provider request that re-sends the whole context, and tool results dominate the request count. Batch independent reads and greps into one call, and do not re-read a file whose content you already hold.
-- Track input/output tokens, agent calls, review loops, elapsed time and verification outcomes when available. Report unknowns as unknown; RTK output reduction is not a token benchmark.
+- Batch independent scoped reads/searches when possible and do not reread unchanged content already in context. New agents must still read the authoritative inputs needed for their own decisions.
+- Record available usage and correction-cycle evidence in existing `verification.md` under verification rules. RTK output reduction is not a model-token or productivity benchmark.

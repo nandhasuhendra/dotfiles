@@ -4,24 +4,29 @@ description: Record a human decision after review.
 
 ## Rule loading
 
-Read `RULES.md`, `rules/core.md`, and `rules/gates.md`. Load a stage-specific rule file only when the pending decision requires it.
+- Read installed shared `RULES.md` and apply its activation check there. Read `rules/core.md` and `rules/gates.md`; load a stage rule only when the pending decision needs it. Resolve paths under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`; stop if required policy is unreadable.
+
 ## Load and gate
 
-- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Apply its dependencies, artifact ownership, stricter gates, freshness protocol and human-checkpoint format.
-- Change slug: $1. Target: $2. Accept only `interview`, `spec`, `test-plan` or `tasks`; `spec` means the complete route/schema bundle, not a standalone PRD/design.
-- Decision: `$3` plus any following words if supplied (`approve`, `approve stop`, `reject: <reason>`, `revisit: <question/stage>`, `pause`). Read existing artifacts, `approvals.md`, `review.md` and `verification.md`. Never overwrite their history.
-- Re-enumerate files and recompute all upstream SHA-256 manifests. Require earlier approvals/reviews current, no blocking questions and an independent target review PASS bound to the exact proposed input manifest.
-- Run manifest hashing and other shell checks through `rtk` per shared rules; preserve raw digest output, not a filtered summary.
-- If the target review is missing or stale, dispatch the independent reviewer first; add a separate security-engineer for security-sensitive `spec` scope or a credible security risk, otherwise require the reviewer's security-N/A rationale. Present the checkpoint after required reviews. Missing required independent dispatch means BLOCKED; never self-review.
+- Change slug: $1. Target: $2. Accept only `human-planning`, `execution` or `archive`; reject any other target name, including legacy `interview`/`spec`/`test-plan`/`tasks` names. `archive` requires a separate explicit request.
+- Decision: `$3` plus following words when supplied (`approve`, `approve stop`, `reject: <reason>`, `revisit: <question/stage>`, `pause`). Read existing artifacts, `approvals.md`, `review.md` and `verification.md` without rewriting their history.
+- Recompute the target manifest and its full path set per `rules/gates.md`; never reuse an unverified digest or filtered summary.
+
+## Verify prerequisites
+
+- `human-planning`: `interview.md`, applicable `prd.md`/`design.md` and `task-breakdown.md` present; independent review PASS bound to the same manifest; no blocking question.
+- `execution`: that complete human bundle with fresh `human-planning` approval, plus proposal, every delta spec, `test-plan.md`, `tasks.md`, OpenSpec config/schema inputs, successful installed-schema validation evidence, REQ/TC/task coverage, and independent review PASS. Add a security-engineer PASS when scope is security-sensitive or a credible risk exists; otherwise require the reviewer's specific N/A rationale.
+- `archive`: review-ready evidence (required scenarios PASS, independent QA and reviewer PASS for current inputs, validation PASS, no blocking defect) plus a separately requested archive authorization.
+- Missing or stale review: dispatch the independent reviewer (and security engineer when required) first. Missing required independent dispatch or evidence means BLOCKED; never self-review or infer PASS.
 
 ## Present the decision
 
-- Build the sorted relative-path/SHA-256 manifest for the target: interview inputs; spec adds every route/schema specification input including proposal and delta specs; test-plan adds `test-plan.md`; tasks adds the full preceding bundle and `tasks.md`. Include OpenSpec config/schema inputs; exclude mutable ledgers. Detect added and missing paths.
-- Show artifact paths, one-line scope, acceptance criteria, risks, review findings and manifest identity. For tasks, require successful installed OpenSpec validation.
-- Present one checkpoint: `approve`, `approve stop`, `reject: <reason>`, `revisit: <question/stage>`, `pause`. If a decision was supplied, validate it; if not, ask once and wait. Invocation, silence, "continue" or reviewer PASS is not a decision.
+- Show artifact paths, one-line scope/risk, findings, review identities, validation evidence and manifest identity using the checkpoint format from `rules/gates.md`.
+- Present one checkpoint via built-in `ask`: `approve`, `approve stop`, `reject: <reason>`, `revisit: <question/stage>`, `pause`, each with its consequence. If a decision was supplied, validate it against current inputs; otherwise ask once and wait. Invocation, silence, "continue" or a reviewer PASS is not a decision.
 
 ## Record and hand off
 
-- `approve`: recompute the manifest after the decision. If unchanged, append target, UTC timestamp, human decision quote, full manifest and matching review record to `approvals.md`; then continue to the next stage in the same turn unless `stop`. Changed inputs mean renewed review and confirmation.
-- `approve stop`: record the same way and stop. `reject: <reason>`: append the rejection as a decision without approval, route to the responsible author and stop. `revisit: <question/stage>`: reopen the named stage; changed inputs invalidate dependent records. `pause`: write nothing and point to `/work-resume $1`.
-- Next stages: interview → `/work-product-plan $1`; spec → `/work-qa $1`; test-plan → `/work-plan $1`; tasks → `/work-implement $1`. Do not archive, merge, release or skip another human gate.
+- `approve`: recompute the manifest after the decision. If unchanged, append target, UTC timestamp, decision reference/quote, full manifest and matching review reference to `approvals.md`; if changed, disclose the delta and ask again.
+- `approve stop`: record and stop. `reject: <reason>`: append the rejection as a decision without approval, route to the responsible author and stop. `revisit: <question/stage>`: reopen that stage and invalidate dependent records. `pause`: write nothing and point to `/work-resume $1`.
+- Next stage: `human-planning` → `/work-prepare $1`; `execution` → `/work-implement $1`; `archive` → `/work-archive $1` proceeds under its recorded authorization.
+- Never record approval on the operator's behalf. Approval of one target never authorizes another, and no approval implies merge, release or deployment.

@@ -16,20 +16,22 @@ Load with `core.md` for interview, product planning, technical planning, human d
 
 ## Human-first lifecycle
 
-The workflow has two distinct documentation layers. Human planning documents are the source of truth for people; OpenSpec artifacts are derived for agent execution only after the human planning bundle has passed review and received explicit approval. Never start by drafting OpenSpec specs.
+Human planning is the source of truth. There are two pre-build approval bundles, defined in `gates.md`, not an approval at every authoring step.
 
-1. **Interview** — gather context, goals, users, constraints, current/desired behavior, facts, assumptions and stable REQ IDs. No OpenSpec specification artifacts.
-2. **Product planning** — write `prd.md` for product/mixed routes. For engineering-only work, explain why a PRD is not applicable.
-3. **Technical planning** — write `design.md` for engineering/mixed work and when product work needs technical decisions. Write `task-breakdown.md` as a readable implementation approach and milestone sequence.
-4. **Human document review** — independently review the complete planning bundle for clarity, completeness, consistency, feasibility, risks, scope, traceability and unresolved questions.
-5. **Human approval** — approve the exact PRD/Tech Doc/task-breakdown bundle and manifest. No OpenSpec proposal, delta specs, agent task files or implementation before this approval.
-6. **Implementation preparation** — inspect the installed OpenSpec schema and translate approved documents into `proposal.md`, delta `specs/**/spec.md` and required design artifacts. Validate fidelity to approved intent.
-7. **Specification review** — independent spec/security review and explicit human approval of generated artifacts. Any material discrepancy returns to human planning.
-8. **QA planning** — derive test scenarios from approved requirements and threat analysis; review coverage and obtain approval.
-9. **Agent task planning** — create schema-compatible `tasks.md` linked to REQ/TC IDs; review, validate and obtain approval.
-10. **Implementation, verification, completion review and archive/release approval** — preserve all existing gates and require real evidence.
+1. **Interview and human planning** — inspect current behavior/callers/tests, actively resolve material decisions, and capture stable REQ IDs in `interview.md`. Write the applicable PRD/Tech Doc and readable `task-breakdown.md` using one informed primary author where practical. Independently review the complete bundle, repair findings, and request `human-planning` approval once.
+2. **Execution preparation** — only after fresh human-planning approval, inspect installed OpenSpec schema/config and derive proposal/delta specs, `test-plan.md`, and schema-compatible `tasks.md`. Prepare these together in dependency order; QA case design can inform task refinement without separate human checkpoints. Independently review the entire execution bundle for fidelity, coverage and feasibility, obtain risk-required security review, validate OpenSpec, then request `execution` approval once.
+3. **Implementation and verification** — after execution approval, implement with stable-checkpoint targeted feedback, then obtain separate final QA and reviewer verdicts with current evidence. Finish review-ready; archive, PR and deployment are separate requests.
 
-Do not conflate `task-breakdown.md` (human planning) with `tasks.md` (agent-ready execution checklist).
+For engineering-only work, record PRD N/A before human-planning review. Product work still needs design where technical decisions or the installed schema require it. Preserve human-readable documents; proportionality removes irrelevant sections and duplicate authoring, not acceptance criteria or required evidence. Do not conflate `task-breakdown.md` with schema execution `tasks.md`.
+
+## Source-backed interview
+
+- Read the relevant current system, consumers, tests and constraints before asking what tools or source can answer. Distinguish facts, hypotheses, confirmed choices and explicitly accepted assumptions.
+- Use built-in `ask` for unresolved material choices: batch related questions with two to five concrete options, trade-offs and a recommendation. Challenge an unsafe or inconsistent preference with current-state evidence and a safer option; honor an informed explicit decision unless it violates a mandatory boundary.
+- Cover affected users/roles, happy/error/permission journeys, compatibility, dependencies, data/security, non-goals and observable acceptance, with applicable N/A reasons. Follow answers to newly exposed impacts rather than a fixed interview round count.
+- Record the actual selected option, rationale and resulting REQ/journey/acceptance links automatically. Do not invent an answer from silence or make the human copy questions and answers into a document. If `ask` is unavailable, disclose that and use numbered options awaiting an explicit response.
+- Reuse settled choices. Reopen only for new material evidence or changed intent, naming the decision and affected downstream inputs. Do not promise that future information can never require a revisit; classify avoidable planning misses separately from new scope.
+- Stop interviewing when material decisions align and no blocking unknown remains. The interview joins human-planning review/approval; do not create a separate interview approval.
 
 ## Document templates
 

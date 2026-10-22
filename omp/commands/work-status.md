@@ -3,21 +3,20 @@ description: Show change status and next action.
 ---
 ## Rule loading
 
-Read `RULES.md`, `rules/core.md`, and `rules/gates.md` for gate freshness and approval status. Load a relevant stage rule only if needed.
+- Read installed shared `RULES.md` and apply its activation check there. Read `rules/core.md` and `rules/gates.md`; load a stage rule only when interpreting that stage's evidence. Resolve paths under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`; stop if required policy is unreadable.
 
 ## Load and inspect
 
-- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Apply its dependencies, artifact ownership, stricter gates and freshness protocol.
-- Change slug: $1. Read existing `openspec/changes/$1/` artifacts, append-only approvals/reviews, verification evidence and repository state. If missing, report that fact; do not initialize a replacement.
-- Re-enumerate all route/schema inputs and recompute each gate's sorted path/SHA-256 manifest with real hashing tools. Compare complete path sets as well as bytes so added/missing files invalidate dependent approvals, reviews, tasks and verification.
-- Check each human decision and matching independent target review, unresolved blockers, required artifacts, validation evidence and task completion evidence. Approved `tasks.md` stays frozen; use `verification.md` for execution completion.
-- Recompute current source identity, including changed tracked files, relevant untracked files and deletions, against verification evidence. HEAD alone does not establish freshness.
-- Read dependency readiness and existing command/scenario results; do not invent PASS from file existence, timestamps, checked boxes, an old approval or an unavailable tool. Distinguish missing evidence, stale evidence, FAIL, BLOCKED and NOT_RUN.
-- Run any shell checks through `rtk` per shared rules. Report actual tool invocations or N/A reasons, and use `rtk gain -p` only as adoption evidence, not correctness.
+- Change slug: $1. This command is read-only: do not edit artifacts, append approvals, dispatch author work, run implementation checks or advance a gate.
+- Read the change artifacts, append-only approvals/reviews, verification evidence and repository state. If the change is missing, report that fact; do not initialize a replacement.
+- Recompute each bundle's sorted path/SHA-256 manifest, comparing complete path sets as well as bytes so added or missing files invalidate dependent records.
+- Check human decisions against their manifests, matching independent review verdicts, unresolved blockers, required artifacts, validation evidence and task completion. Approved `tasks.md` stays frozen; completion comes from `verification.md`.
+- Compare verification against current implementation identity including dirty tracked files, relevant untracked files and deletions; HEAD alone does not establish freshness.
+- Report missing, stale, FAIL, BLOCKED and NOT_RUN distinctly; never infer PASS from file existence, timestamps, checkboxes, an old approval or an unavailable tool. Legacy-target changes report the mapping obligation, never implicit authority.
 
 ## Report
 
-- Present `Gate | Evidence/freshness | Blocker | Next command` for interview, spec, test-plan, tasks, implementation, verification and archive as applicable.
-- Cite artifact paths, actual digest comparisons, review identities and observed command/browser evidence. Include dependency limitations, invalidated records, assumptions and risks.
-- Recommend exactly one next action with the command or checkpoint options. A completed artifact's review runs as part of its stage command; a pending decision uses `approve`, `approve stop`, `reject: <reason>`, `revisit: <question/stage>` or `pause`. A verification PASS still needs explicit archive authorization.
-- This command is read-only: do not edit artifacts, append approvals, dispatch author work, execute implementation checks or advance a gate.
+- Present `Gate | Evidence/freshness | Blocker | Next command` across `human-planning`, `execution`, implementation, verification and optional archive as applicable.
+- Cite artifact paths, actual digest comparisons, review identities and observed evidence. Include dependency limits, invalidated records, assumptions and risks.
+- Recommend exactly one next action: the stage command, `/work-approve <slug> <target>` for a pending decision, or `/work-resume <slug>`. Review-ready is terminal; archive is a separate request.
+- Route any shell hashing through RTK per core policy and preserve raw output.

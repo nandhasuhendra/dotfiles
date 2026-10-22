@@ -3,30 +3,24 @@ description: Create traceable QA scenarios.
 ---
 ## Rule loading
 
-Load `RULES.md`, `rules/core.md`, `rules/planning.md`, and `rules/gates.md`.
+- Read installed shared `RULES.md` and apply its activation check there. Read `rules/core.md` and `rules/planning.md`; load `rules/gates.md` for decisions. Resolve paths under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`; stop if required policy is unreadable.
 
 ## Load and gate
 
-- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Apply its dependencies, artifact ownership, stricter gates and freshness protocol.
 - Change slug: $1. Read existing `openspec/changes/$1/` artifacts and relevant source before editing.
-- Re-enumerate inputs and recompute upstream SHA-256 manifests. Require current human interview/spec approvals, their independent review PASS records and the complete route/schema specification bundle. Changed, missing or added upstream inputs invalidate dependent approvals/reviews/tasks/verification; stop for renewed decisions rather than silently continuing.
+- Require fresh `human-planning` approval and the derived specs from `/work-prepare`. Stop if the human bundle changed or approval is stale.
+- Read `QA-TEST-CASES.md` through shared template resolution and pass its path to the author. Filled scenarios begin NOT_RUN.
 
 ## Plan scenarios
 
-- Dispatch qa-engineer with approved inputs and source impact. If author dispatch is unavailable, adopt its instructions and disclose it; this does not substitute for later independent review or verification.
-- Resolve/read `QA-TEST-CASES.md` through shared template rules and provide its path/content to the scenario author. Missing templates block authoring; filled cases begin NOT_RUN.
-- Inspect relevant source, callers and existing tests to identify affected features. Use Codegraph only when the call/dependency graph materially helps; use Playwright when the changed behavior is browser-based. Do not run tools merely to populate an evidence list.
-- Run any shell commands through `rtk` per shared rules. Record tools actually used and their results; mark inapplicable tools N/A with a short reason. Keep raw failure output for gates.
-- Write `test-plan.md` with stable `TC-` IDs linked to every `REQ-` ID, Given/When/Then, priority, test layer, fixtures/preconditions and observable expected results.
-- Cover positive, negative, boundary, permissions/security, compatibility and affected-feature regressions; add concurrency, performance and migration cases when applicable. Explain N/A coverage and expose manual gaps.
-- Specify repository-supported test commands and a real smoke path. Browser changes require Playwright flows, error states, keyboard access and relevant viewport sizes. Do not invent executable commands or claim scenarios ran.
-- Record specification input paths/digests, assumptions, blockers and risks. Changed expected behavior returns to spec approval rather than weakening coverage.
+- Dispatch `qa-engineer` with the approved inputs and source impact; if dispatch is unavailable, adopt its instructions and disclose it. Review and final verification still require separate runs.
+- Write `test-plan.md` with stable `TC-` IDs linked to every `REQ-`, Given/When/Then, priority, layer, fixtures/preconditions and observable expected results.
+- Cover positive, negative, boundary, permissions/security, compatibility and affected-feature regressions; add concurrency, performance or migration cases when applicable. Explain N/A coverage and expose manual gaps.
+- Inspect relevant source, callers and existing tests to find affected features. Use Codegraph/LSP only when dependency impact is nontrivial and Playwright only for browser-based behavior; record actual use or a brief N/A reason.
+- Specify repository-supported test commands and a real smoke path; browser work requires Playwright flows, error states, keyboard access and relevant viewports. Never invent commands or claim execution.
 - Do not implement application code or implementation tests.
 
-## Review and checkpoint
+## Handoff
 
-- After authoring, dispatch the independent test-plan reviewer. Repair CHANGES_REQUESTED once and re-review; if it still fails, present the findings and stop for the human.
-- On PASS, present the shared checkpoint with `test-plan.md`, REQ/TC coverage, security coverage, review verdict, manifest identity and the options `approve`, `approve stop`, `reject: <reason>`, `revisit: <question/stage>`, `pause`.
-- `approve`: record test-plan approval with the shared protocol, then continue to `/work-plan $1` in the same turn. `approve stop`: record and stop.
-- `reject` routes to qa-engineer with the reason; `revisit` reopens the named spec/QA expectation and requires renewed spec approval when behavior changes; `pause` points to `/work-resume $1`.
-- Do not require the human to run `/work-review` or `/work-approve` after this command.
+- Continue to `/work-plan $1`; QA scenarios join the same execution bundle and are reviewed and approved with it. Do not request a separate test-plan approval.
+- Report coverage vs gaps, assumptions, blockers and the affected-behavior changes that must return to planning.

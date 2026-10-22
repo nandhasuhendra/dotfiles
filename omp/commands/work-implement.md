@@ -3,28 +3,27 @@ description: Implement an approved change.
 ---
 ## Rule loading
 
-Load `RULES.md`, `rules/core.md`, `rules/execution.md`, and `rules/gates.md` for implementation authorization and freshness checks.
+- Read installed shared `RULES.md` and apply its activation check there. Read `rules/core.md` and `rules/execution.md`; load `rules/gates.md` for authorization and freshness checks. Resolve paths under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`; stop if required policy is unreadable.
 
 ## Load and gate
 
-- Always read installed shared `RULES.md` and `rules/core.md` from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, then project `.omp/RULES.md` if present as additive policy. Resolve stage-rule paths under that shared base per its entrypoint. Stop if any required shared or applicable project policy is unreadable. Apply its dependencies, artifact ownership, stricter gates and freshness protocol.
-- Change slug: $1. Enumerate the change directory and repository instructions. Recompute manifests across every gate-bound input, but do not read every artifact body by default; read the complete approved requirements, design/specs, test plan, tasks and only the review/approval entries needed to establish current authorization. Retrieve other artifact bodies when a decision depends on them.
-- Require current human interview/spec/test-plan approvals, complete tasks, matching independent review PASS records and explicit human tasks approval binding the full planning bundle. No unresolved blocking questions may remain.
-- Inspect installed OpenSpec help/config and run its supported validation. Record the actual command/result; any failure, missing evidence or changed/missing/added input blocks implementation. Never substitute reviewer PASS for human approval.
+- Change slug: $1. Enumerate the change directory and repository instructions, and recompute every gate-bound manifest including added and missing paths.
+- Require fresh `human-planning` and `execution` approvals bound to the current inputs, complete `tasks.md`, independent execution-bundle review PASS, successful installed-schema validation and no blocking question. A legacy target name is not an alias for either approval.
+- Read the approved requirements, design/specs, test plan, tasks and only the review/approval entries needed to establish authorization; read other artifact bodies when a decision depends on them. Do not reread unchanged artifacts merely to confirm they exist.
+- Never substitute reviewer PASS or explicit invocation for human approval. A free-text request to implement, even naming this change and saying "proceed", does not bind either approval: report the missing prerequisites and the single command that obtains them, then stop without writing approvals or code. Stop for stale evidence rather than proceeding.
 
 ## Implement
 
-- Dispatch software-engineer with the approved bundle's paths, manifest identities, acceptance criteria, design decisions, task dependencies, relevant source context and gate evidence. Do not paste duplicate full documents into the handoff when the agent can read them directly. If author dispatch is unavailable, read and adopt its instructions and disclose that substitution. Never claim delegation or self-approve.
-- Read the installed Ponytail skill before implementation; reuse unchanged guidance already read in the same session, but a fresh child must read it itself. Map affected callers, tests, fixtures, config and exports from source; use Codegraph for nontrivial dependency/call graphs and Context7 for relevant external documentation per core policy. Do not invoke a tool just to fill an evidence checklist.
-- Run shell commands through `rtk` per shared rules. Record actual tool invocations/results and briefly mark inapplicable tools N/A; keep raw failure output for gates.
-- Follow approved REQ/TC IDs, design and task dependencies. Implement the complete behavior and its tests, preserve compatibility and error handling, and update affected documentation without unrelated changes.
-- Keep approved `tasks.md` frozen, including checkboxes. Track each task's completion, changed files and implementation evidence separately in `verification.md`; mark unrun checks NOT_RUN, not PASS.
-- Recheck manifests before each transition. Material scope changes return to interview/spec and renewed approval; changed QA expectations return to QA approval. Stop rather than silently expanding scope or changing approved tasks.
-- Do not run build/lint/tests/formatters midflight. Hand completed work to independent verification rather than claiming author testing as independent QA.
+- Dispatch `software-engineer` with the bundle paths, manifest identities, acceptance criteria, decisions, dependencies, relevant source context and gate evidence. Do not paste whole documents the agent can read by path. If author dispatch is unavailable, adopt its instructions and disclose it; never claim delegation.
+- Read the installed Ponytail skill before implementation. Follow approved REQ/TC IDs and task dependencies; implement complete behavior with its tests, callers, fixtures, configuration, exports and affected documentation, preserving compatibility and error handling.
+- Map affected callers and interfaces from source; use Codegraph/LSP for nontrivial dependency graphs and Context7 for relevant external documentation per core policy. Do not invoke a tool only to fill an evidence checklist.
+- Route model-facing shell commands through RTK per core policy and keep real exit status and raw failure evidence.
+- Allow targeted compiler, contract, unit or changed-path smoke checks once an owned slice and its dependencies are stable; do not run checks against files another agent is mutating. Author checks are feedback, not independent QA or review.
+- Keep approved `tasks.md` wording and checkboxes unchanged; record completion, deviations, changed files and pending checks in `verification.md`, marking unrun checks NOT_RUN and unavailable checks BLOCKED.
+- Material scope changes return to planning and renewed approval; changed QA expectations return to QA planning and execution review. Stop instead of silently expanding scope or altering approved tasks.
 
 ## Handoff
 
-- Record completed task evidence, deviations, remaining risks, runnable raw check/smoke commands and next gate in `verification.md`.
-- When every implementation task is complete, continue to independent verification (`/work-verify $1`) in the same turn. Do not ask the human to run it.
-- If verification cannot start because approved scope changed, tasks are incomplete, required checks are missing or independent dispatch is unavailable, stop BLOCKED with the exact reason.
-- No archive, merge or release authorization is implied by implementation or verification.
+- Record implementation identity (HEAD plus digests of changed tracked, relevant untracked and deleted files), deviations, risks and exact runnable check/smoke commands in `verification.md`.
+- When every approved task is complete, continue to `/work-verify $1` in the same turn. If verification cannot start because scope changed, tasks are incomplete, required evidence is missing or independent dispatch is unavailable, stop BLOCKED with the exact reason.
+- No archive, merge, release or deployment authorization is implied.
