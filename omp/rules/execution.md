@@ -11,6 +11,16 @@ Load with `core.md` for implementation. Load `verification.md` for verification,
 - RTK: follow core's universal shell-routing and fallback policy in every stage. Preserve exit status and full failure evidence; compression is not verification.
 - Antislop: read only the matching code/prose/UI/accessibility/responsive guidance. Do not start unrelated setup, asset searches or audits for non-UI work.
 
+## Implementation code readability
+
+- Write implementation code for human readers. Do not compress statements or blocks merely to reduce lines or tokens.
+- Follow the repository's formatter, EditorConfig and surrounding language conventions for indentation, spaces, tabs, line endings and line width. Do not mix tabs and spaces for indentation; preserve syntax-required whitespace.
+- Use consistent spacing around operators, after separators and within expressions according to the language's style. Remove trailing whitespace and end text files with a newline.
+- Separate logical steps and adjacent declarations with blank lines where they make the structure clearer. Keep related statements together; do not insert an empty line after every statement.
+- Put separate statements on separate lines. Expand dense conditionals, nested expressions, long argument lists and chained calls into readable multiline blocks using the existing formatter's layout.
+- Keep nesting and block boundaries visually clear through consistent indentation. Prefer explicit, readable control flow over clever one-liners.
+- Check changed code for readability before handoff. Use existing formatting checks at a stable checkpoint; limit formatting changes to the touched code and do not add a formatter solely for this rule.
+
 ## Evidence
 Record actual invocations and outcomes, not just tool names. Mark inapplicable tools N/A with a reason. Keep raw logs or rerunnable commands for gate checks. Do not install dependencies, alter global settings, enable unsafe browser flags or send repository data externally without authorization.
 
