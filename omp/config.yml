@@ -21,7 +21,7 @@ task:
 modelRoles:
   review_tier: openrouter/minimax/minimax-m3.1-flash:free
   doc_tier: openrouter/thinkingmachines/inkling:free
-  default: openrouter/thinkingmachines/inkling:free:low
+  default: opencode-zen/deepseek-v4.1-flash-free:low
 retry:
   fallbackChains:
     review_tier:
