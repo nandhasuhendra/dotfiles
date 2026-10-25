@@ -72,7 +72,7 @@ Start a new OMP session after installation. Explicitly activated operations load
 | Codegraph | Reuse a working CLI, otherwise install `@colbymchenry/codegraph@1.6.2` | Source-confirmed impact, callers and regression scope. |
 | Playwright | Install/verify `@playwright/mcp@0.0.83`, install its matching Chromium and render a smoke page | Real browser acceptance and regression checks. |
 | Context7 | Configure hosted MCP and verify a real MCP initialize response; no local package needed | Current library/API/CLI documentation, matched to installed versions. |
-| rtk-ai | Reuse a verified `rtk`, otherwise run the official v0.45.0 installer with release checksum verification enforced | Wrap every model-facing shell command; specialized subcommands, proxy or run. |
+| rtk-ai | Reuse a verified `rtk`, otherwise run the official v0.45.0 installer with release checksum verification enforced | Wrap every shell tool invocation; specialized subcommands, proxy or run. |
 
 Only Playwright and Context7 need the MCP entries supplied here. Installed tools are verified by actual invocation, not PATH lookup alone. Working CLIs and Ponytail are not automatically upgraded on repeat runs; Playwright is kept at the configured version.
 
@@ -88,7 +88,7 @@ Read the installed Ponytail skill and confirm the two MCP tool sets are availabl
 
 ### Shell commands
 
-Every model-facing shell command goes through `rtk`:
+Every shell tool invocation goes through `rtk`:
 
 | Route | Use |
 | --- | --- |
@@ -96,7 +96,7 @@ Every model-facing shell command goes through `rtk`:
 | `rtk proxy <command> [args]` | Specialized route rejects required flags, hides needed failure detail, or the command is unsupported. |
 | `rtk run '<shell command>'` | Pipelines, redirection or compound shell syntax. |
 
-File read/search/edit tools remain preferred over shell. Internal script plumbing that produces no agent-facing output may run natively. Preserve exit status and raw failure output; RTK compression is not verification. If RTK is unavailable or unsuitable, run the original command and record the fallback reason, command and result. `rtk gain -p` reports adoption or output reduction, not correctness or total model-token savings. Universal routing lives in `rules/core.md`, so it applies during planning as well as execution.
+File read/search/edit tools remain preferred over shell. Preserve exit status and raw failure output; RTK compression is not verification. If RTK is unavailable, shell execution is blocked rather than run natively. `rtk gain -p` reports adoption or output reduction, not correctness or total model-token savings. Universal routing lives in `rules/core.md`, so it applies during planning as well as execution.
 
 ### Context7 and Ponytail
 

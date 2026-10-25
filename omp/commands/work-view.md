@@ -17,6 +17,6 @@ description: Serve change docs to a phone browser.
 - Otherwise require `openspec/changes` in the current project. If `$1` is set, serve only `openspec/changes/$1` after confirming it exists; if it does not, list the available changes and stop. With no slug, serve all changes.
 - Run `"$VIEWER" start "$ROOT" "$HOST" "$PORT"` in the background via the wrapper. Never bind publicly or expose the port through a tunnel without explicit authorization.
 - Report the actual `Local:` and `Phone:` URLs from the output, the fact that the page is read-only, and how to stop it: `/work-view stop`.
-- Run agent-facing shell checks through `rtk` per shared rules. The wrapper's internal control flow (PID checks, `nohup`, `kill`, `curl` readiness) is native plumbing and exempt; keep its failures visible.
+- Run every shell tool invocation through `rtk` per shared rules, including calls that start or control the viewer. Keep failures visible.
 - Mermaid fences render in the browser through the pinned jsDelivr module. If the CDN is unreachable, the source block remains visible; report that fallback rather than claiming a rendered diagram.
 - If the viewer fails, show the log path and the actual failure. Do not retry with another port without telling the operator.

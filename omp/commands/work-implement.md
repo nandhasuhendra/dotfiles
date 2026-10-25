@@ -17,7 +17,7 @@ description: Implement an approved change.
 - Dispatch `software-engineer` with the bundle paths, manifest identities, acceptance criteria, decisions, dependencies, relevant source context and gate evidence. Do not paste whole documents the agent can read by path. If author dispatch is unavailable, adopt its instructions and disclose it; never claim delegation.
 - Read the installed Ponytail skill before implementation. Follow approved REQ/TC IDs and task dependencies; implement complete behavior with its tests, callers, fixtures, configuration, exports and affected documentation, preserving compatibility and error handling.
 - Map affected callers and interfaces from source; use Codegraph/LSP for nontrivial dependency graphs and Context7 for relevant external documentation per core policy. Do not invoke a tool only to fill an evidence checklist.
-- Route model-facing shell commands through RTK per core policy and keep real exit status and raw failure evidence.
+- Route every shell tool invocation through RTK per core policy and keep real exit status and raw failure evidence.
 - Allow targeted compiler, contract, unit or changed-path smoke checks once an owned slice and its dependencies are stable; do not run checks against files another agent is mutating. Author checks are feedback, not independent QA or review.
 - Keep approved `tasks.md` wording and checkboxes unchanged; record completion, deviations, changed files and pending checks in `verification.md`, marking unrun checks NOT_RUN and unavailable checks BLOCKED.
 - Material scope changes return to planning and renewed approval; changed QA expectations return to QA planning and execution review. Stop instead of silently expanding scope or altering approved tasks.
