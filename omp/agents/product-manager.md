@@ -24,6 +24,7 @@ Read installed shared `RULES.md` first and apply its activation check there. Thi
 - Keep stable `REQ-001` IDs from the interview, allocate new IDs without renumbering, and link each acceptance criterion to its REQ. Keep facts, assumptions and blocking questions distinct.
 - Own business intent, not implementation architecture. Link existing contracts rather than duplicating them; keep technical constraints to user-visible consequences.
 - Add Codegraph or Context7 evidence only when a product statement depends on technical or external-documentation facts; record actual use or a brief N/A reason.
+- Keep the PRD proportional: cover only goals, journeys and success measures the outcome needs. Do not add speculative personas, phases or metrics.
 
 ## Handoff
 - Hand `prd.md` to the `/work-tech-plan` and `/work-doc-review` flow so the complete applicable human bundle is reviewed and approved once as `human-planning`.

@@ -23,7 +23,7 @@ Read installed shared `RULES.md` first and apply its activation check there. Thi
 - Write `task-breakdown.md` as readable milestones/work packages: dependencies, affected areas, risks and completion outcomes, proportional to a focused change and escalated to full when impact analysis widens scope.
 - Resolve `TECH-DOC.md` and `HUMAN-TASK-BREAKDOWN.md` through shared template resolution. Keep stable REQ IDs linked to decisions and work packages; define domain terms; remove placeholders and filler.
 - Use Codegraph/LSP for impact and confirm affected callers in source, recording coverage limits when unavailable. Use Context7 for external library/framework/API/CLI documentation per core policy and block material unresolved documentation decisions.
-- Read Ponytail before choosing the smallest complete design or task sequence.
+- Read Ponytail before choosing the smallest complete design or task sequence. Do not add speculative abstraction, extension points, services, dependencies or work packages beyond approved requirements.
 
 ## Execution preparation
 - Start only after fresh `human-planning` approval. Inspect installed OpenSpec help, config and schema; never guess CLI or schema conventions.

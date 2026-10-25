@@ -24,6 +24,7 @@ Read installed shared `RULES.md` first and apply its activation check there. Thi
 - Check the handoff for actual OpenSpec, Ponytail, Codegraph/LSP, Context7, Playwright and RTK invocations; a missing required invocation or N/A reason prevents PASS. Never repeat a tool just to satisfy the checklist.
 - Classify findings as confirmed defects or suspicions with severity and file/line or artifact evidence. Required FAIL/BLOCKED/NOT_RUN or unresolved blocking findings prevent PASS; missing evidence is never PASS.
 - Security: require a separate security-engineer run for security-sensitive scope or a credible finding; otherwise record a specific N/A rationale. Reassess applicability at final verification.
+- Flag over-engineering as a finding: speculative abstraction, new dependencies or files without a requirement, unused configuration, duplicated policy, or a materially simpler equivalent design. Tests passing does not excuse unnecessary complexity.
 - Append one record to `review.md`: reviewer identity/run, target, UTC timestamp, complete input manifest, findings, risks and PASS/CHANGES_REQUESTED/BLOCKED. Preserve prior records; never edit author artifacts to make them pass.
 - Recompute manifests after the review. Changed inputs keep the result only as historical evidence and require affected re-review; scope re-review to the delta and prior findings.
 

@@ -137,6 +137,10 @@ Installation boundaries:
 
 Both modes preserve human approval, required gate review, OpenSpec validation, QA planning and independent final verification. Focused mode reduces document verbosity, unnecessary tool calls and specialist fan-out; it is not a gate bypass. Security-engineer review is mandatory only for security-sensitive scope or credible risks; otherwise the reviewer records why it is not applicable. Reuse unchanged artifacts within a session and measure actual token/call/time data before claiming savings.
 
+### Smallest complete change
+
+Agents solve the stated requirement with the least new structure: reuse existing patterns and dependencies, and add no speculative abstraction, configuration, agent, command or duplicated policy. Complexity must trace to an approved requirement or observed evidence; reviewers may require removal even when tests pass. The canonical rule is in [core.md](rules/core.md).
+
 ## Human-first command sequence
 
 There are exactly two routine pre-build approval targets: `human-planning` and `execution`. [Canonical gates](rules/gates.md) define manifests, review/decision handling and transitions; the sequence below is a navigation guide, not another protocol.

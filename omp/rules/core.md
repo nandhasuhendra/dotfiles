@@ -18,6 +18,14 @@ Load only after the applicability check in shared `RULES.md`. Read the active pr
 
 Classify work as focused (localized, low-risk, behavior-preserving), full (new behavior, cross-module, migration, uncertain impact), or security-sensitive. If unsure, use full. Focused reduces exploration and verbosity, never approval, review, QA or verification gates. Escalate when scope or risk expands; invalidate affected approvals.
 
+## Smallest complete change
+
+- Solve the stated requirement at the smallest scope that fully satisfies it. Complexity is justified only by an approved requirement or observed evidence, never by hypothetical future needs.
+- Reuse existing patterns, files, dependencies and commands. Add a module, dependency, abstraction, configuration option, feature flag, agent or command only when the current structure cannot carry the change.
+- Do not add speculative extension points, duplicate policy, dead code, compatibility shims or unused configurability. Remove what the change makes obsolete.
+- Over-engineering is a review finding: a reviewer may require removal even when behavior and tests pass, especially when a simpler equivalent exists.
+- This applies to code and to workflow artifacts (`RULES.md`, `rules/`, `agents/`, `commands/`). Keep one source of truth and reference policy instead of restating it.
+
 ## Stop, escalate and retry policy
 
 Stop exploration and move forward when the current decision has enough source-backed evidence to satisfy its completion condition; do not keep searching for theoretical completeness.

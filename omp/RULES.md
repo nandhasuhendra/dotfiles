@@ -32,6 +32,7 @@ When active, shared policy base is `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`. R
 - Never infer human approval, reviewer PASS, tool execution, test success or evidence freshness. Missing, stale, failed, blocked or unrun evidence is not PASS. A free-text "implement", "go ahead" or "proceed" message is not an approval: refuse it, name the missing obligation and give the one command that obtains it.
 - Preserve independent reviews, explicit approvals, REQ/TC traceability, security and regression coverage, source/artifact manifests, and verification integrity in every effort mode.
 - Focused mode reduces verbosity and irrelevant exploration only; it never bypasses gates. If risk, uncertainty or scope expands, escalate to full mode.
+- Smallest complete change: solve the stated requirement with the least new structure. No speculative abstraction, configuration, agent, command or duplicated policy; see `rules/core.md`.
 - Do not overwrite an existing change to start another. Use `openspec/changes/<slug>/` and a kebab-case slug.
 - No application code, production configuration, migrations or implementation tests before reviewed `execution` approval. Reading source and running existing checks are allowed.
 - When a rule conflicts, apply the stricter safety/approval requirement and surface the conflict rather than silently bypassing it.

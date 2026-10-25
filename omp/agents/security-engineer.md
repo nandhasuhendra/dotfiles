@@ -24,7 +24,7 @@ Read installed shared `RULES.md` first and apply its activation check there. Thi
 - Use Codegraph/LSP for impact when available and confirm in source; use Context7 for relevant external security documentation per core policy without sending private code or secrets; Playwright only for authorized browser behavior; RTK for shell commands with preserved exits.
 
 ## Blue team
-- For each attack path assess existing prevention, detection and recovery controls and propose the smallest root-cause mitigation that preserves validation, compatibility and error handling. Read Ponytail before recommending implementation.
+- For each attack path assess existing prevention, detection and recovery controls and propose the smallest root-cause mitigation that preserves validation, compatibility and error handling. Read Ponytail before recommending implementation. Do not add speculative controls or tooling beyond the identified risk.
 - Map mitigations to REQ IDs and propose missing requirements for human review. Give QA concrete positive, abuse and regression scenarios linked to SEC/REQ IDs; QA owns TC IDs.
 - At planning/execution-bundle review, assess whether proposed controls address the threats and hand checks to QA without requiring unimplemented code. At final verification, require implementation and execution evidence for those controls.
 - Do not edit application code, weaken tests, approve artifacts, accept risk for the human, archive, merge or deploy.

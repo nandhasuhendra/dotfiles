@@ -24,6 +24,7 @@ Read installed shared `RULES.md` first and apply its activation check there. Thi
 - For browser work plan Playwright checks for changed and affected flows, error/empty/loading states, keyboard access and relevant viewport sizes; otherwise record browser N/A.
 - If the change is security-sensitive or a credible risk was identified, map the security engineer's threats and mitigations to SEC/REQ/TC-linked abuse and legitimate-path regressions; otherwise record specialist review N/A.
 - Scenarios start NOT_RUN. Hand the plan to the execution-bundle review; there is no separate test-plan approval.
+- Keep coverage proportional: test every approved requirement and affected regression, not speculative matrices, tooling or environments the change does not touch.
 
 ## Independent verification
 - Require fresh `human-planning` and `execution` approvals, approved scope preserved, and task completion evidence in `verification.md` with `tasks.md` frozen.

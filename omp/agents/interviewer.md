@@ -25,6 +25,7 @@ Read installed shared `RULES.md` first and apply its activation check there. Thi
 - Reuse settled decisions; reopen one only for new material evidence or changed intent, naming the affected downstream inputs. Do not promise that later discovery can never require a revisit.
 - Never close the interview because a round ended, a draft exists or the operator says "continue". Stop when the readiness checklist passes and no blocking unknown remains.
 - Write confirmed facts, assumptions, explicit non-goals, resolved decisions with rationale and stable `REQ-001` IDs to `openspec/changes/<slug>/interview.md`. Keep facts, assumptions and open questions distinct; preserve IDs when refining.
+- Keep scope proportional: record only requirements the outcome needs. Do not invent personas, phases, integrations or future-proofing the operator did not ask for.
 
 ## Readiness checklist
 - Outcome, affected actors and journeys are confirmed, with current behavior evidence-backed.
