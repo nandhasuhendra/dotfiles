@@ -19,15 +19,17 @@ task:
     interviewer: "@doc_tier"
     product-manager: "@doc_tier"
 modelRoles:
-  review_tier: openrouter/minimax/minimax-m3.1-flash:free
-  doc_tier: openrouter/thinkingmachines/inkling:free
-  default: opencode-zen/deepseek-v4.1-flash-free:low
+  review_tier: opencode-zen/deepseek-v4.1-flash-free:low
+  doc_tier: opencode-zen/deepseek-v4.1-flash-free:low
+  default: google-antigravity/claude-sonnet-5-5:low
 retry:
   fallbackChains:
     review_tier:
+      - opencode-zen/deepseek-v4.1-flash-free:low
       - openrouter/thinkingmachines/inkling:free
       - openrouter/thinkingmachines/inkling-small:free
     doc_tier:
+      - opencode-zen/deepseek-v4.1-flash-free:low
       - openrouter/minimax/minimax-m3.1-flash:free
       - openrouter/thinkingmachines/inkling-small:free
 compaction:
