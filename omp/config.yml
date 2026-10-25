@@ -18,10 +18,12 @@ task:
     tech-lead: "@doc_tier"
     interviewer: "@doc_tier"
     product-manager: "@doc_tier"
+    software-engineer: "@execution_tier"
 modelRoles:
-  review_tier: opencode-zen/deepseek-v4.1-flash-free:low
-  doc_tier: opencode-zen/deepseek-v4.1-flash-free:low
-  default: google-antigravity/claude-sonnet-5-5:low
+  review_tier: openai-codex/gpt-5.6-sol:low
+  doc_tier: openai-codex/gpt-5.6-sol:low
+  execution_tier: opencode-zen/deepseek-v4.1-flash-free:low
+  default: openai-codex/gpt-5.6-sol:low
 retry:
   fallbackChains:
     review_tier:
@@ -31,6 +33,11 @@ retry:
     doc_tier:
       - opencode-zen/deepseek-v4.1-flash-free:low
       - openrouter/minimax/minimax-m3.1-flash:free
+      - openrouter/thinkingmachines/inkling-small:free
+    execution_tier:
+      - opencode-zen/deepseek-v4.1-flash-free:low
+      - openrouter/minimax/minimax-m3.1-flash:free
+      - openrouter/thinkingmachines/inkling:free
       - openrouter/thinkingmachines/inkling-small:free
 compaction:
   thresholdTokens: 200000
