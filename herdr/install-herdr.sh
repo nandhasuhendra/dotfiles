@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HERDR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_DIR="$HOME/.config/herdr"
 STAMP="$(date +%Y%m%d-%H%M%S)"
 
@@ -20,7 +20,7 @@ if ! command -v herdr >/dev/null 2>&1; then
 fi
 
 mkdir -p "$CONFIG_DIR"
-source_file="$DOTFILES_DIR/herdr/config.toml"
+source_file="$HERDR_DIR/config.toml"
 destination="$CONFIG_DIR/config.toml"
 [[ -f "$source_file" ]] || die "Missing $source_file"
 

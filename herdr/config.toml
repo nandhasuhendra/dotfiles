@@ -4,22 +4,60 @@ onboarding = false
 name = "dracula"
 auto_switch = false
 
+[theme.custom]
+accent = "#bd93f9"
+
 [ui]
+sidebar_width = 22
+sidebar_min_width = 16
+sidebar_max_width = 28
+sidebar_collapsed_mode = "compact"
+hide_tab_bar_when_single_tab = false
+pane_outer_borders = false
+pane_scrollbars = false
+pane_gaps = false
+show_agent_labels_on_pane_borders = true
 status_indicators = "symbols"
+tab_bar_position = "top"
+tab_bar_right_separator = "  "
+tab_bar_right = [
+  { type = "zoom" },
+  { type = "datetime", format = "%H:%M" },
+]
+window_title = "{workspace} › {tab}"
+copy_on_select = true
 
 [ui.toast]
-delivery = "terminal"
+delivery = "herdr"
+delay_seconds = 1
 
-[ui.sidebar.agents]
-row_gap = 0
-rows = [
-  ["state_icon", "machine", "workspace", "tab"],
-  ["agent"],
-]
+[ui.toast.herdr]
+position = "bottom-right"
+
+[ui.toast.clipboard]
+enabled = true
+position = "bottom-center"
 
 [ui.sidebar.spaces]
 row_gap = 0
 rows = [
-  ["state_icon", "workspace"],
-  ["branch", "git_status"],
+  ["state_icon", { token = "workspace", fg = "#bd93f9", bold = true }],
+  [{ token = "branch", fg = "#6272a4" }, "git_status"],
 ]
+
+[ui.sidebar.agents]
+row_gap = 0
+rows = [
+  ["state_icon", { token = "workspace", fg = "#bd93f9", bold = true }, { token = "tab", fg = "#6272a4" }],
+  [{ token = "agent", fg = "#ff79c6", bold = true }, { token = "$subagent", fg = "#50fa7b", bold = true }],
+]
+
+[ui.sound]
+enabled = true
+
+[[keys.command]]
+key = "prefix+alt+g"
+type = "popup"
+command = "lazygit"
+width = "85%"
+height = "85%"

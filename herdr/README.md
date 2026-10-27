@@ -1,13 +1,13 @@
 # Herdr
 
-The tracked `config.toml` keeps the Dracula theme and compact two-line sidebar
-layouts for agents and spaces.
+The tracked `config.toml` configures a slim, borderless Dracula theme with
+compact styled sidebar rows, visible top bar with clock/zoom, and floating toasts.
 
 To install Herdr (if missing) and link its config on Linux or macOS, run from
 the dotfiles repository:
 
 ```sh
-./install-herdr.sh
+./herdr/install-herdr.sh
 ```
 
 The installer backs up an existing config before linking and reloads a running
