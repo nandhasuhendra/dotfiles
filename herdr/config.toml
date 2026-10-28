@@ -49,7 +49,15 @@ rows = [
 row_gap = 0
 rows = [
   ["state_icon", { token = "workspace", fg = "#bd93f9", bold = true }, { token = "tab", fg = "#6272a4" }],
-  [{ token = "agent", fg = "#ff79c6", bold = true }, { token = "$subagent", fg = "#50fa7b", bold = true }],
+  [{ token = "agent", fg = "#ff79c6", bold = true }],
+  [{ token = "$subagent_1", fg = "#50fa7b" }],
+  [{ token = "$subagent_2", fg = "#50fa7b" }],
+  [{ token = "$subagent_3", fg = "#50fa7b" }],
+  [{ token = "$subagent_4", fg = "#50fa7b" }],
+  [{ token = "$subagent_5", fg = "#50fa7b" }],
+  [{ token = "$subagent_6", fg = "#50fa7b" }],
+  [{ token = "$subagent_7", fg = "#50fa7b" }],
+  [{ token = "$subagent_8", fg = "#50fa7b" }],
 ]
 
 [ui.sound]

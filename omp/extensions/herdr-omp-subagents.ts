@@ -1,3 +1,4 @@
+// @ts-nocheck
 import net from "node:net";
 
 const HERDR_ENV = process.env.HERDR_ENV;
@@ -7,7 +8,7 @@ const socketEndpoint =
 const paneId = process.env.HERDR_PANE_ID;
 const source = "herdr:omp:subagents";
 const nestedOmpSession = process.env.OMPCODE === "1";
-
+const MAX_TREE_SLOTS = 8;
 let requestQueue = Promise.resolve();
 
 interface SubagentLifecyclePayload {
@@ -65,49 +66,77 @@ function sendRequestAttempt(request: unknown, timeoutMs = 800): Promise<boolean>
 }
 
 function sendRequest(request: unknown): Promise<void> {
-  requestQueue = requestQueue.then(
-    () => sendRequestAttempt(request),
-    () => sendRequestAttempt(request),
-  );
+  requestQueue = requestQueue
+    .catch(() => {})
+    .then(async () => {
+      await sendRequestAttempt(request);
+    });
   return requestQueue;
 }
-
 export default function (pi: ExtensionApi) {
   if (HERDR_ENV !== "1" || !socketPath || !paneId || nestedOmpSession) {
     return;
   }
-
   const activeSubagents = new Map<string, string>();
-  let lastReportedText: string | null = null;
+  let lastReportedHash: string | null = null;
 
-  function formatSubagentText(): string | null {
-    if (activeSubagents.size === 0) {
-      return null;
-    }
+  function buildTreeTokens(): Record<string, string | null> {
+    const tokens: Record<string, string | null> = {
+      subagent: null,
+    };
+
     const names = Array.from(activeSubagents.values());
-    if (names.length === 1) {
-      return names[0];
+    const count = names.length;
+
+    if (count === 0) {
+      for (let i = 1; i <= MAX_TREE_SLOTS; i++) {
+        tokens[`subagent_${i}`] = null;
+      }
+      return tokens;
     }
+
     const joined = names.join(", ");
-    return joined.length <= 20 ? joined : `${names.length} subagents`;
+    tokens.subagent = joined.length <= 20 ? `› ${joined}` : `› ${count} subagents`;
+
+    if (count <= MAX_TREE_SLOTS) {
+      for (let i = 0; i < count; i++) {
+        const isLast = i === count - 1;
+        const branch = isLast ? "└─ " : "├─ ";
+        tokens[`subagent_${i + 1}`] = `${branch}${names[i]}`;
+      }
+      for (let i = count + 1; i <= MAX_TREE_SLOTS; i++) {
+        tokens[`subagent_${i}`] = null;
+      }
+    } else {
+      for (let i = 0; i < MAX_TREE_SLOTS - 1; i++) {
+        tokens[`subagent_${i + 1}`] = `├─ ${names[i]}`;
+      }
+      const overflow = count - (MAX_TREE_SLOTS - 1);
+      tokens[`subagent_${MAX_TREE_SLOTS}`] = `└─ … +${overflow} more`;
+    }
+
+    return tokens;
   }
 
   function reportSubagents() {
-    const text = formatSubagentText();
-    if (text === lastReportedText) {
+    const list = Array.from(activeSubagents.values());
+    const tokens = buildTreeTokens();
+    const hash = JSON.stringify(tokens);
+    if (hash === lastReportedHash) {
       return;
     }
-    lastReportedText = text;
+    lastReportedHash = hash;
 
     const params: Record<string, unknown> = {
       pane_id: paneId,
       source,
-      tokens: {
-        subagent: text ? `› ${text}` : null,
-      },
+      tokens,
     };
 
-    if (text) {
+    if (list.length > 0) {
+      const names = Array.from(activeSubagents.values());
+      const joined = names.join(", ");
+      const text = joined.length <= 20 ? joined : `${names.length} subagents`;
       params.display_agent = `omp › ${text}`;
     } else {
       params.clear_display_agent = true;
@@ -121,13 +150,12 @@ export default function (pi: ExtensionApi) {
   }
 
   function clearSubagents() {
-    if (activeSubagents.size === 0 && lastReportedText === null) {
+    if (activeSubagents.size === 0 && lastReportedHash === null) {
       return;
     }
     activeSubagents.clear();
     reportSubagents();
   }
-
   // 1. Listen to OMP subagent lifecycle events on event bus
   try {
     pi.events?.on?.("task:subagent:lifecycle", (rawPayload: unknown) => {
@@ -136,9 +164,14 @@ export default function (pi: ExtensionApi) {
       const id = String(payload.id);
       const status = payload.status;
       if (status === "started" || status === "active") {
+        for (const [key] of activeSubagents) {
+          if (key.startsWith("tool_task_")) {
+            activeSubagents.delete(key);
+          }
+        }
         const label =
-          payload.agent ||
           payload.name ||
+          payload.agent ||
           (payload.description ? String(payload.description).slice(0, 16) : undefined) ||
           "subagent";
         activeSubagents.set(id, label);
@@ -176,7 +209,7 @@ export default function (pi: ExtensionApi) {
   pi.on("tool_execution_end", (rawEvent: unknown) => {
     const event = rawEvent as ToolExecutionEvent | undefined;
     if (event?.toolName === "task") {
-      for (const key of Array.from(activeSubagents.keys())) {
+      for (const [key] of activeSubagents) {
         if (key.startsWith("tool_task_")) {
           activeSubagents.delete(key);
         }
@@ -184,7 +217,6 @@ export default function (pi: ExtensionApi) {
       reportSubagents();
     }
   });
-
   // 3. Clear on agent/session completion, reset, switch, or shutdown
   pi.on("agent_end", () => {
     clearSubagents();
