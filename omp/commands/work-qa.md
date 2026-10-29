@@ -7,9 +7,9 @@ description: Create traceable QA scenarios.
 
 ## Load and gate
 
-- Change slug: $1. Read existing `openspec/changes/$1/` artifacts and relevant source before editing.
+- Change slug: $1. Read existing `openspec/changes/$1/` artifacts and relevant source before editing. Run `rtk proxy openspec validate $1` to confirm derived delta specs are valid.
 - Require fresh `human-planning` approval and the derived specs from `/work-prepare`. Stop if the human bundle changed or approval is stale.
-- Read `QA-TEST-CASES.md` through shared template resolution and pass its path to the author. Filled scenarios begin NOT_RUN.
+- Cross-reference delta specs in `openspec/changes/$1/specs/` to ensure every added or modified capability requirement is accounted for in test planning. Read `QA-TEST-CASES.md` through shared template resolution and pass its path to the author. Filled scenarios begin NOT_RUN.
 
 ## Plan scenarios
 

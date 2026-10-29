@@ -47,9 +47,12 @@ case "$(uname -s)" in
   Linux|Darwin) ;;
   *) die 'Supported systems: Linux and macOS.' ;;
 esac
-for tool in node npm omp curl git tar; do
+for tool in node npm omp curl git tar python3; do
   command -v "$tool" >/dev/null 2>&1 || die "Missing $tool. Install it and rerun."
 done
+if ! command -v gh >/dev/null 2>&1; then
+  status NOTICE 'gh CLI not found; required only if using /work-commit --open-pr'
+fi
 node -e 'const [major, minor] = process.versions.node.split(".").map(Number); process.exit(major > 20 || (major === 20 && minor >= 19) ? 0 : 1)' \
   || die 'Node.js 20.19 or newer is required. Select a supported Node version and rerun.'
 for item in mcp.json agents commands RULES.md rules templates skills; do
@@ -83,6 +86,7 @@ install_cli() {
 
 stage 2 'Install command-line dependencies'
 install_cli openspec '@fission-ai/openspec@1.14.3'
+run 'Configure OpenSpec delivery mode (commands)' openspec config set delivery commands
 install_cli codegraph '@colbymchenry/codegraph@1.6.2'
 if command -v rtk >/dev/null 2>&1 && rtk --version >> "$LOG_FILE" 2>&1 && rtk gain >> "$LOG_FILE" 2>&1; then
   status READY 'rtk-ai (rtk)'

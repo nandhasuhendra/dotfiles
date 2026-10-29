@@ -8,7 +8,7 @@ description: Produce implementation task breakdown.
 ## Load and gate
 
 - Change slug: $1. Read the change artifacts and repository conventions. Require fresh `human-planning` approval, the derived specs from `/work-prepare` and QA coverage for every `REQ-` from `/work-qa`. Stop if evidence is missing or stale.
-- Inspect installed OpenSpec help, config and schema instructions before writing tasks.
+- Run `rtk proxy openspec instructions tasks --change $1` to load schema-defined task formats, dependency structures, and validation rules before drafting tasks.
 
 ## Plan tasks
 
@@ -21,6 +21,6 @@ description: Produce implementation task breakdown.
 
 ## Review and checkpoint
 
-- Run installed OpenSpec validation and record the actual command and result. A validation failure blocks the bundle.
+- Run `rtk proxy openspec validate $1` and record the actual command and result. A validation failure blocks the bundle.
 - The execution bundle is now complete (human bundle, proposal, delta specs, `test-plan.md`, `tasks.md`). Continue to `/work-review $1 execution` for the independent full-bundle review; risk-required security review and validation evidence belong to that review.
 - The single execution checkpoint is `/work-approve $1 execution`. Do not request separate test-plan or tasks approvals, and do not implement before explicit execution approval.

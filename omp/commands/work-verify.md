@@ -18,8 +18,8 @@ description: Verify implementation independently.
 - Browser changes require real Playwright execution of changed flows, error states, keyboard access and relevant viewports in an authorized environment; unavailable required browser evidence is BLOCKED, never simulated PASS.
 - Cover every approved TC/REQ plus affected existing-feature regressions, recording PASS/FAIL/BLOCKED/NOT_RUN per scenario. Manual gaps and unavailable dependencies never become PASS.
 - Decide from the recorded risk classification and findings whether a separate security-engineer run is required; require it for security-sensitive scope or a credible finding, otherwise have the reviewer record a specific N/A rationale.
-- After QA evidence exists, dispatch one independent reviewer with the authoritative bundle paths, implementation identity, QA evidence, applicable security verdict and validation evidence. Do not run duplicate reviewers against an unchanged manifest.
-- Run installed OpenSpec validation and record the actual result. Recompute manifests after the runs; changed source/test/config invalidates affected evidence and requires affected checks plus independent delta review, reusing unchanged recorded evidence.
+- After QA evidence exists, dispatch one independent reviewer with the authoritative bundle paths, implementation identity, QA evidence, applicable security verdict and validation evidence. Reviewer assesses implementation against OpenSpec verification principles: Completeness (every task and delta requirement fulfilled), Correctness (behavior matches spec contracts without regressions), and Coherence (code, docs and specs align). Do not run duplicate reviewers against an unchanged manifest.
+- Run `rtk proxy openspec validate $1` and record the actual result. Recompute manifests after the runs; changed source/test/config invalidates affected evidence and requires affected checks plus independent delta review, reusing unchanged recorded evidence.
 
 ## Handoff
 

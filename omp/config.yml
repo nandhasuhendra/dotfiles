@@ -2,7 +2,7 @@ symbolPreset: nerd
 composer:
   shape: claude
 theme:
-  dark: dark-dracula
+  dark: light-github
   light: light-github
 setupVersion: 2
 browser:
@@ -11,34 +11,37 @@ defaultThinkingLevel: auto
 task:
   enableEffort: false
   agentModelOverrides:
+    sonic: "@execution_tier"
     reviewer: "@review_tier"
-    qa-engineer: "@review_tier"
-    security-engineer: "@review_tier"
+    interviewer: "@doc_tier"
     security-reviewer: "@review_tier"
     tech-lead: "@doc_tier"
-    interviewer: "@doc_tier"
+    qa-engineer: "@review_tier"
     product-manager: "@doc_tier"
+    security-engineer: "@review_tier"
     software-engineer: "@execution_tier"
 modelRoles:
-  review_tier: openai-codex/gpt-5.6-sol:low
   doc_tier: openai-codex/gpt-5.6-sol:low
+  review_tier: openai-codex/gpt-5.6-sol:low
   execution_tier: opencode-zen/deepseek-v4.1-flash-free:low
-  default: openai-codex/gpt-6.1-sol:medium
+  default: opencode-zen/big-pickle
 retry:
   fallbackChains:
-    review_tier:
-      - opencode-zen/deepseek-v4.1-flash-free:low
-      - openrouter/thinkingmachines/inkling:free
-      - openrouter/thinkingmachines/inkling-small:free
     doc_tier:
+      - openai-codex/gpt-6.1-sol:low
+      - google-antigravity/gemini-3.8-flash:low
       - opencode-zen/deepseek-v4.1-flash-free:low
-      - openrouter/minimax/minimax-m3.1-flash:free
-      - openrouter/thinkingmachines/inkling-small:free
+      - openrouter/nvidia/nemotron-3.5-lightning:free:medium
+    review_tier:
+      - google-antigravity/gemini-3.8-flash:low
+      - opencode-zen/deepseek-v4.1-flash-free:low
+      - openrouter/nvidia/nemotron-3.5-lightning:free:medium
+      - openrouter/thinkingmachines/inkling:free
     execution_tier:
       - opencode-zen/deepseek-v4.1-flash-free:low
-      - openrouter/minimax/minimax-m3.1-flash:free
+      - google-antigravity/gemini-3.1-flash-lite:low
+      - openrouter/nvidia/nemotron-3.5-lightning:free:medium
       - openrouter/thinkingmachines/inkling:free
-      - openrouter/thinkingmachines/inkling-small:free
 compaction:
   thresholdTokens: 200000
   modelThresholds:

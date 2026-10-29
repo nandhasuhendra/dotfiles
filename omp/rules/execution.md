@@ -11,6 +11,16 @@ Load with `core.md` for implementation. Load `verification.md` for verification,
 - RTK: follow core's universal shell-routing and fallback policy in every stage. Preserve exit status and full failure evidence; compression is not verification.
 - Antislop: read only the matching code/prose/UI/accessibility/responsive guidance. Do not start unrelated setup, asset searches or audits for non-UI work.
 
+## Subagent implementation and main-agent review
+
+- Implementation tasks are delegated to `software-engineer` subagents running on the configured cheaper execution tier (`@execution_tier`).
+- The main agent (orchestrator running the primary model) MUST directly review the subagent's implementation before proceeding to verification or asking for human gate review:
+  1. Inspect changed files and git diff for correctness, error handling, and scope containment.
+  2. Enforce Ponytail principles (smallest complete change, no dead code or unasked-for abstraction).
+  3. Confirm schema integrity via `rtk proxy openspec validate <slug>`.
+  4. If defects, compilation/test errors, or missed requirements occur, direct the subagent to repair them immediately.
+- Only after main-agent validation passes does the workflow advance to independent verification (`/work-verify`) and subsequent human gate presentation.
+
 ## Implementation code readability
 
 - Write implementation code for human readers. Do not compress statements or blocks merely to reduce lines or tokens.

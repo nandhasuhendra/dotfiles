@@ -41,17 +41,17 @@ Every transition rechecks all upstream evidence. Missing, stale, FAIL, BLOCKED o
 | Operation | Required evidence / boundary |
 | --- | --- |
 | Interview, product/technical planning | Current-state investigation and aligned material decisions; author one human bundle. No separate interview approval or derived specs yet. |
-| `work-doc-review` / `human-planning` approval | Independent complete human-bundle PASS, no blocking unknowns, explicit approval of its exact manifest. |
+| `/work-review` + `/work-approve` `human-planning` | Independent complete human-bundle PASS, no blocking unknowns, explicit approval of its exact manifest. |
 | `work-prepare`, `work-qa`, `work-plan` | Fresh human-planning approval before any derived artifact; contribute specs, scenarios and tasks to one execution bundle. No intermediate human approvals. |
 | `execution` approval | Complete fresh human/execution inputs, independent execution-bundle PASS, security PASS when required, full REQ/TC/task coverage, successful installed-schema validation, explicit human approval. |
-| `work-implement` | Fresh human-planning and execution approvals; implement only approved scope. No legacy target alias grants this permission. |
+| `work-implement` | Fresh human-planning and execution approvals; implement approved scope via `software-engineer` subagent on `@execution_tier`; main agent reviews and validates implementation before verification. |
 | `work-verify` | Tasks complete, approved scope preserved, current source/checks available; separate independent QA and reviewer examine actual behavior/evidence. |
 | Review-ready | Every required scenario PASS, fresh independent QA/reviewer PASS, required security PASS and OpenSpec validation PASS, no blocking defect; readable docs/code/test/QA/risk handoff. No human acceptance inferred. |
 | `work-archive` | Review-ready evidence plus separate explicit human archive authorization matching current manifests. PR, deployment, merge and release remain separately requested. |
 
 - Keep one continuing author/reviewer where practical; do not dispatch a new role merely to rewrite equivalent material. Each pre-build bundle gets one independent review and one human checkpoint, not one per constituent file.
 - Re-review repairs only in the changed artifact, prior findings and dependent inputs; reuse proven-unchanged PASS coverage with its identity. Continue the existing reviewer when available. If the same finding class survives two re-reviews, surface it rather than loop.
-- Stop at pending approval. An explicit custom-role invocation authorizes only that role's work, not a lifecycle transition. Status/view remain inspection-only.
+- Stop at pending approval. An explicit custom-role invocation authorizes only that role's work, not a lifecycle transition. `/work-status` remains inspection-only.
 - Material intent/scope changes return to human planning; changed spec/QA/task content returns to execution review/approval. Repair code within approved behavior, then repeat affected verification. Never alter expectations to fit defects.
 - Required security review is a separate security-engineer red-team/blue-team run for sensitive scope or credible findings, bound to current inputs and covered by QA threat scenarios. Otherwise the independent reviewer records a specific security-N/A rationale. Reassess at final verification.
 - Final QA and reviewer must be independent of implementers and each other; missing required independent evidence blocks readiness. Same operator-authorized model in separate runs is allowed; no silent paid escalation.
@@ -79,7 +79,7 @@ Decision: approve | approve stop | reject: <reason> | revisit: <question/stage> 
 - `pause`: record nothing and point to `/work-resume <slug>`.
 - One explicit reply is enough. Do not ask for the same decision twice; do not make the human re-run review after a PASS unless inputs changed.
 - Show artifact paths, a one-line scope/risk summary, review findings and the manifest identity before asking. Invocation, silence, "continue" or an earlier approval is not a decision.
-- `work-doc-review` handles the human bundle; `work-review` handles an explicitly assigned independent review. `work-approve` accepts only `human-planning`, `execution`, or separately requested `archive`, verifies prerequisites and records the actual decision. No legacy-target aliases.
+- `/work-review <slug> <target>` handles the independent review of `human-planning` or `execution`; `/work-approve <slug> <target>` accepts only `human-planning` or `execution`, verifies prerequisites and records the actual decision. Archive authorization and execution are handled directly by `/work-archive <slug>`. No legacy-target aliases.
 
 ## Agent handoffs
 

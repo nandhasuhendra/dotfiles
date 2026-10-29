@@ -6,7 +6,7 @@ Custom agents and slash commands for human-first product/technical planning, Ope
 
 The workflow activates before loading lifecycle core/stage/gate policy, only for a custom `/work-*` command, an explicit custom-agent request, or an explicit workflow request. Ordinary questions, unrelated work, repository presence, path/tool mentions and internal helper dispatch do not activate planning or approvals. Ordinary safety, relevant skills and verification still apply.
 
-Activation belongs to the requested operation/change, not the entire session. A direct role performs only its assigned work; `/work-status` and `/work-view` are read-only and do not start planning. Explicit invocation is not approval and cannot bypass an active change's transition prerequisites. See [activation policy](RULES.md) and the canonical [gate protocol](rules/gates.md).
+Activation belongs to the requested operation/change, not the entire session. A direct role performs only its assigned work; `/work-status` is read-only and does not start planning. Explicit invocation is not approval and cannot bypass an active change's transition prerequisites. See [activation policy](RULES.md) and the canonical [gate protocol](rules/gates.md).
 
 ## Context and token efficiency
 
@@ -149,7 +149,7 @@ There are exactly two routine pre-build approval targets: `human-planning` and `
 | --- | --- | --- |
 | Discover | `/work-new <request>` | Inspect current source/docs/tests, use built-in `ask` for material choices and record interview decisions. Interview confirmation is not a separate approval gate. |
 | Human planning | `/work-product-plan <slug>` when applicable; `/work-tech-plan <slug>` | Reuse/update applicable PRD, design and human task breakdown proportionally. Read-only schema preflight is allowed; no generated specs yet. |
-| Human checkpoint | `/work-doc-review <slug>` | Independently review interview plus applicable PRD/design and human task breakdown together; request `human-planning` approval of the immutable input manifest. |
+| Human checkpoint | `/work-review <slug> human-planning`; `/work-approve <slug> human-planning` | Independently review interview plus applicable PRD/design and human task breakdown together; request `human-planning` approval of the immutable input manifest. |
 | Execution preparation | `/work-prepare <slug>` | After human approval, derive schema proposal/specs, QA plan and executable tasks together. `/work-qa` and `/work-plan` populate this bundle, without separate approval checkpoints. |
 | Execution checkpoint | `/work-review <slug> execution`; `/work-approve <slug> execution` | Independent full-bundle review, risk-required security review, successful schema validation and explicit `execution` approval before code. |
 | Implement | `/work-implement <slug>` | Complete approved tasks/callers/tests/docs; coordinate targeted checks at stable checkpoints without racing shared edits. |
@@ -179,13 +179,13 @@ The installed OpenSpec schema takes precedence for required headings and checkbo
 
 ## Read on your phone
 
-Use the command from the project:
+Run the wrapper directly from your project:
 
-```text
-/work-view
-/work-view <change-slug>
-/work-view stop
+```bash
+omp/view-docs.sh start /path/to/project/openspec/changes 0.0.0.0 8765
 ```
+
+To stop the viewer: `omp/view-docs.sh stop`.
 
 Or run the wrapper directly:
 
@@ -193,7 +193,7 @@ Or run the wrapper directly:
 omp/view-docs.sh start /path/to/project/openspec/changes 0.0.0.0 8765
 ```
 
-Open the printed `http://<laptop-lan-ip>:8765/` on a phone connected to the same Wi-Fi. The index lists each change; Markdown tables, relative `.md` links and Mermaid fences render. The command runs the viewer in the background and `/work-view stop` stops it.
+Open the printed `http://<laptop-lan-ip>:8765/` on a phone connected to the same Wi-Fi. The index lists each change; Markdown tables, relative `.md` links and Mermaid fences render.
 
 - Mermaid uses a pinned jsDelivr module in the browser. If the CDN is unreachable, the diagram stays as a readable code block; no diagram is claimed.
 - No authentication. Use a trusted network. For access away from home, bind to the Tailscale IP (`tailscale ip -4`) or use a private tunnel; never expose the port publicly.
@@ -220,7 +220,7 @@ A continuing informed author may carry related authoring stages forward using di
 
 Targeted author checks may run once owned inputs are stable and no shared-edit race exists. Record real failures and repairs; these checks do not self-certify QA. Final readiness requires current required scenarios, changed-path smoke and independent verdicts, with no unresolved blocking finding. Required FAIL/BLOCKED/NOT_RUN prevents readiness.
 
-Every author returns `Gate`, `Artifacts`, `Evidence`, `Open questions`, `Next`. The orchestrator applies the [canonical gate protocol](rules/gates.md), presents the actual bundle and records only an explicit human decision. `/work-review <slug> <target>` and `/work-approve <slug> <target>` use `human-planning` or `execution`; administrative `archive` remains separate. `/work-status` reports evidence/freshness, blocker and one next action; `/work-resume` rechecks prerequisites rather than inferring approval.
+Every author returns `Gate`, `Artifacts`, `Evidence`, `Open questions`, `Next`. The orchestrator applies the [canonical gate protocol](rules/gates.md), presents the actual bundle and records only an explicit human decision. `/work-review <slug> <target>` and `/work-approve <slug> <target>` use `human-planning` or `execution`; administrative `archive` is handled directly by `/work-archive`. `/work-status` reports evidence/freshness, blocker and one next action; `/work-resume` rechecks prerequisites rather than inferring approval.
 
 ### Approval identity and legacy work
 
@@ -285,7 +285,7 @@ These observations concern earlier revisions and fixtures, not proof of the revi
 - Checkpoint smoke on a disposable OpenSpec workspace: `/work-review demo interview` dispatched an independent reviewer, which recorded INT-001 PASS with a matching SHA-256 manifest. Re-running the command reused that PASS and presented one menu (`approve`, `approve stop`, `reject`, `revisit`, `pause`) without recording approval. `/work-status` recommended the same single action; `/work-approve demo interview pause` wrote no approval.
 - Phone viewer smoke served a disposable `openspec/changes` fixture: index listing, rendered Markdown table, relative `.md` link, and rejection of traversal/non-Markdown paths passed.
 - Real Chromium rendered a Mermaid flowchart to `.mermaid svg` with zero console errors; the nonce policy allowed only the pinned jsDelivr module plus the inline renderer.
-- `/work-view demo` started a single-change viewer, returned HTTP 200, and `/work-view stop` stopped it. Wrapper `start`/`status`/`stop` also passed with state cleanup.
+- Phone viewer smoke served a disposable `openspec/changes` fixture: index listing, rendered Markdown table, relative `.md` link, and rejection of traversal/non-Markdown paths passed. Wrapper `start`/`status`/`stop` also passed with state cleanup.
 - RTK smoke: `rtk proxy` preserved exit code 7, `rtk run` executed a pipeline and returned 2, and `rtk git`/`rtk grep` produced usable output. OMP selected the specialized `rtk git status --short --branch` route; an earlier smoke deliberately used `rtk proxy` for full output.
 - Tool-use rules and evidence requirements were updated in RULES, all agents and stage commands. They remain prompt-level instructions, not runtime enforcement.
 - The approve/reject/revisit transitions and full approval-to-archive happy path were not exercised, so approval recording and downstream continuation are not proven end-to-end. Application-specific security/browser scenarios and macOS installation were not run. Refusal and checkpoint smokes do not guarantee enforcement.

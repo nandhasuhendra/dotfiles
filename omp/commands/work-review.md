@@ -17,7 +17,7 @@ description: Independently review a human-planning or execution bundle.
 
 - Dispatch a separate reviewer run independent of the authors, implementation, QA and security run. No self-review or role-adoption fallback: if dispatch or independence is unavailable, append BLOCKED with the reason.
 - `human-planning`: `interview.md`, applicable `prd.md`/`design.md` and `task-breakdown.md` together. `execution`: that complete human bundle, proposal, every delta spec, `test-plan.md`, `tasks.md` and OpenSpec config/schema inputs.
-- Review fidelity to approved human intent, REQ/TC/task traceability, complete coverage, feasibility and dependencies, compatibility/security/regression work, visible open decisions and successful installed-schema validation evidence for `execution`.
+- Review fidelity to approved human intent, REQ/TC/task traceability, complete coverage, feasibility and dependencies, compatibility/security/regression work, visible open decisions, and run `rtk proxy openspec validate $1` to verify successful schema validation for `execution`.
 - Check the handoff for actual OpenSpec, Ponytail, Codegraph/LSP, Context7, Playwright and RTK invocations; a missing required invocation or N/A reason prevents PASS. Do not rerun tools only to populate evidence.
 - For security-sensitive scope or a credible finding, require a separate security-engineer PASS bound to the same manifest; otherwise the reviewer records a specific N/A rationale.
 - Require correct source-backed reasoning, not summaries alone. Separate confirmed defects from suspicions and give file/line or artifact evidence.

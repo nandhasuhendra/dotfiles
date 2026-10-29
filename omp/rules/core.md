@@ -13,6 +13,7 @@ Load only after the applicability check in shared `RULES.md`. Read the active pr
 - Reuse paths, IDs, digests and existing evidence instead of copying full documents into handoffs. Read full authoritative content needed for the decision; supporting context is on demand.
 - For unchanged artifacts already in context, verify identity/freshness without rereading their bodies. New agents must read the specific authoritative inputs needed for their own task.
 - Respect free-model/operator routing; independence means separate author, QA and reviewer runs, not mandatory model diversity. Unknown usage stays unknown. Report unavailable required dispatch/model access as BLOCKED; never silently switch to paid routes or persist configuration.
+- Routine mechanical and Git operations (commit, push, PR creation), particularly `/work-commit`, MUST run on free models via subagent delegation (`agent: "sonic"` mapped to `@execution_tier`) to preserve primary model quotas for design, review, and verification.
 
 ## Scope and risk
 

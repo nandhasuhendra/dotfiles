@@ -18,8 +18,8 @@ description: Archive a completed change.
 - If `approvals.md` already records a current human archive authorization matching these exact inputs, proceed without asking again.
 - Otherwise show evidence, manifests, remaining risks and the exact archive scope, then present one checkpoint via built-in `ask`: `approve` (authorize archive only), `approve stop`, `reject: <reason>`, `revisit: <question/stage>`, `pause`. Invocation, merge/release approval or "continue" is not archive authorization.
 - `approve`: recompute manifests after the decision. If unchanged, append the decision reference/quote, UTC timestamp, scope and manifests to `approvals.md`, then archive in the same turn. If anything changed, stop for renewed verification and authorization. `reject` records the decision without authorization; `revisit` reopens the named stage; `pause` writes nothing and points to `/work-resume $1`.
-- Only after current verification and archive authorization, reconcile schema task checkboxes from proven completion in `verification.md`. Record the completion-only before/after digest change; preserve task wording, dependencies and scope. Any other task edit requires renewed execution review and approval.
-- Use only the installed, documented OpenSpec archive lifecycle for this change; inspect its help and validate again after reconciliation, recording the real command and result.
+- Only after current verification and archive authorization, run `rtk proxy openspec instructions archive --change $1` and reconcile schema task checkboxes from proven completion in `verification.md`. Record the completion-only before/after digest change; preserve task wording, dependencies and scope. Any other task edit requires renewed execution review and approval.
+- Execute the archive lifecycle via `rtk proxy openspec archive $1` (merging delta specs into main `openspec/specs/` per schema lifecycle). Run `rtk proxy openspec validate` post-archive and record the command, exit code and output.
 
 ## Handoff
 

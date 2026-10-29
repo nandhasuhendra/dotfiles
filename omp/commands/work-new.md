@@ -10,8 +10,9 @@ description: Start a gated product or engineering change.
 ## Load
 
 - Request: $ARGUMENTS. Free text, not a required slug. Read repository `AGENTS.md`, existing human documentation, relevant source and tests before choosing a kebab-case slug.
+- Inspect existing project capabilities and active specifications using `rtk proxy openspec context` and `rtk proxy openspec list --specs` to ground the change in current architecture and avoid duplicate requirements.
 - Create `openspec/changes/<slug>/` only when unused; never overwrite an existing change. Do not create `proposal.md`, delta specs or schema tasks before `human-planning` approval.
-- Do not invoke dependency CLIs or run shell commands merely to complete the interview. Route genuinely needed shell commands through RTK per core policy and keep the real result.
+- Route genuinely needed shell commands through RTK per core policy and keep the real result.
 
 ## Interview
 
@@ -26,5 +27,5 @@ description: Start a gated product or engineering change.
 ## Handoff
 
 - Continue to the human planning commands: `/work-product-plan <slug>` when a PRD applies, then `/work-tech-plan <slug>`. Those draft the human bundle only.
-- The bundle's single pre-build checkpoint is `/work-doc-review <slug>` → `human-planning` approval. Do not request a separate interview review or approval, and do not create application code, tests or derived specs.
+- The bundle's single pre-build checkpoint is `/work-review <slug> human-planning` → `/work-approve <slug> human-planning`. Do not request a separate interview review or approval, and do not create application code, tests or derived specs.
 - Report the route, artifacts, evidence visibly missing, blocking questions and the next command.

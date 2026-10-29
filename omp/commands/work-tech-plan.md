@@ -8,9 +8,8 @@ description: Create the human-readable Tech Doc and task breakdown.
 
 ## Load and gate
 
-- Change slug: $1. Read the change's `interview.md`, applicable `prd.md` and relevant source/repository instructions. Stop on blocking questions or an incomplete interview.
-- Do not create OpenSpec artifacts, delta specs or schema `tasks.md` here; execution preparation owns them after `human-planning` approval.
-
+- Change slug: $1. Read the change's `interview.md`, applicable `prd.md` and relevant source/repository instructions. Inspect existing capability specs under `openspec/specs/` to evaluate technical delta impact on existing architectural contracts. Stop on blocking questions or an incomplete interview.
+- Do not create OpenSpec change artifacts, delta specs or schema `tasks.md` here; execution preparation owns them after `human-planning` approval.
 ## Technical planning
 
 - Dispatch `tech-lead`; disclose if adopting the role directly.
@@ -22,5 +21,5 @@ description: Create the human-readable Tech Doc and task breakdown.
 
 ## Handoff
 
-- Continue to `/work-doc-review $1` when both documents are complete and no material question remains; otherwise stop and ask.
-- The applicable human bundle is reviewed and approved once as `human-planning`; do not request a separate design or task-breakdown approval.
+- Continue to `/work-review $1 human-planning` when both documents are complete and no material question remains; otherwise stop and ask.
+- The applicable human bundle is reviewed and approved once as `human-planning` via `/work-review $1 human-planning` → `/work-approve $1 human-planning`; do not request a separate design or task-breakdown approval.

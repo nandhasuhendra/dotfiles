@@ -9,14 +9,14 @@ description: Translate approved human planning documents into OpenSpec and agent
 ## Load and gate
 
 - Change slug: $1. Recompute the human-planning manifest and require fresh `human-planning` approval bound to the exact current inputs. Stop if inputs changed, the decision is stale or a material question is unresolved.
-- Only now inspect installed OpenSpec help, config, schema and artifact instructions; never guess CLI commands or conventions.
+- Only now inspect installed OpenSpec schema and artifact instructions: run `rtk proxy openspec instructions proposal --change $1` and `rtk proxy openspec templates` to identify schema conventions and artifact templates.
 
 ## Prepare derived specifications
 
 - Read the approved human bundle in full and translate it with `tech-lead` as the single primary author into the installed schema's `proposal.md`, delta `specs/**/spec.md` and any required design artifact.
 - Preserve approved REQ IDs, acceptance criteria, scope, non-goals, assumptions and decisions; link every requirement to its human source. Do not add scope, drop criteria or change technical decisions.
 - Consult `product-manager` only for an unresolved product-requirement interpretation; stop for the operator rather than inventing intent. A material decision missing from approved human intent reopens planning.
-- Validate with the installed OpenSpec command discovered from real help and record the invocation, exit status and failure evidence.
+- Validate with `rtk proxy openspec validate $1` and record the invocation, exit status and failure evidence. Any schema validation failure blocks handoff.
 - Do not create schema `tasks.md` or `test-plan.md` here; `/work-qa` and `/work-plan` complete the same execution bundle.
 
 ## Handoff

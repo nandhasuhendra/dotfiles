@@ -8,9 +8,8 @@ description: Draft a human-readable PRD from the confirmed interview.
 
 ## Load and gate
 
-- Change slug: $1. Read `interview.md` and the repository context; stop if material questions are blocking or the interview is incomplete.
-- Do not generate OpenSpec specs in this stage: human planning documents come first and are approved together as `human-planning`.
-
+- Change slug: $1. Read `interview.md` and repository context; inspect existing capability specs under `openspec/specs/` (via `rtk proxy openspec list --specs`) to ensure requirement consistency. Stop if material questions are blocking or the interview is incomplete.
+- Do not generate OpenSpec change specs in this stage: human planning documents come first and are approved together as `human-planning`.
 ## Write the PRD
 
 - Dispatch `product-manager`; if dispatch is unavailable, follow its role instructions and disclose the substitution.
@@ -22,4 +21,4 @@ description: Draft a human-readable PRD from the confirmed interview.
 ## Handoff
 
 - Continue to `/work-tech-plan $1` when no material product question blocks technical design. If a decision is needed, ask the operator, record the answer in `interview.md`, and then continue.
-- The human bundle is reviewed and approved once at `/work-doc-review $1`; do not request a separate PRD review or approval.
+- The human bundle is reviewed and approved once via `/work-review $1 human-planning` → `/work-approve $1 human-planning`; do not request a separate PRD review or approval.

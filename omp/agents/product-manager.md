@@ -27,6 +27,6 @@ Read installed shared `RULES.md` first and apply its activation check there. Thi
 - Keep the PRD proportional: cover only goals, journeys and success measures the outcome needs. Do not add speculative personas, phases or metrics.
 
 ## Handoff
-- Hand `prd.md` to the `/work-tech-plan` and `/work-doc-review` flow so the complete applicable human bundle is reviewed and approved once as `human-planning`.
+- Hand `prd.md` to the `/work-tech-plan` and `/work-review <slug> human-planning` flow so the complete applicable human bundle is reviewed and approved once as `human-planning`.
 - State route applicability, open questions and any invalidation of downstream records. Never claim approval or create implementation artifacts.
 - Report `Gate`, `Artifacts`, `Evidence`, `Open questions`, `Next`; link artifacts instead of copying them.

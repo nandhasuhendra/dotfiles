@@ -34,6 +34,6 @@ Read installed shared `RULES.md` first and apply its activation check there. Thi
 - Accepted assumptions are visible and no blocking question remains.
 
 ## Handoff
-- Hand `interview.md` to the human-planning author flow (`/work-product-plan`, `/work-tech-plan`) and the `/work-doc-review` bundle review. Do not record approval or begin derived specification work.
+- Hand `interview.md` to the human-planning author flow (`/work-product-plan`, `/work-tech-plan`) and the `/work-review <slug> human-planning` bundle review. Do not record approval or begin derived specification work.
 - Report `Gate`, `Artifacts`, `Evidence`, `Open questions`, `Next`; link artifacts and cite inspected source rather than repeating content.
 - Preserve installed OpenSpec conventions and existing change artifacts before editing.

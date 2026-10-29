@@ -3,17 +3,33 @@ return {
 	{ "nvim-tree/nvim-web-devicons", lazy = true },
 	{ "kylechui/nvim-surround", version = "^4.0.0", event = "VeryLazy", opts = {} },
 	{
-		"Mofiqul/dracula.nvim",
+		"catppuccin/nvim",
+		name = "catppuccin",
 		lazy = false,
 		priority = 1000,
 		config = function()
-			vim.cmd.colorscheme("dracula")
+			vim.cmd.colorscheme("catppuccin-latte")
 		end,
 	},
+	-- {
+	-- 	"Mofiqul/dracula.nvim",
+	-- 	lazy = false,
+	-- 	priority = 1000,
+	-- 	config = function()
+	-- 		vim.cmd.colorscheme("dracula")
+	-- 	end,
+	-- },
 	{
 		"nvim-lualine/lualine.nvim",
 		event = "VeryLazy",
-		opts = { options = { theme = "dracula-nvim", globalstatus = true, section_separators = "", component_separators = "" } },
+		opts = {
+			options = {
+				theme = "dracula-nvim",
+				globalstatus = true,
+				section_separators = "",
+				component_separators = "",
+			},
+		},
 	},
 	{
 		"folke/which-key.nvim",

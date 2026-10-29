@@ -2,7 +2,7 @@
 
 ## Applicability — check before loading workflow rules
 
-Activate this workflow only for a user-invoked `/work-*` command, an explicit request to use this workflow, or an explicit request for a custom agent. A custom agent performs only its requested role; it does not start the whole lifecycle. `/work-status` and `/work-view` inspect only. Internal helper dispatch, ordinary/simple/non-project prompts, repository presence, and mentions of `omp/`, skills or tools do not activate it. Scope activation to the requested operation/change; do not carry it into unrelated requests.
+Activate this workflow only for a user-invoked `/work-*` command, an explicit request to use this workflow, or an explicit request for a custom agent. A custom agent performs only its requested role; it does not start the whole lifecycle. `/work-status` inspects only. Internal helper dispatch, ordinary/simple/non-project prompts, repository presence, and mentions of `omp/`, skills or tools do not activate it. Scope activation to the requested operation/change; do not carry it into unrelated requests.
 
 Without activation, stop workflow loading here: no `rules/core.md`, stage/gate rules, change scaffolding, or workflow approval ritual. Ordinary safety, project instructions, and independently supplied universal tool policies still apply. Explicit invocation is never approval and cannot bypass prerequisites for a requested active-change transition.
 
@@ -24,11 +24,11 @@ When active, shared policy base is `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`. R
 | OpenSpec preparation, QA planning, task planning | `rules/planning.md` and `rules/gates.md`; contribute to one `execution` bundle |
 | Implementation and repository changes | `rules/execution.md`; add `rules/gates.md` when checking transitions |
 | Verification, security review, archive | `rules/execution.md`, `rules/verification.md`, `rules/gates.md` |
-| Status, resume, view, approve, standalone review | `rules/core.md` plus `rules/gates.md`; add a stage file only when needed |
+| Status, resume, approve, standalone review | `rules/core.md` plus `rules/gates.md`; add a stage file only when needed |
 
 ## Active-workflow invariants
 
-- Human planning documents are the source of truth. Do not create OpenSpec specifications until the complete applicable human document bundle has passed independent review and explicit human approval.
+- Human planning documents are the source of truth. Do not create OpenSpec specifications until the complete applicable human document bundle has passed independent review and explicit human approval. Agents MUST NOT invoke native `openspec-*` skills directly (such as `openspec-propose` or `openspec-apply-change`) to bypass human-planning, execution-review, or approval gates.
 - Never infer human approval, reviewer PASS, tool execution, test success or evidence freshness. Missing, stale, failed, blocked or unrun evidence is not PASS. A free-text "implement", "go ahead" or "proceed" message is not an approval: refuse it, name the missing obligation and give the one command that obtains it.
 - Preserve independent reviews, explicit approvals, REQ/TC traceability, security and regression coverage, source/artifact manifests, and verification integrity in every effort mode.
 - Focused mode reduces verbosity and irrelevant exploration only; it never bypasses gates. If risk, uncertainty or scope expands, escalate to full mode.
