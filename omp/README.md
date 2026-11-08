@@ -22,6 +22,10 @@ The workflow bundles the [Caveman skill](skills/caveman/SKILL.md) from [JuliusBr
 
 **Important distinction:** Caveman is for communication, not human documentation. PRDs, Tech Docs, QA plans, task breakdowns, code/comments, commits and PRs remain clear, professional and self-contained. Agents remove filler, not rationale, requirements, uncertainty, evidence, safety language or technical facts. The installer now requires and links the bundled skill so it cannot silently be absent.
 
+## Hallmark design skill
+
+The workflow bundles the [Hallmark skill](skills/hallmark/SKILL.md) from [Nutlope/hallmark](https://github.com/Nutlope/hallmark). It provides opinionated design rules, theme dealing, and verification against generic AI UI defaults.
+
 ## Model selection and quota-aware operation
 
 The operator chooses the active model per session based on availability. No workflow agent pins a provider or silently switches to a paid route. Child agents inherit the active route unless the operator explicitly configures overrides; workflow work does not authorize persistent settings changes.
@@ -55,7 +59,7 @@ bash omp/install-omp.sh
 
 Requires Linux or macOS, Node.js **20.19+**, npm, OMP, Git, curl and tar already on PATH. The installer installs missing workflow dependencies, verifies them, then replaces configuration. It never invokes `sudo` or edits your shell profile.
 
-Configuration goes into `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`. Existing `config.yml`, `mcp.json`, `agents/`, `commands/`, `RULES.md`, `rules/` and `templates/` are moved to timestamped backups and replaced with current source links. Matching links remain unchanged. All five document templates and all five stage-rule files are required and checked before dependency installation. The bundled `skills/caveman/` is required and linked; optional `extensions/` is linked only if present.
+Configuration goes into `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`. Existing `config.yml`, `mcp.json`, `agents/`, `commands/`, `RULES.md`, `rules/` and `templates/` are moved to timestamped backups and replaced with current source links. Matching links remain unchanged. All five document templates and all five stage-rule files are required and checked before dependency installation. The bundled `skills/caveman/` and `skills/hallmark/` are required and linked; optional `extensions/` is linked only if present.
 
 CLI packages go into `${NPM_CONFIG_PREFIX:-$HOME/.local}`; keep its `bin/` directory first on PATH when starting OMP. The installer prints the exact shell command. Chromium uses Playwright's managed browser cache; Ponytail uses OMP's user plugin store.
 

@@ -17,7 +17,9 @@ tags:
 
 # Task Breakdown: {{title}}
 
-Authoring guidance: reuse existing source-backed milestones and keep only applicable slices. Backend/frontend/QA headings, delivery codes and contract examples are optional organizational aids, not required architecture, CRUD order, containers or new work. Preserve useful acceptance detail and link source requirements rather than inventing another plan.
+Authoring guidance: reuse existing source-backed milestones and keep only applicable slices. Contract examples and delivery codes are organizational aids, not required architecture, containers or new work. Preserve useful acceptance detail and link source requirements rather than inventing another plan.
+
+**Journey-per-pair rule:** every PRD user journey (`US-*`) gets exactly one BE task and one FE task. Both depend only on the frozen contract IDs in Tech Doc sections 3 and 4, never on each other. BE builds and tests against the request/response fixtures; FE builds against a mock of the same fixtures. Neither blocks the other, and both meet in staging by flipping the FE adapter from `mock` to `real`. Do not split a journey into several BE or FE tasks, and do not add a task that needs the other team's code. Contract freeze happens at Tech Doc approval, not as a task.
 
 This human plan joins the interview and applicable PRD/design for `human-planning` approval. Afterward, execution preparation derives schema tasks alongside specs and QA coverage, preserving these milestone IDs and rationale. The [canonical gate protocol](../rules/gates.md) governs the combined `execution` approval before code; there is no standalone QA/task approval.
 
@@ -25,58 +27,71 @@ This human plan joins the interview and applicable PRD/design for `human-plannin
 | :--- | :--- |
 | PRD reference | [<PRD>](<relative link>) |
 | Tech doc reference | [<Tech Doc>](<relative link>) |
+| Contract source | Tech Doc sections 3 (API) and 4 (messages), fixtures at `<fixture path>` |
 | Architecture model | <Source-confirmed structure and boundaries; reuse existing conventions> |
-| Execution order | <Dependency order and source-backed rationale; no required CRUD ordering> |
+| Execution order | All BE and FE tasks start in parallel once contracts are frozen; QA integration follows each pair. Shared prerequisites (migrations, shared types) are named explicitly with rationale. |
 | Execution evidence | <Link existing verification.md when available; no competing progress checklist here> |
-| Delivery codes | **BE** backend, **FE** frontend, **QA** verification |
+| Delivery codes | **BE** backend, **FE** frontend, **QA** verification. Task numbers match the journey: `TASK-BE-01` pairs with `TASK-FE-01` and `TASK-QA-01`. |
 
 ## Engineering Management Summary
 
-<How the work is sliced, what each slice delivers independently, and why the order is safe.>
+<How the work is sliced by journey, what each pair delivers independently, and why parallel execution is safe.>
 
 ### Sequencing Strategy
 
-<What lands first and why; how QA can test each milestone without waiting for the whole change. Follow actual dependencies rather than a generic create/edit-first rule.>
+<Which journeys start first and why. Name any real shared prerequisite (e.g. a migration two journeys need). Default is full parallelism: BE against contract tests, FE against mocks, QA integration in staging per journey.>
 
-### Vertical Task Inventory & Traceability
+### Journey Task Inventory & Traceability
 
-| Task | Outcome | REQ IDs | Dependencies |
-| :--- | :--- | :--- | :--- |
-| TASK-BE-01 | <Observable result> | <REQ-001> | <None / task> |
-| TASK-FE-01 | <Observable result> | <REQ-00x> | <Task> |
-| TASK-QA-01 | <Verification result> | <REQ-00x> | <Tasks> |
+| Journey (PRD US ID) | Contract IDs | BE task | FE task | QA task | REQ IDs |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| US-XXX-01 | CT-001, CT-002 | TASK-BE-01 | TASK-FE-01 | TASK-QA-01 | <REQ-001> |
 
-## 1. Backend Vertical Slices (BE)
+Dependencies column intentionally absent: BE and FE tasks depend only on their contract IDs. QA task depends on its BE and FE pair.
 
-### TASK-BE-01: <Title>
+## 1. Journey Slices
 
-#### Summary
+Repeat one `JNY` block per journey. Each block has exactly one BE task and one FE task.
 
-<The complete, independently testable backend workflow this task delivers.>
+### JNY-01: <Journey title> (US-XXX-01)
 
-#### Context
+| Field | Value |
+| :--- | :--- |
+| Contracts | <CT-001, CT-002, EV-001 or none; links to Tech Doc sections 3.4 and 4.2> |
+| Fixtures | <`<fixture path>` files for success, validation, forbidden, stale-write, empty cases> |
+| Page / route | `<route>` or `N/A — no user-facing screen` |
 
-<Current gap, constraints, owning module/paths, and requirements served.>
+#### TASK-BE-01: <Title>
 
-#### Acceptance criteria
+##### Summary
 
-1. <Observable, testable condition with boundary.>
+<The complete, independently testable backend workflow for this journey, implementing every contract in the block above.>
+
+##### Context
+
+<Current gap, constraints, owning module/paths, and requirements served. Depends only on the frozen contracts.>
+
+##### Acceptance criteria
+
+1. Each contract request fixture is accepted or rejected as specified, and every response, including error responses, matches the contract response fixture shape.
 2. <Failure/rollback condition.>
 3. <Authorization, isolation or concurrency condition.>
 
-#### Test scenarios
+##### Test scenarios
 
+- Contract conformance: replay every request fixture and assert the response matches its fixture.
 - <Positive path with persisted assertion.>
 - <Negative/validation/denial path.>
 - <Crash, retry, concurrency or rollback path where applicable.>
 
-#### Other information
+##### Other information
 
-1. API contract:
-   ```graphql
-   # Exact signatures, inputs, payloads, or `N/A — reason`
-   ```
-2. Database design and queries:
+1. Contract (input and output, linked not copied):
+   - Request: <CT-001 request payload/arguments>
+   - Response: <CT-001 response and error codes>
+   - Events/messages: <EV-001 produced or consumed, or none; link Tech Doc section 4.2>
+2. Database design and queries (link the Tech Doc ERD in section 2.2 and query catalogue in 2.5; restate only what differs):
+   - Tables: <tables created or changed>; queries: <Q-001, Q-002>
    ```sql
    -- Proposed statements; mark as not applied
    ```
@@ -87,68 +102,71 @@ This human plan joins the interview and applicable PRD/design for `human-plannin
    <repository-supported command and required environment; container only if project policy requires it>
    ```
 
-## 2. Frontend Vertical Slices (FE)
+#### TASK-FE-01: <Title>
 
-### TASK-FE-01: <Title>
+##### Summary
 
-#### Summary
+<The user journey this task delivers end to end against mocked contract data, including loading, empty, error and recovery states.>
 
-<The user journey this task delivers, including loading, empty, error and recovery states.>
+##### Context
 
-#### Context
+<Current screen/data source, module ownership, and what must not change. Depends only on the frozen contracts, not on the BE task.>
 
-<Current screen/data source, module ownership, and what must not change.>
+##### Acceptance criteria
 
-#### Acceptance criteria
-
-1. <Hydration/rendering condition.>
-2. <Interaction and error condition.>
+1. With the adapter on `mock`, the page renders every contract response fixture (success, empty, error, stale-write) correctly.
+2. <Interaction and error condition; payloads sent equal the contract request fixtures.>
 3. <Accessibility and responsive condition.>
+4. Switching the adapter to `real` needs no component change.
 
-#### Test scenarios
+##### Test scenarios
 
-- <Rendered state assertion.>
+- <Rendered state assertion per response fixture.>
 - <Failure/empty state assertion.>
 - <Keyboard/accessible interaction assertion.>
+- <Request payload assertion: what the UI sends matches the contract request schema.>
 
-#### Other information
+##### Other information
 
 1. UI references:
    - <Relative screenshot paths and provenance, or `N/A — reason`>.
-2. API/hook usage:
+2. Contract usage and mock plan:
    ```typescript
-   // Exact operation or hook; `N/A — reason` if no API change
+   // Exact operation or hook typed from the contract; `N/A — reason` if no API change
+   // Mock: adapter `mock | real` switch (<config key>) returning fixtures from <fixture path>
    ```
 3. Implementation guide:
    - Target files and state handling.
 4. Verification command:
    ```
-   <exact command>
+   <exact command, run in mock mode>
    ```
 
-## 3. QA & Verification Slices (QA)
+## 2. QA & Staging Integration (QA)
 
-### TASK-QA-01: <Title>
+One QA task per journey pair; it starts when both its BE and FE tasks are done.
+
+### TASK-QA-01: <Title> (JNY-01)
 
 #### Summary
 
-<What must be proven for a review-ready handoff and at which layer; release authorization is separate.>
+<Prove at staging that the real backend honors the contract the FE mocked, and that the journey works end to end. Release authorization is separate.>
 
 #### Acceptance criteria
 
-1. <Scenario group with expected outcome.>
+1. With the FE adapter on `real`, every journey flow behaves as it did on `mock`; any response that differs from its fixture is logged as a contract change, not patched silently.
 2. <Regression group.>
 
 #### Test scenarios
 
-- <Transactional/integration scenario.>
+- <Staging happy path through the real BE.>
 - <Security/isolation negative scenario.>
 - <Crash, migration, rollback or concurrency scenario.>
-- <Frontend contract and accessibility scenario.>
+- <Frontend accessibility scenario in `real` mode.>
 
 #### Other information
 
-1. Fixtures and environment: <disposable database, containers, seeded accounts; no secrets>.
+1. Fixtures and environment: <staging, seeded accounts; no secrets>.
 2. Verification commands:
    ```
    <exact commands>
@@ -158,6 +176,7 @@ This human plan joins the interview and applicable PRD/design for `human-plannin
 ## Completion Criteria
 
 - <Outcome that must be true, linked to REQ IDs.>
+- Every journey has one completed BE task, one completed FE task and one QA staging pass against the same frozen contracts, with no unrecorded contract drift.
 - <Migration, compatibility, documentation and operational outcomes.>
 - <Independent review and QA evidence required before completion.>
 

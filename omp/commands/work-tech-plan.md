@@ -18,6 +18,7 @@ description: Create the human-readable Tech Doc and task breakdown.
 - Write `task-breakdown.md` as a readable milestone/work-package sequence with dependencies, affected areas, risks and completion outcomes. Keep a focused change proportional and escalate to full when impact analysis widens scope.
 - Link stable REQ IDs to decisions and work packages; surface decisions that need the operator. Avoid repeating the PRD and avoid schema-specific checkboxes as the primary presentation.
 - Use Codegraph/LSP for non-obvious impact and confirm in source; record coverage limits if unavailable. Use Context7 for relevant external documentation per core policy.
+- When designing new websites, pages, or UI (or when Hallmark is requested), read the Hallmark skill (`skill://hallmark`): specify Hallmark shape, theme tokens, macrostructure, typography, and Floor constraints in `design.md`.
 
 ## Handoff
 

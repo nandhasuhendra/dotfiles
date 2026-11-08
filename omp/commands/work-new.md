@@ -20,6 +20,7 @@ description: Start a gated product or engineering change.
 - Use built-in `ask` for each unresolved material choice: 2–5 concrete options, trade-offs and a recommendation, with a custom/free-text path. Record the selected option and rationale automatically; never invent a selection from silence, skip or timeout. If `ask` is unavailable, disclose it and ask concise numbered questions awaiting an explicit answer.
 - Inspect before asking, and never ask for facts source already answers. Challenge an unsafe or inconsistent preference with source-backed evidence.
 - Establish the product/engineering/mixed route from intent and focused/full effort with escalation triggers. Focused work reduces exploration and verbosity, never review, approval, QA or verification.
+- For changes involving new websites, pages, or UI design (or when Hallmark is requested), read the Hallmark skill (`skill://hallmark`): apply its single pre-flight/ask protocol for material, audience, use, and tone; determine genre without inventing metrics, logos, or quotes.
 - Write `openspec/changes/<slug>/interview.md` with users, current/desired behavior, constraints, compatibility, non-goals, stable `REQ-` IDs, selected decisions with rationale, facts, assumptions and blocking questions.
 - Reuse settled decisions; leave OpenSpec schema inspection and generation to execution preparation after `human-planning` approval.
 - Stop when the interviewer's readiness checklist passes and no blocking unknown remains; a finished round, a drafted artifact or "continue" does not end it.

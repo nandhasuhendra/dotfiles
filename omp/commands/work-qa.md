@@ -18,6 +18,7 @@ description: Create traceable QA scenarios.
 - Cover positive, negative, boundary, permissions/security, compatibility and affected-feature regressions; add concurrency, performance or migration cases when applicable. Explain N/A coverage and expose manual gaps.
 - Inspect relevant source, callers and existing tests to find affected features. Use Codegraph/LSP only when dependency impact is nontrivial and Playwright only for browser-based behavior; record actual use or a brief N/A reason.
 - Specify repository-supported test commands and a real smoke path; browser work requires Playwright flows, error states, keyboard access and relevant viewports. Never invent commands or claim execution.
+- For web or UI changes (or when Hallmark is requested), read the Hallmark skill (`skill://hallmark`): plan checks for Hallmark Floor invariants (focus-visible, contrast, token discipline, motion fallbacks) and `sloplint.mjs` sweep alongside Playwright browser flows.
 - Do not implement application code or implementation tests.
 
 ## Handoff

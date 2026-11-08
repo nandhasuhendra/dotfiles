@@ -15,7 +15,7 @@ description: Produce implementation task breakdown.
 - Dispatch `tech-lead` with the approved bundle; if author dispatch is unavailable, adopt its instructions and disclose it.
 - Write schema-compatible `tasks.md` after QA coverage exists: small ordered implementation and test tasks with `REQ-`/`TC-` links, affected files/callers/tests/fixtures/config/exports, dependencies, acceptance evidence, compatibility work and rollout/rollback where applicable.
 - Resolve `TASK-BREAKDOWN.md` through shared template resolution and use it as a content checklist within the installed schema format, not a competing plan.
-- Choose the smallest complete implementation from repository conventions and confirmed source impact. Read Ponytail for approach; use Codegraph/LSP for nontrivial dependency impact and Context7 for relevant external documentation per core policy.
+- Choose the smallest complete implementation from repository conventions and confirmed source impact. Read Ponytail for approach; when building new websites, pages, or UI (or when Hallmark is requested), read the Hallmark skill (`skill://hallmark`) to structure theme scaffolding (`theme.mjs`), token declarations, hero-first sequence, and sloplint sweep tasks; use Codegraph/LSP for nontrivial dependency impact and Context7 for relevant external documentation per core policy.
 - Keep approved `tasks.md` wording and checkboxes frozen once approved; track execution in `verification.md`.
 - Do not create application code, production configuration, migrations or implementation tests.
 

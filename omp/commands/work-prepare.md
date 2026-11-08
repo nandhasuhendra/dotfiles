@@ -15,6 +15,7 @@ description: Translate approved human planning documents into OpenSpec and agent
 
 - Read the approved human bundle in full and translate it with `tech-lead` as the single primary author into the installed schema's `proposal.md`, delta `specs/**/spec.md` and any required design artifact.
 - Preserve approved REQ IDs, acceptance criteria, scope, non-goals, assumptions and decisions; link every requirement to its human source. Do not add scope, drop criteria or change technical decisions.
+- When web or UI design is in scope (or when Hallmark is requested), read the Hallmark skill (`skill://hallmark`): translate approved Hallmark design decisions into derived design artifacts and delta specs (theme tokens, layout invariants, Floor rules).
 - Consult `product-manager` only for an unresolved product-requirement interpretation; stop for the operator rather than inventing intent. A material decision missing from approved human intent reopens planning.
 - Validate with `rtk proxy openspec validate $1` and record the invocation, exit status and failure evidence. Any schema validation failure blocks handoff.
 - Do not create schema `tasks.md` or `test-plan.md` here; `/work-qa` and `/work-plan` complete the same execution bundle.

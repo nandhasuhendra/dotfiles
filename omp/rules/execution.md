@@ -10,6 +10,7 @@ Load with `core.md` for implementation. Load `verification.md` for verification,
 - Playwright: execute changed browser flows, error states, keyboard access and relevant viewports. Browser work without executable Playwright is BLOCKED, never simulated PASS.
 - RTK: follow core's universal shell-routing and fallback policy in every stage. Preserve exit status and full failure evidence; compression is not verification.
 - Antislop: read only the matching code/prose/UI/accessibility/responsive guidance. Do not start unrelated setup, asset searches or audits for non-UI work.
+- Hallmark: read its installed skill (`skill://hallmark`) when designing or implementing new websites, pages, or UI (or when requested); follow The Floor, theme tokens, hero-first construction, and execute `node <skill-dir>/scripts/sloplint.mjs <files> --render` before handoff.
 
 ## Subagent implementation and main-agent review
 
@@ -19,6 +20,7 @@ Load with `core.md` for implementation. Load `verification.md` for verification,
   2. Enforce Ponytail principles (smallest complete change, no dead code or unasked-for abstraction).
   3. Confirm schema integrity via `rtk proxy openspec validate <slug>`.
   4. If defects, compilation/test errors, or missed requirements occur, direct the subagent to repair them immediately.
+  5. For web or UI changes, confirm Hallmark Floor compliance and clean `sloplint.mjs` sweep output.
 - Only after main-agent validation passes does the workflow advance to independent verification (`/work-verify`) and subsequent human gate presentation.
 
 ## Implementation code readability

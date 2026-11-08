@@ -15,12 +15,13 @@ description: Implement an approved change.
 ## Implement
 
 - Dispatch `software-engineer` as a subagent via the `task` tool (routed to the cheaper `@execution_tier` model) with bundle paths, manifest identities, acceptance criteria, decisions, dependencies, and relevant source context. Do not paste whole documents the subagent can read by path. If dispatch is unavailable, disclose it.
-- Subagent executes implementation: follows Ponytail rules for the smallest complete change; runs `rtk proxy openspec instructions apply --change $1`; implements complete behavior with tests, callers, fixtures, configuration, exports, and affected documentation; routes shell invocations through RTK; keeps `tasks.md` frozen; records completion and deviations in `verification.md`.
+- Subagent executes implementation: follows Ponytail rules for the smallest complete change; when building new websites, pages, or UI (or when Hallmark is requested), applies the Hallmark skill (`skill://hallmark`): enforces The Floor, theme tokens, hero-first construction, and executes `node <skill-dir>/scripts/sloplint.mjs <files> --render`; runs `rtk proxy openspec instructions apply --change $1`; implements complete behavior with tests, callers, fixtures, configuration, exports, and affected documentation; routes shell invocations through RTK; keeps `tasks.md` frozen; records completion and deviations in `verification.md`.
 - **Main agent review**: Upon subagent completion, the main (parent) agent MUST inspect the subagent's changes directly before advancing:
   1. Inspect git diff (`rtk git diff` / changed files) and test execution results.
   2. Verify all approved tasks in `tasks.md` are completed with zero unapproved scope expansion or over-engineering.
   3. Verify schema compliance using `rtk proxy openspec validate $1`.
   4. If defects, syntax/test failures, or missing requirements are found, direct the subagent to perform a targeted correction cycle.
+  5. For web or UI changes, verify Hallmark Floor compliance and clean `sloplint.mjs` sweep output.
 - Material scope changes return to planning and renewed approval; changed QA expectations return to QA planning and execution review. Stop instead of silently expanding scope or altering approved tasks.
 
 ## Handoff

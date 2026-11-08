@@ -4,7 +4,7 @@ composer:
 theme:
   dark: light-github
   light: light-github
-setupVersion: 2
+setupVersion: 3
 browser:
   enabled: false
 defaultThinkingLevel: auto
@@ -24,7 +24,7 @@ modelRoles:
   doc_tier: openai-codex/gpt-5.6-sol:low
   review_tier: openai-codex/gpt-5.6-sol:low
   execution_tier: opencode-zen/deepseek-v4.1-flash-free:low
-  default: opencode-zen/big-pickle
+  default: openrouter/nvidia/nemotron-3.5-lightning:free
 retry:
   fallbackChains:
     doc_tier:
@@ -61,3 +61,7 @@ providers:
     codeMode: "off"
 telemetry:
   otlpExportEnabled: false
+codexResets:
+  autoRedeem: "yes"
+update:
+  auto: true

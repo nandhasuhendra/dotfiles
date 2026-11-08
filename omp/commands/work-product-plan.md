@@ -15,6 +15,7 @@ description: Draft a human-readable PRD from the confirmed interview.
 - Dispatch `product-manager`; if dispatch is unavailable, follow its role instructions and disclose the substitution.
 - For product/mixed work write `prd.md` from confirmed interview evidence and source, following `PRD.md` through shared template resolution. For engineering-only work record PRD N/A in the human bundle; do not invent business requirements.
 - Write for a teammate who did not join the interview: executive summary, user problem, current behavior, proposed experience, goals, non-goals, journeys, business rules, risks and measurable acceptance. Remove placeholders and unused sections.
+- When web or UI experience is in scope (or when Hallmark is requested), read the Hallmark skill (`skill://hallmark`): align proposed experience, journeys, and acceptance with Hallmark material-first requirements (real content, one idea per screen, no decorative slop or fake metrics).
 - Preserve stable REQ IDs and distinct facts, assumptions and unresolved questions. Keep implementation architecture out unless needed to explain a user-visible constraint.
 - Never continue into derived specifications, tasks or code.
 

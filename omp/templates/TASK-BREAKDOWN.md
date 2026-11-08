@@ -11,7 +11,7 @@ status: draft
 | Change | <slug> |
 | Inputs | <Approved human-planning manifest plus pending schema/spec/QA paths; no separate QA approval> |
 | Delivery outcome | <Smallest complete, independently verifiable change> |
-| Sequencing | <Dependency order and why; do not impose backend/frontend or CRUD ordering> |
+| Sequencing | <Dependency order and why; do not impose backend/frontend or CRUD ordering. Per PRD user journey keep one BE and one FE task that depend only on frozen Tech Doc contract IDs, never on each other.> |
 
 Reuse approved human milestones, REQ IDs and TC scenarios instead of inventing a competing plan. Installed OpenSpec schema headings and numbered task-checkbox grammar take precedence over this shape example. Tasks join the entire execution bundle for independent review, schema validation and explicit `execution` approval before implementation, as defined by the [canonical gate protocol](../rules/gates.md). Freeze approved wording/boxes and track progress in `verification.md`.
 
@@ -19,7 +19,7 @@ Reuse approved human milestones, REQ IDs and TC scenarios instead of inventing a
 
 - [ ] 1.1 TASK-001 <Deliver one complete behavior linked to REQ/TC IDs>
 
-Add only tasks needed for the change, including tests, affected consumers, documentation and rollout/rollback. Give each task one checkbox here; do not duplicate execution checklists in its details.
+Add only tasks needed for the change, including tests, affected consumers, documentation and rollout/rollback. Give each task one checkbox here; do not duplicate execution checklists in its details. Preserve the human plan's journey pairs: `TASK-BE-<n>` and `TASK-FE-<n>` per journey, each linked to its contract IDs and fixtures, with the FE task verified against the mock and the BE task against contract tests.
 
 ## Task details
 
