@@ -69,3 +69,6 @@ type = "popup"
 command = "lazygit"
 width = "85%"
 height = "85%"
+
+[keys]
+open_worktree = "prefix+alt+o"
