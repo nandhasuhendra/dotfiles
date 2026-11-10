@@ -21,10 +21,10 @@ task:
     security-engineer: "@review_tier"
     software-engineer: "@execution_tier"
 modelRoles:
-  doc_tier: openai-codex/gpt-5.6-sol:low
+  doc_tier: openai-codex/gpt-5.6-sol:medium
   review_tier: openai-codex/gpt-5.6-sol:low
   execution_tier: opencode-zen/deepseek-v4.1-flash-free:low
-  default: openrouter/nvidia/nemotron-3.5-lightning:free
+  default: google-antigravity/gemini-3.8-flash:medium
 retry:
   fallbackChains:
     doc_tier:
@@ -43,12 +43,7 @@ retry:
       - openrouter/nvidia/nemotron-3.5-lightning:free:medium
       - openrouter/thinkingmachines/inkling:free
 compaction:
-  thresholdTokens: 200000
-  modelThresholds:
-    opencode-zen/deepseek-v4.1-flash-free: 120000
-    opencode-zen/glm-5.3-flash-free: 120000
-    opencode-zen/mimo-v2.6-flash-free: 120000
-    opencode-zen/big-pickle: 120000
+  thresholdTokens: 60000
 find:
   enabled: "off"
 dev:
