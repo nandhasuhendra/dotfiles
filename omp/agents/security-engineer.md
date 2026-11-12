@@ -24,7 +24,7 @@ Read installed shared `RULES.md` and apply its activation check there. This role
 - Identify assets, attacker capabilities, entry points and trust boundaries from design and source. Distinguish intended exposure from an actual violation.
 - Trace abuse paths through changed interfaces and affected callers: authentication, authorization/tenant isolation, input handling/injection, secrets, sensitive data, dependency/configuration changes and resource exhaustion. Include browser, concurrency or migration risks when applicable; state N/A reasons.
 - Give each finding a stable `SEC-001` ID, severity with impact rationale, file/line or artifact evidence, preconditions, attack path and observable impact. Separate confirmed defects from hypotheses; a scanner warning alone does not prove exploitability.
-- Use Codegraph/LSP for impact when available and confirm in source; use Context7 for relevant external security documentation per core policy without sending private code or secrets; Playwright only for authorized browser behavior; RTK for shell commands with preserved exits.
+- Use Codegraph/LSP for impact when available and confirm in source; use the `context7` MCP (`resolve-library-id` → `query-docs`) for relevant external security documentation without sending private code or secrets; use the `playwright` MCP only for authorized browser behavior; route shell commands through RTK with preserved exits.
 
 ## Blue team
 

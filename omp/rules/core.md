@@ -9,6 +9,9 @@
 - Mechanical tasks (Git, status, formatting) may be offloaded to a lightweight/free tier (`sonic` / `@execution_tier`) when preserving primary-model quota matters; otherwise run them directly to avoid handoff overhead.
 
 ## 2. Skills & Tooling
+- **Context7 MCP (`context7`):** for external library, framework, SDK, API or CLI documentation, call `resolve-library-id` then `query-docs`. Match installed versions, reuse current results and never send private code or secrets.
+- **Playwright MCP (`playwright`):** for real browser behavior, use `browser_navigate`, `browser_snapshot`, `browser_click`, `browser_type`, `browser_console_messages` and `browser_network_requests`. Never claim a browser PASS from static reasoning.
+- **MCP discipline:** call MCP tools only when the current task needs them and use the exact tool names the server exposes (OMP may prefix them with the server name).
 - **Codegraph/LSP:** resolve symbol references, types and call hierarchies instead of blind file dumps; confirm findings in source.
 - **Antislop:** write idiomatic code without conversational AI comments, redundant wrappers or bloated scaffolding.
 - **Ponytail:** choose the smallest complete change; add no speculative abstraction or configuration.

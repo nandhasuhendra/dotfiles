@@ -46,7 +46,7 @@ Create `openspec/changes/<slug>/` and write four files:
 3. **`design.md`** — technical architecture:
    - `## Context`
    - `## Goals / Non-Goals`
-   - `## Decisions` — domain models, API contracts (payloads, methods, status codes), error matrix, dependencies.
+   - `## Decisions` — domain models, API contracts (payloads, methods, status codes), error matrix, dependencies. Use the Context7 MCP (`resolve-library-id` → `query-docs`) for external API contracts; never send private code or secrets.
    - `## Risks / Trade-offs`
 
 4. **`tasks.md`** — 3–6 atomic tasks:
