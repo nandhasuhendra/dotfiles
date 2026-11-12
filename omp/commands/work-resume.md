@@ -21,7 +21,7 @@ Read installed shared `RULES.md` and apply its activation check there. Read `rul
 
 - **Spec incomplete or Gate 1 pending:** continue `/work-spec` and present the Alignment Summary through `ask`.
 - **Documents written but Gate 2 pending:** present the readiness report and Gate 2 through `ask`.
-- **Tasks incomplete:** continue `/work-build` from the first unchecked task, respecting blast radius and the Circuit Breaker.
+- **Tasks incomplete:** if Gate 2 approval is available in the current session, continue `/work-build` from the first unchecked task. Otherwise re-confirm Gate 2 through `ask`; continue only after explicit `Approved`. Respect blast radius and the Circuit Breaker.
 - **Tasks complete but unshipped:** continue `/work-ship`.
 - Material scope changes return to `/work-spec`; never silently expand approved scope.
 
