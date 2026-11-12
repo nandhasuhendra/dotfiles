@@ -2,7 +2,7 @@
 
 ## 1. Activation & Context Budget
 - Load these rules only for an explicit `/work-*` command or an explicit custom-agent request. Ordinary prompts do not activate the workflow.
-- Guard context: read only the active prompt, `rules/core.md` and the rules for the current stage. Avoid recursive scans or repository-tree dumps.
+- Guard context: read the active command, this file, `rules/core.md`, and only the stage rules it names. Do not scan unrelated agents, commands, templates, or repository trees.
 - Shared rules resolve under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/rules/`.
 
 ## 2. Pipeline & Rule Map
@@ -15,8 +15,8 @@
 | Ship | `/work-ship [slug]` | `core.md`, `execution.md`, `verification.md` |
 
 1. `/work-spec` — Socratic interview, Devil's Advocate critique, Alignment Summary (Gate 1), `proposal.md`/`design.md`/`tasks.md`, final approval (Gate 2).
-2. `/work-human` — optional post-Gate-2 human planning bundle (`PRD.md`, `TECH-DOC.md`, `HUMAN-TASK-BREAKDOWN.md`) under `openspec/changes/<slug>/human/`, derived from the approved change and the installed templates. Documentation only; it adds no gate.
-3. `/work-build` — atomic task execution with physical tests/LSP and the Circuit Breaker.
+2. `/work-human` — optional post-Gate-2 human planning bundle derived from the approved change and installed templates. Documentation only; it adds no gate.
+3. `/work-build` — atomic task execution with focused tests/LSP and the Circuit Breaker.
 4. `/work-ship` — semantic commit and OpenSpec archive.
 
 ## 3. Standalone Utilities
