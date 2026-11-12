@@ -5,7 +5,7 @@
 - Cover happy paths and the failure/edge cases defined in `design.md`.
 
 ## 2. Regression & Clean Workspace
-- Run the existing regression suites; linters and typecheckers must pass with zero warnings or errors.
+- `/work-build` runs focused checks for each subtask. `/work-ship` runs the project's required regression suites, linters and typecheckers.
 - Before `/work-ship`, run `rtk proxy openspec validate <slug>` and `git diff --stat`; archive only when every task is complete.
 
 ## 3. Browser Verification
