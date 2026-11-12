@@ -24,6 +24,7 @@ Read installed shared `RULES.md` and apply its activation check there. Read `rul
 - Cite artifact paths and observed evidence; distinguish missing, stale, failed and unrun checks.
 - Recommend exactly one next action:
   - `/work-spec <feature>` when no approved specification exists.
-  - `/work-build <slug>` when `tasks.md` is approved but incomplete.
+  - `/work-build <slug>` when Gate 2 approval is known in the current session and tasks are incomplete.
+  - `/work-resume <slug>` when Gate 2 state is unknown, including after a session change.
   - `/work-ship <slug>` when all tasks are complete and unshipped.
   - `/work-resume <slug>` when the session was interrupted.
