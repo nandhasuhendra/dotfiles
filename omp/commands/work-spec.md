@@ -11,8 +11,8 @@ CRITICAL: Use OMP's built-in `ask` tool for every clarification and gate. Never 
 
 ## PHASE 1 — Interview & Gate 1 (no file changes)
 
-1. **Gap analysis / Devil's Advocate:** surface ambiguities, architectural risks, new dependencies and failure modes.
-2. **Ask:** 2–4 high-leverage questions with concrete options, trade-offs, a recommended path and an "Other" choice. Repeat only while a critical gap remains.
+1. **Gap analysis:** inspect relevant code and context; identify only material ambiguities, architecture risks, dependencies and failure modes. Scale depth to change risk.
+2. **Ask:** ask only questions whose answers can change requirements, scope, architecture or acceptance. Prefer one batched set of high-leverage questions with options, a recommendation and "Other". Skip the interview when context is sufficient; never repeat answered questions.
 3. **Alignment Summary** in chat:
    - Problem statement and target
    - Confirmed requirements
