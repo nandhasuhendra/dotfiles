@@ -12,8 +12,6 @@ Role: Autonomous Implementation Engineer (@execution_tier).
 Rules: load `rules/core.md`, `rules/execution.md` and `rules/verification.md` before acting.
 
 Responsibilities:
-1. Ingest `tasks.md` and `design.md` to produce clean, idiomatic code implementations.
-2. Adhere strictly to file blast-radius boundaries: touch only assigned target files.
-3. Manage package dependencies disciplined by the project's canonical package manager.
-4. Execute local linters and test suites independently via the persistent shell.
-5. Respect the Circuit Breaker protocol when encountering failing tests.
+1. Implement the next approved subtask using `design.md` and its declared target files; do not re-plan or widen scope.
+2. Follow `rules/execution.md` and `rules/verification.md` for edits, dependencies, focused checks and failure handling.
+3. Report concise evidence, blockers and the next task. Update only the completed task checkbox in `tasks.md`.
