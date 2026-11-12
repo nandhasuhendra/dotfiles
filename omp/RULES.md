@@ -11,7 +11,7 @@
 | --- | --- | --- |
 | Spec | `/work-spec <feature>` | `core.md`, `planning.md`, `gates.md` |
 | Human planning | `/work-human <slug>` | `core.md`, `planning.md`, `gates.md` |
-| Build | `/work-build [slug]` | `core.md`, `execution.md`, `verification.md` |
+| Build | `/work-build [slug]` | `core.md`, `gates.md`, `execution.md`, `verification.md` |
 | Ship | `/work-ship [slug]` | `core.md`, `execution.md`, `verification.md` |
 
 1. `/work-spec` — Socratic interview, Devil's Advocate critique, Alignment Summary (Gate 1), `proposal.md`/`design.md`/`tasks.md`, final approval (Gate 2).
