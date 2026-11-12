@@ -4,9 +4,9 @@
 - Respect the user's configured model tier and quota constraints.
 - Keep child-agent reasoning low and avoid exploratory loops, repeated narration or rewriting unchanged context.
 - Use the bundled Caveman skill for routine agent communication; it does not govern document prose.
-- For `/work-spec`, `/work-build` and `/work-ship`, do not read `omp/templates/*` or unrelated documentation; the compact schema headings in those commands are authoritative. `/work-human` is the exception and must read the installed `templates/PRD.md`, `templates/TECH-DOC.md` and `templates/HUMAN-TASK-BREAKDOWN.md` directly.
+- Load only the active command, this file and the stage rules it names. Read templates only when `/work-human` is invoked; otherwise the command's artifact schema is authoritative.
 - Prefer file read/search/edit tools over shell. Route shell commands through RTK (`rtk <subcommand>`, `rtk proxy <command>`, or `rtk run '<shell command>'`) to compress output. Preserve exit codes and raw failure evidence.
-- Mechanical tasks (Git, status, formatting) may be offloaded to a lightweight/free tier (`sonic` / `@execution_tier`) when preserving primary-model quota matters; otherwise run them directly to avoid handoff overhead.
+- Delegate mechanical work only when delegation saves more context/quota than the handoff costs. Otherwise do it directly.
 
 ## 2. Skills & Tooling
 - **Context7 MCP (`context7`):** for external library, framework, SDK, API or CLI documentation, call `resolve-library-id` then `query-docs`. Match installed versions, reuse current results and never send private code or secrets.
