@@ -10,4 +10,4 @@ All lifecycle gates MUST invoke OMP's built-in `ask` TUI tool. A command invocat
 STRICT DIRECTIVES:
 - Writing code before an explicit `Approved` at Gate 2 is prohibited.
 - Before presenting Gate 2, run `rtk proxy openspec validate <slug>` and fix schema errors.
-- Gate confirmations are session-local. `/work-status` and `/work-resume` must never infer them from files or from a prior decision.
+- Gate confirmations are session-local. Never infer approval from files, checked tasks, command invocation or a prior session. If `/work-build` starts or resumes without Gate 2 approval available in the current session context, re-confirm it through `ask` before editing code.
