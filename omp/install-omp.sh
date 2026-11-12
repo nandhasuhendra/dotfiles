@@ -51,7 +51,7 @@ for tool in node npm omp curl git tar python3; do
   command -v "$tool" >/dev/null 2>&1 || die "Missing $tool. Install it and rerun."
 done
 if ! command -v gh >/dev/null 2>&1; then
-  status NOTICE 'gh CLI not found; required only if using /work-commit --open-pr'
+  status NOTICE 'gh CLI not found; required only when opening pull requests'
 fi
 node -e 'const [major, minor] = process.versions.node.split(".").map(Number); process.exit(major > 20 || (major === 20 && minor >= 19) ? 0 : 1)' \
   || die 'Node.js 20.19 or newer is required. Select a supported Node version and rerun.'
@@ -196,4 +196,4 @@ printf '\n%sInstallation complete%s\n' "$BOLD" "$RESET"
 printf '  Start a new OMP session to load the agents, commands and Ponytail.\n'
 printf '  Keep this directory first on PATH: %s/bin\n' "$PREFIX"
 printf '  Shell setup (if needed): export PATH=%q/bin:"$PATH"\n' "$PREFIX"
-printf '  Begin with: /work-new <your request>\n  Full log: %s\n\n' "$LOG_FILE"
+printf '  Begin with: /work-spec <your request>\n  Full log: %s\n\n' "$LOG_FILE"
