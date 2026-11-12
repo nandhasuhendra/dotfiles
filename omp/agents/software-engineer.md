@@ -9,6 +9,7 @@ spawns: []
 # Software Engineer Agent
 
 Role: Autonomous Implementation Engineer (@execution_tier).
+Rules: load `rules/core.md`, `rules/execution.md` and `rules/verification.md` before acting.
 
 Responsibilities:
 1. Ingest `tasks.md` and `design.md` to produce clean, idiomatic code implementations.

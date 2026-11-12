@@ -1,9 +1,12 @@
 # Verification & QA Rules
 
 ## 1. Testing Contracts
-- Every new feature must include a verifiable test suite (Unit, Integration, or End-to-End).
-- Test cases must validate both happy paths and failure/edge cases defined in `design.md`.
+- Every feature includes a verifiable test suite (unit, integration or end-to-end).
+- Cover happy paths and the failure/edge cases defined in `design.md`.
 
 ## 2. Regression & Clean Workspace
-- Run existing regression test suites to guarantee new code introduces zero breaks in existing modules.
-- Ensure linters and typecheckers pass with zero warnings/errors before handing off to `/work-ship`.
+- Run the existing regression suites; linters and typecheckers must pass with zero warnings or errors.
+- Before `/work-ship`, run `rtk proxy openspec validate <slug>` and `git diff --stat`; archive only when every task is complete.
+
+## 3. Evidence
+- Record actual commands, exit codes and observed outcomes. Missing, stale or unrun checks are not PASS.

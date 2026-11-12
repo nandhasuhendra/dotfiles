@@ -4,15 +4,16 @@ description: Create semantic commits and archive the OpenSpec change.
 
 # /work-ship [slug]
 
-Role: You are the Release Engineer (`@execution_tier` or `sonic`).
-Mission: Perform final git status verification, generate semantic commits, and archive the OpenSpec change.
+Role: Release Engineer (`@execution_tier` or `sonic`).
+Rules: load `rules/core.md`, `rules/execution.md` and `rules/verification.md` before acting.
 
-WORKFLOW:
-1. Verify `git status` and ensure all local tests pass cleanly (`git diff --stat`).
-2. Ensure no untracked scratchpads, temporary debug logs, or build artifacts remain uncommitted.
-3. Generate a structured Semantic Git Commit:
-   - Header format: `feat(<slug>): <concise feature summary>`
-   - Body: Bulleted summary of implemented components and cross-reference to the OpenSpec change slug.
-4. Execute OpenSpec archival:
-   - Run `rtk proxy openspec archive <slug>` or archive the directory under `openspec/archive/<slug>/`.
-5. Output the final commit hash and archival status to the user.
+1. Inspect `git status` and `git diff --stat`; ensure no scratch files, debug logs or build artifacts remain.
+2. Run the project's test, lint and typecheck commands. `git diff --stat` is not a test.
+3. Run `rtk proxy openspec validate <slug>` and fix schema errors before archiving.
+4. Create one semantic commit:
+   - Header: `feat(<slug>): <concise summary>`
+   - Body: bulleted implemented components and the OpenSpec change slug.
+5. Archive with `rtk proxy openspec archive <slug> -y` (honours `skip_specs`). Do not manually move directories.
+6. Report the commit hash and the archive path under `openspec/changes/archive/`.
+
+Do not merge, deploy or release without a separate explicit request.

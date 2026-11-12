@@ -16,7 +16,7 @@ Read installed shared `RULES.md` and apply its activation check there. Read `rul
 - Read `openspec/changes/<slug>/proposal.md`, `design.md` and `tasks.md` when present.
 - Run `rtk proxy openspec status --change $1` and `rtk proxy openspec validate $1` to report schema status.
 - Count completed tasks from the `- [x]` checkboxes in `tasks.md`. A checked box is not proof that tests passed.
-- Check whether Gate 1 and Gate 2 were explicitly confirmed through the `ask` tool. Never infer approval from silence, a prior decision, or a command invocation.
+- Gate 1 and Gate 2 confirmations are session-local and are not persisted in the change. Never infer them from files, silence, a prior decision or a command invocation. If gate state is unknown, recommend `/work-resume`.
 
 ## Report
 

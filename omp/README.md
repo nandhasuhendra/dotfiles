@@ -12,7 +12,7 @@ Activation belongs to the requested operation, not the entire session. Explicit 
 
 | Stage | Command | Output and boundary |
 | --- | --- | --- |
-| Spec | `/work-spec <feature-requirements>` | Socratic interview, Devil's Advocate critique, Alignment Summary, Gate 1, then `proposal.md`, `design.md` and `tasks.md` under `openspec/changes/<slug>/`, followed by Gate 2. |
+| Spec | `/work-spec <feature-requirements>` | Socratic interview, Devil's Advocate critique, Alignment Summary, Gate 1, then `.openspec.yaml`, `proposal.md`, `design.md` and `tasks.md` under `openspec/changes/<slug>/`, schema validation and Gate 2. |
 | Build | `/work-build [slug]` | Atomic execution of the approved `tasks.md` with strict blast-radius limits, canonical package management, physical tests/LSP checks and the two-attempt Circuit Breaker. |
 | Ship | `/work-ship [slug]` | Final `git status` check, semantic commit, PR summary and OpenSpec archival via `rtk proxy openspec`. |
 
@@ -48,7 +48,9 @@ Routine Git, status and formatting work should be delegated to a lightweight/fre
 - Never enumerate every agent, command, skill, template or rule as a ritual. Avoid recursive directory scans or repository-tree dumps unless requested.
 - Use paths, IDs and diffs to reference artifacts; read full bodies only for the decision at hand.
 - Keep handoffs compact: slug, paths, decisions, blockers and the next action.
-- Mechanical tasks (Git operations, status queries, text formatting) belong on free/lightweight tiers.
+- Use RTK for shell commands so output is compressed, and the bundled Caveman skill for terse agent communication. Neither applies to human documents.
+- Do not read legacy `templates/*` for the streamlined pipeline; the compact schema headings in `/work-spec` are authoritative.
+- Mechanical tasks (Git operations, status queries, text formatting) may run on free/lightweight tiers when quota matters; otherwise run them directly to avoid handoff overhead.
 
 ## Install
 
@@ -117,11 +119,12 @@ All change artifacts live under `openspec/changes/<slug>/`:
 
 | Artifact | Purpose |
 | --- | --- |
-| `proposal.md` | Functional PRD: problem statement, user journeys, functional requirements and success metrics. No internal file paths or code extensions. |
-| `design.md` | Technical architecture: domain models, API contracts, error handling, dependencies and integration standards. |
+| `.openspec.yaml` | Schema marker. The streamlined flow sets `schema: spec-driven` and `skip_specs: true` so the three-artifact change validates without capability deltas. |
+| `proposal.md` | Functional PRD: `## Why`, `## What Changes`, `## Capabilities` and `## Impact`. No internal file paths or code extensions. |
+| `design.md` | Technical architecture: `## Context`, `## Goals / Non-Goals`, `## Decisions` and `## Risks / Trade-offs`. |
 | `tasks.md` | Sequential, atomic implementation checklist (3–6 focused tasks) with explicit target file scopes and acceptance criteria. |
 
-Legacy templates remain installed under `templates/` for reference, but the three-stage pipeline authors only the artifacts above.
+`skip_specs: true` trades OpenSpec capability deltas for a smaller three-artifact flow. If you want spec-level tracking, omit it and add `specs/<capability>/spec.md`. Legacy templates remain installed under `templates/` for reference but are not read by the pipeline.
 
 ## Read on your phone
 

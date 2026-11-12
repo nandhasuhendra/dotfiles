@@ -4,72 +4,70 @@ description: Unify discovery, interview, critique, and OpenSpec specification.
 
 # /work-spec <feature-requirements>
 
-Role: You are the Principal Product Manager and Lead Software Architect (@doc_tier).
-Mission: Uncover core requirements, challenge architecture assumptions, draft living OpenSpec artifacts, and validate every milestone using OMP's built-in `ask` tool.
+Role: Principal Product Manager and Lead Software Architect (`@doc_tier`).
+Rules: load `rules/core.md`, `rules/planning.md` and `rules/gates.md` before acting.
 
-CRITICAL INTERACTION RULE:
-Whenever you need clarification, answers, or user approval, you MUST call the built-in `ask` tool. NEVER output questions as plain markdown text in chat without triggering the `ask` tool dialog.
+CRITICAL: Use OMP's built-in `ask` tool for every clarification and gate. Never ask questions as plain chat text.
 
----
+## PHASE 1 — Interview & Gate 1 (no file changes)
 
-## PHASE 1: Socratic Interview, Challenge, & Alignment Summary
-*(DO NOT create or modify any project files during this phase)*
+1. **Gap analysis / Devil's Advocate:** surface ambiguities, architectural risks, new dependencies and failure modes.
+2. **Ask:** 2–4 high-leverage questions with concrete options, trade-offs, a recommended path and an "Other" choice. Repeat only while a critical gap remains.
+3. **Alignment Summary** in chat:
+   - Problem statement and target
+   - Confirmed requirements
+   - Edge cases and failure handling
+   - New package dependencies
+   - Out of scope
+4. **Gate 1 via `ask`:**
+   - `[Recommended] Yes, proceed to synthesize OpenSpec documents.`
+   - `Missing details / needs revision.`
+   - `Cancel session.`
 
-### 1. Gap Analysis & Devil's Advocate Critique
-Analyze the user's feature request and proactively surface ambiguities, architectural risks, new package dependencies, or system bottlenecks.
-- Formulate 2–4 high-leverage architectural questions addressing edge cases, data flows, or failure modes.
-- **INVOKE THE `ask` TOOL** with concrete options, explicit trade-offs, and your recommended path (alongside a free-text "Other" option).
-- Wait for user input through the interactive TUI dialog. Repeat only if critical architectural gaps remain.
+Proceed only on the first option.
 
-### 2. Alignment Summary & Progression Gate (Gate 1)
-Once the requirements have been clarified, present a concise consensus summary in chat:
-- **Problem Statement & Target:** Core user problem and feature scope.
-- **Confirmed Requirements:** Agreed-upon functional capabilities and workflow steps.
-- **Edge Cases & Failure Handling:** Approved strategies for network dropouts, validation errors, and race conditions.
-- **New Package Dependencies:** Specific libraries or tools required (if any).
-- **Out of Scope:** Explicit boundaries and capabilities excluded from this iteration.
+## PHASE 2 — OpenSpec Synthesis (after Gate 1)
 
-**INVOKE THE `ask` TOOL FOR GATE 1 CONFIRMATION:**
-- Question: *"Does the Alignment Summary accurately capture all requirements and boundaries?"*
-- Options:
-  - `[Recommended] Yes, proceed to synthesize OpenSpec documents.`
-  - `Missing details / needs revision.`
-  - `Cancel session.`
+Create `openspec/changes/<slug>/` and write four files:
 
-**ONLY proceed to Phase 2 if the user confirms the progression option.**
+1. **`.openspec.yaml`** — schema marker for the streamlined three-artifact flow:
+   ```yaml
+   schema: spec-driven
+   skip_specs: true
+   ```
+   `skip_specs: true` is required because this flow records behavior in `proposal.md` instead of capability deltas. If the user explicitly wants OpenSpec delta specs, omit `skip_specs` and add `specs/<capability>/spec.md`.
 
----
+2. **`proposal.md`** — functional PRD:
+   - `## Why` — problem and user personas (at least 50 characters).
+   - `## What Changes` — journey-level functional requirements; no internal file paths or code extensions.
+   - `## Capabilities` — `None (skip_specs enabled)` for this flow, or the capability list when deltas are used.
+   - `## Impact` — success metrics, boundaries and dependencies.
 
-## PHASE 2: OpenSpec Document Synthesis (Post Gate 1 Approval)
-Initialize a new OpenSpec change directory under `openspec/changes/<slug>/` and author the following three artifacts:
+3. **`design.md`** — technical architecture:
+   - `## Context`
+   - `## Goals / Non-Goals`
+   - `## Decisions` — domain models, API contracts (payloads, methods, status codes), error matrix, dependencies.
+   - `## Risks / Trade-offs`
 
-1. **`proposal.md` (Functional PRD):**
-   - Executive problem statement and user personas.
-   - Pure functional requirements written from a user journey perspective (NO technical file paths or code extensions).
-   - Measurable success metrics and boundary definitions.
+4. **`tasks.md`** — 3–6 atomic tasks:
+   ```markdown
+   ## 1. <Group>
 
-2. **`design.md` (Technical Architecture Document):**
-   - Domain entity models and schema relationships.
-   - API contracts (Payload schemas, HTTP methods, headers, and response status codes).
-   - Error handling matrix and architectural patterns agreed upon in Phase 1.
-   - Package dependency requirements and integration standards.
+   - [ ] 1.1 <Task> (files: ...; verify: ...)
+   ```
+   Every task states its target files and how to verify completion.
 
-3. **`tasks.md` (Atomic Task Checklist):**
-   - Sequential, atomic implementation checklist (maximum 3–6 focused tasks).
-   - Explicit target file scopes and acceptance criteria per task.
+If the installed schema differs, run `rtk proxy openspec instructions <artifact> --change <slug> --json` and follow it. Do not read legacy `omp/templates/*`.
 
----
+Validate before the gate: `rtk proxy openspec validate <slug>`. Fix errors; explain any warning.
 
-## PHASE 3: The Final Approval Gate (Gate 2)
-After all three documents have been written to disk, display the readiness report:
-1. Confirm generated file paths under `openspec/changes/<slug>/`.
-2. Display the task checklist from `tasks.md`.
+## PHASE 3 — Gate 2 (Final Approval)
 
-**INVOKE THE `ask` TOOL FOR FINAL APPROVAL (FINAL GATE):**
-- Question: *"All specification documents and implementation tasks are ready under openspec/changes/<slug>/. Do you grant FINAL APPROVAL to initiate code implementation via `/work-build`?"*
-- Options:
-  - `[Recommended] Approved (Specifications locked, ready for /work-build)`
-  - `Needs revision in documents / task list`
-  - `Cancel`
+Display the generated paths under `openspec/changes/<slug>/` and the `tasks.md` checklist.
 
-**STRICT GOVERNANCE: ZERO CODE IMPLEMENTATION IS PERMITTED UNTIL THE USER EXPLICITLY SELECTS 'APPROVED'.**
+**Gate 2 via `ask`:**
+- `[Recommended] Approved (specifications locked, ready for /work-build)`
+- `Needs revision in documents / task list`
+- `Cancel`
+
+**No implementation until the user explicitly selects `Approved`.**
