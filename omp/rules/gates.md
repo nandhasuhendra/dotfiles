@@ -1,10 +1,11 @@
 # Gate Governance Rules
 
-All lifecycle gates MUST invoke OMP's built-in `ask` TUI tool to enforce true, blocking human-in-the-loop governance:
+All lifecycle gates MUST invoke OMP's built-in `ask` TUI tool. A command invocation, silence, or a previous approval is not consent.
 
-- **Gate 1 (Alignment Gate):** Validates the `Alignment Summary` prior to physical document generation in `/work-spec`.
-- **Gate 2 (Final Approval Gate):** Validates the complete specification suite and task checklist prior to code execution in `/work-build`.
+- **Gate 1 (Alignment Gate):** validates the Alignment Summary before any specification file is written in `/work-spec`.
+- **Gate 2 (Final Approval Gate):** validates the complete `proposal.md`, `design.md` and `tasks.md` before `/work-build`.
 
-STRICT DIRECTIVE:
-- Writing code prior to an explicit 'Approved' status at Gate 2 is strictly prohibited.
-- Bypassing gates without explicit user interaction through the `ask` dialog is strictly prohibited.
+STRICT DIRECTIVES:
+- Writing code before an explicit `Approved` at Gate 2 is prohibited.
+- Before presenting Gate 2, run `rtk proxy openspec validate <slug>` and fix schema errors.
+- Gate confirmations are session-local. `/work-status` and `/work-resume` must never infer them from files or from a prior decision.

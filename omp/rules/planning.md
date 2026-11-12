@@ -1,13 +1,15 @@
 # Planning Stage Rules
 
 ## 1. Decoupled Functional Specifications
-- Functional PRD documents (`proposal.md`) must NEVER reference internal code paths, source file extensions, or directory structures. PRDs must focus exclusively on user journeys, business logic, and success metrics.
-- Technical architecture documents (`design.md`) focus on interface contracts, entity schemas, API endpoints, and sequence diagrams.
+- `proposal.md` is functional: user problem and personas, journey-level requirements, success metrics and boundaries. It must never reference internal code paths, source file extensions or directory structures.
+- `design.md` owns the technical contract: domain models, API payloads and status codes, error handling, dependencies and integration standards.
 
-## 2. Socratic Interview & Gap Analysis
-- The planning agent must conduct gap analysis and challenge assumptions prior to writing physical files.
-- All clarifying questions MUST be routed through OMP's built-in `ask` tool dialog.
-- The planning agent must present an `Alignment Summary` and secure user confirmation via `ask` before moving to file synthesis.
+## 2. Socratic Interview & Gate 1
+- Inspect the current system before asking. Surface ambiguities, architectural risks, new dependencies and failure modes.
+- Route every clarifying question through OMP's built-in `ask` tool.
+- Present the Alignment Summary and obtain Gate 1 confirmation via `ask` before writing any files.
 
-## 3. Scope Boundaries
-- Explicitly define `Out of Scope` boundaries to prevent scope creep during execution.
+## 3. Schema Compliance & Scope
+- Follow the installed OpenSpec `spec-driven` headings shown in `/work-spec`; use `.openspec.yaml` to declare the schema and whether capability deltas are skipped.
+- Define `Out of Scope` boundaries explicitly and add no speculative scope.
+- Do not read legacy `omp/templates/*`; the compact headings in `/work-spec` are the source of truth.
