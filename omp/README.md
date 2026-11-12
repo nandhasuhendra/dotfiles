@@ -81,7 +81,26 @@ Start a new OMP session after installation. Shared `RULES.md` and `rules/*.md` r
 | Context7 | Configure hosted MCP and verify a real MCP initialize response; no local package needed | Current library/API/CLI documentation, matched to installed versions. |
 | rtk-ai | Reuse a verified `rtk`, otherwise run the official v0.45.0 installer with release checksum verification enforced | Wrap every shell tool invocation; specialized subcommands, proxy or run. |
 
-Only Playwright and Context7 need the MCP entries supplied here. Installed tools are verified by actual invocation, not PATH lookup alone. Working CLIs and Ponytail are not automatically upgraded on repeat runs; Playwright is kept at the configured version.
+Only Playwright and Context7 are MCP servers; [mcp.json](mcp.json) is the single source of truth. Installed tools are verified by actual invocation, not PATH lookup alone. Working CLIs and Ponytail are not automatically upgraded on repeat runs; Playwright is kept at the configured version.
+
+## MCP servers
+
+`mcp.json` configures exactly two servers, both `enabled: true`:
+
+| Server | Transport | Tools | Use |
+| --- | --- | --- | --- |
+| `context7` | HTTP, `https://mcp.context7.com/mcp` | `resolve-library-id`, `query-docs` | Current external library, framework, SDK, API and CLI documentation. Resolve the library ID first, then query the topic. Never send private code or secrets. |
+| `playwright` | stdio, `playwright-mcp --browser chromium --headless --no-sandbox` | 25 `browser_*` tools, including `browser_navigate`, `browser_snapshot`, `browser_click`, `browser_type`, `browser_console_messages`, `browser_network_requests` | Real browser verification of changed UI, console and network behavior. |
+
+Call MCP tools only when the active stage needs them, and use the exact tool names the server exposes (OMP may prefix them with the server name). A browser or documentation claim without an MCP call is not evidence.
+
+Codegraph, Ponytail, Hallmark, Caveman and Antislop are **not** MCP servers: they are a CLI, OMP plugins/skills, or bundled skills. Do not expect them in `mcp.json`.
+
+Verify the configuration and both live handshakes:
+
+```bash
+bash omp/tests/mcp-check.sh
+```
 
 Check actual invocations before starting:
 
@@ -103,11 +122,9 @@ Every shell tool invocation goes through `rtk`:
 
 File read/search/edit tools remain preferred over shell. Preserve exit status and raw failure output; RTK compression is not verification. If RTK is unavailable, shell execution is blocked rather than run natively.
 
-### Context7, Ponytail and Codegraph
+### Documentation and impact tools
 
-Use Context7 for relevant external library/framework/SDK/API/CLI/service documentation questions: resolve the library ID, then query the specific topic. Never send private code or secrets.
-
-Read installed Ponytail before implementation for the smallest complete solution. Prefer language-server symbol intelligence and Codegraph for nontrivial impact, confirming callers and regression scope in source. Caveman applies to agent conversation, not human documents.
+Use the `context7` MCP for external documentation as described above. Read installed Ponytail before implementation for the smallest complete solution. Prefer language-server symbol intelligence and the Codegraph CLI for nontrivial impact, confirming callers and regression scope in source. Caveman applies to agent conversation, not human documents.
 
 ### Hallmark
 
