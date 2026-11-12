@@ -26,7 +26,7 @@ Purpose: turn an approved `/work-spec` change into a readable human planning bun
 
 - Read `proposal.md`, `design.md` and `tasks.md`; treat them as the source of truth.
 - Inspect existing source, screenshots, callers or documentation only where the templates need evidence. Use the Context7 MCP for external contracts and never send private code or secrets.
-- Reuse settled decisions. Do not re-interview or restate answered questions. If a document cannot be completed without a material fact, ask at most 2 focused questions through `ask`; otherwise record the gap as an open decision instead of inventing content.
+- Reuse settled decisions. Do not re-interview or restate answered questions. Record non-blocking gaps as open decisions. If a missing fact would change approved scope or design, stop and direct the user back to `/work-spec`; do not resolve it by silently changing the approved artifacts.
 - Build one traceability set and keep it identical across all three documents: stable `REQ-*`/`FR-*` IDs derived from the proposal, `US-*` journeys, the Tech Doc's `CT-*`/`Q-*`/`EV-*` IDs, and the OpenSpec task numbers.
 
 ## Phase 2 — Write the bundle
