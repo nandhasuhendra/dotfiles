@@ -4,7 +4,7 @@
 - Respect the user's configured model tier and quota constraints.
 - Keep child-agent reasoning low and avoid exploratory loops, repeated narration or rewriting unchanged context.
 - Use the bundled Caveman skill for routine agent communication; it does not govern document prose.
-- Do not read `omp/templates/*` or unrelated documentation for this pipeline. The compact schema headings in the commands are authoritative.
+- For `/work-spec`, `/work-build` and `/work-ship`, do not read `omp/templates/*` or unrelated documentation; the compact schema headings in those commands are authoritative. `/work-human` is the exception and must read the installed `templates/PRD.md`, `templates/TECH-DOC.md` and `templates/HUMAN-TASK-BREAKDOWN.md` directly.
 - Prefer file read/search/edit tools over shell. Route shell commands through RTK (`rtk <subcommand>`, `rtk proxy <command>`, or `rtk run '<shell command>'`) to compress output. Preserve exit codes and raw failure evidence.
 - Mechanical tasks (Git, status, formatting) may be offloaded to a lightweight/free tier (`sonic` / `@execution_tier`) when preserving primary-model quota matters; otherwise run them directly to avoid handoff overhead.
 
