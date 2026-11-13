@@ -7,42 +7,73 @@ theme:
 setupVersion: 3
 browser:
   enabled: false
-defaultThinkingLevel: auto
+
+# Cheap defaults; elevate only through explicit workload roles.
+defaultThinkingLevel: low
+
 task:
   enableEffort: false
   agentModelOverrides:
     sonic: "@execution_tier"
     reviewer: "@review_tier"
     interviewer: "@doc_tier"
-    security-reviewer: "@review_tier"
     tech-lead: "@doc_tier"
-    qa-engineer: "@review_tier"
     product-manager: "@doc_tier"
-    security-engineer: "@review_tier"
     software-engineer: "@execution_tier"
+    code-reviewer: "@review_tier"
+    qa-engineer: "@qa_tier"
+    security-engineer: "@security_tier"
+
 modelRoles:
-  doc_tier: openai-codex/gpt-5.6-sol:medium
-  review_tier: openai-codex/gpt-5.6-sol:low
-  execution_tier: opencode-zen/deepseek-v4.1-flash-free:low
+  # Everyday conversation and lightweight orchestration.
   default: google-antigravity/gemini-3.8-flash:low
+
+  # Planning/spec work: capable Flash first; Codex remains an explicit escalation.
+  doc_tier: google-antigravity/gemini-3.8-flash:medium
+
+  # Implementation and routine code changes.
+  execution_tier: opencode-zen/deepseek-v4.1-flash-free:low
+
+  # Diff review should be independent and inexpensive.
+  review_tier: google-antigravity/gemini-3.8-flash:low
+
+  # QA focuses on executing tests, not expensive reasoning.
+  qa_tier: opencode-zen/deepseek-v4.1-flash-free:low
+
+  # Reserve Codex quota for security-sensitive analysis.
+  security_tier: openai-codex/gpt-5.6-sol:medium
+
 retry:
+  modelFallback: true
+  fallbackOn: any
+  rateLimitWalksChain: true
   fallbackChains:
+    default:
+      - opencode-zen/deepseek-v4.1-flash-free:low
+      - openrouter/nvidia/nemotron-3.5-lightning:free:medium
+
     doc_tier:
-      - openai-codex/gpt-6.1-sol:low
-      - google-antigravity/gemini-3.8-flash:low
+      - openai-codex/gpt-5.6-sol:medium
       - opencode-zen/deepseek-v4.1-flash-free:low
       - openrouter/nvidia/nemotron-3.5-lightning:free:medium
-    review_tier:
-      - google-antigravity/gemini-3.8-flash:low
-      - opencode-zen/deepseek-v4.1-flash-free:low
-      - openrouter/nvidia/nemotron-3.5-lightning:free:medium
-      - openrouter/thinkingmachines/inkling:free
+
     execution_tier:
-      - opencode-zen/deepseek-v4.1-flash-free:low
-      - google-antigravity/gemini-3.1-flash-lite:low
-      - openai-codex/gpt-5.6-luna:low
+      - google-antigravity/gemini-3.8-flash:low
       - openrouter/nvidia/nemotron-3.5-lightning:free:medium
-      - openrouter/thinkingmachines/inkling:free
+
+    review_tier:
+      - opencode-zen/deepseek-v4.1-flash-free:low
+      - openrouter/nvidia/nemotron-3.5-lightning:free:medium
+
+    qa_tier:
+      - google-antigravity/gemini-3.8-flash:low
+      - openrouter/nvidia/nemotron-3.5-lightning:free:medium
+
+    security_tier:
+      - google-antigravity/gemini-3.8-flash:medium
+      - opencode-zen/deepseek-v4.1-flash-free:low
+      - openrouter/nvidia/nemotron-3.5-lightning:free:medium
+
 compaction:
   thresholdTokens: 60000
 find:
