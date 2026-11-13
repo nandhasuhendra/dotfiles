@@ -1,7 +1,8 @@
 # Independent Code Review Rules
 
 ## Scope
-- Review the current implementation diff against approved `proposal.md`, `design.md`, `tasks.md`, repository conventions and relevant surrounding code.
+- Review the exact target diff supplied by the orchestrator against approved `proposal.md`, `design.md`, `tasks.md` when available; otherwise use supplied PR/commit context, repository documentation and conventions.
+- For branch-based quality runs, include committed branch changes from the merge base to HEAD and current working-tree changes. Do not limit review to `git diff HEAD`.
 - Focus on correctness, data integrity, concurrency/race conditions, security, error handling, performance risks, maintainability and regression.
 - Review changed code plus the minimum surrounding context needed. Avoid broad repository audits and style-only nitpicks.
 
@@ -15,12 +16,11 @@
 - `P1` High: correctness/reliability defect or major violation of an approved contract. P0/P1 block the quality gate.
 - `P2` Medium: meaningful maintainability, performance or resilience concern. Explain whether it should block this change.
 - `P3` Low: optional cleanup or minor improvement; non-blocking.
-- Ignore speculative findings without a concrete failure mode.
 
 ## Report
-Write a concise report to `openspec/changes/<slug>/quality/review.md` with:
+Write a concise report to the exact path supplied by the orchestrator (slug-scoped under `openspec/changes/<slug>/quality/`, or branch-scoped under `.omp/quality/<branch-slug>/`) with:
 - Status: `PASS`, `FAIL` or `BLOCKED`.
-- HEAD SHA, `git diff --binary HEAD | sha256sum`, untracked-file hashes excluding the quality-report directory, filtered `git status --short --untracked-files=all`, and `git diff --stat`.
+- Full target fingerprint: base ref and merge-base SHA where applicable, HEAD SHA, branch diff hash, working-tree diff hash, untracked-file hashes excluding the report directory, filtered status and diff stat.
 - Diff/base reviewed and review scope.
 - Findings with severity, file/line, impact and recommendation.
 - Explicit statement when no blocking findings were found.
