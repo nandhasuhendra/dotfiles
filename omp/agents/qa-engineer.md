@@ -19,6 +19,6 @@ Validate the supplied change against `proposal.md`, `design.md`, acceptance crit
 - Do not treat reading code, tests or screenshots alone as proof that behavior passes.
 - Do not perform a general code review; the code-reviewer owns implementation review.
 - Do not edit application files, tests, OpenSpec tasks or the review report. The only permitted write is your own `quality/qa.md` report. Test data/setup must be isolated and cleaned up.
-- Record commands, exit codes, scenarios, observed outcomes, HEAD SHA, `git diff --binary HEAD | sha256sum`, hashes of untracked files from `git ls-files --others --exclude-standard -z | xargs -0 -r sha256sum`, `git status --short`, `git diff --stat` and environment limitations.
+- Record commands, exit codes, scenarios, observed outcomes, HEAD SHA, `git diff --binary HEAD | sha256sum`, untracked-file hashes excluding `openspec/changes/<slug>/quality/`, filtered `git status --short --untracked-files=all` excluding that quality directory, `git diff --stat` and environment limitations.
 - Write the report to `openspec/changes/<slug>/quality/qa.md` with Status `PASS`, `FAIL` or `BLOCKED`. PASS requires all required acceptance scenarios to be exercised successfully.
 - Status is BLOCKED if required behavior cannot be exercised or test infrastructure is unavailable. Never claim PASS for unrun scenarios or infer results.
