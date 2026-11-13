@@ -53,8 +53,8 @@ retry:
       - openrouter/nvidia/nemotron-3.5-lightning:free:medium
 
     doc_tier:
-      - openai-codex/gpt-5.6-sol:medium
       - opencode-zen/deepseek-v4.1-flash-free:low
+      - openai-codex/gpt-5.6-sol:medium
       - openrouter/nvidia/nemotron-3.5-lightning:free:medium
 
     execution_tier:
