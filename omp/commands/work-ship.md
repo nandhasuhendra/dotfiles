@@ -26,10 +26,11 @@ Argument handling:
 Before staging, archiving, committing, pushing or opening a PR:
 
 1. Require Quality Gate approval from the current session.
-2. If automated review + QA was selected, require both reports to be `PASS`. Compare their recorded HEAD SHA, `git diff --binary HEAD | sha256sum`, untracked-file hashes (excluding `openspec/changes/<slug>/quality/`), filtered `git status --short --untracked-files=all` (excluding that quality directory), and `git diff --stat` against the current workspace. Any mismatch means evidence is stale; stop and direct the user to rerun the quality stage through `/work-build <slug>`.
-3. If human review + QA was selected, use `ask` to obtain explicit confirmation that the user reviewed the current code diff and verified required behavior/acceptance criteria.
-4. If the quality choice/approval is unknown (including a resumed/new session), ask the user to confirm manual review + QA for the current diff. If they have not completed it, stop and direct them to `/work-build <slug>` to run the parallel agents or return after manual verification.
-5. Any changed application diff invalidates previous review/QA results. Never silently reuse stale reports or treat persisted reports as approval across sessions.
+2. Resolve evidence path: `openspec/changes/<slug>/quality/` when a slug is supplied; without a slug, resolve the current branch's `.omp/quality/<sanitized-branch>/` report directory. If no matching evidence exists, stop and direct the user to `/work-build review-and-qa` (or `/work-build <slug> review-and-qa`).
+3. Automated review + QA requires both reports to be `PASS`. A `qa-only` report is never sufficient by itself for the full ship gate. Compare the full recorded target fingerprint (base ref/merge-base, HEAD SHA, branch diff hash, working-tree diff hash, untracked-file hashes, filtered status and diff stat) against the current workspace. Any mismatch means evidence is stale; stop and direct the user to rerun the relevant quality action.
+4. If human review + QA was selected during normal build, use `ask` to obtain explicit confirmation that the user reviewed the current code diff and verified required behavior/acceptance criteria.
+5. If quality choice/approval is unknown (including a resumed/new session), ask the user to confirm manual review + QA for the current diff. If they have not completed it, stop and direct them to run `/work-build review-and-qa` or return after manual verification.
+6. Any changed application diff invalidates previous review/QA results. Never silently reuse stale reports or treat persisted reports as approval across sessions.
 
 ## Shared preflight
 
