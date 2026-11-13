@@ -11,14 +11,16 @@
 | --- | --- | --- |
 | Spec | `/work-spec <feature>` | `core.md`, `planning.md`, `gates.md` |
 | Human planning | `/work-human <slug>` | `core.md`, `planning.md`, `gates.md` |
-| Build + quality | `/work-build <slug>` | `core.md`, `gates.md`, `execution.md`, `verification.md`, `review.md` |
+| Build + quality | `/work-build [slug] [review-and-qa\|qa-only]` | `core.md`, `gates.md`, `execution.md`, `verification.md`, `review.md` |
 | Ship | `/work-ship [slug] [mode]` | `core.md`, `gates.md`, `execution.md`, `verification.md` |
 
 1. `/work-spec` — resolve ambiguity, present Alignment Summary (Gate 1), create `proposal.md`/`design.md`/`tasks.md`, and obtain Gate 2 approval.
 2. `/work-human` — optional post-Gate-2 human planning bundle. Documentation only; adds no gate.
-3. `/work-build` — implement atomic tasks with focused checks, then ask whether to run independent parallel code review + QA agents or use human review + QA.
-4. Quality Gate — automated mode requires both independent reports to PASS; human mode requires explicit user confirmation at ship time. Both approvals are session-local.
-5. `/work-ship` — final regression and selected commit/archive/push/PR workflow. Never bypass the quality gate.
+3. `/work-build` — implement atomic tasks with focused checks, then ask whether to run independent parallel code review + QA or use human review + QA.
+4. `/work-build <slug> review-and-qa` / `/work-build review-and-qa` — quality-only parallel code review and QA for an OpenSpec change or the current branch/worktree.
+5. `/work-build <slug> qa-only` / `/work-build qa-only` — quality-only QA without code review. This does not satisfy the full ship quality gate by itself.
+6. Quality gate — automated full approval requires both independent reports to PASS; human mode requires explicit user confirmation at ship time. Approvals are session-local.
+7. `/work-ship` — final regression and selected commit/archive/push/PR workflow. Never bypass the quality gate.
 
 ## 3. Standalone Utilities
 - `/work-status` — read-only inspection of active changes, task progress and quality evidence.
