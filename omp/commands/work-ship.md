@@ -25,11 +25,11 @@ Argument handling:
 
 Before staging, archiving, committing, pushing or opening a PR:
 
-1. Require a Quality Gate approval from the current session.
-2. If the user selected automated review + QA, require both reports to be `PASS` and the reviewed diff to remain unchanged. Reports are evidence, not approval across sessions.
-3. If the user selected human review + QA, use `ask` to obtain explicit confirmation that the user has reviewed the current code diff and verified required behavior/acceptance criteria.
-4. If the quality choice/approval is unknown, ask the user to confirm manual review + QA for the current diff. If they have not completed it, stop and direct them to `/work-build <slug>` to run the parallel agents or return after manual verification.
-5. Any changed application diff invalidates previous review/QA results. Re-run the quality gate through `/work-build`; never silently reuse stale reports.
+1. Require Quality Gate approval from the current session.
+2. If automated review + QA was selected, require both reports to be `PASS`. Compare their recorded HEAD SHA, `git diff --binary HEAD | sha256sum`, untracked-file hashes, `git status --short` and `git diff --stat` against the current workspace. Any mismatch means evidence is stale; stop and direct the user to rerun the quality stage through `/work-build <slug>`.
+3. If human review + QA was selected, use `ask` to obtain explicit confirmation that the user reviewed the current code diff and verified required behavior/acceptance criteria.
+4. If the quality choice/approval is unknown (including a resumed/new session), ask the user to confirm manual review + QA for the current diff. If they have not completed it, stop and direct them to `/work-build <slug>` to run the parallel agents or return after manual verification.
+5. Any changed application diff invalidates previous review/QA results. Never silently reuse stale reports or treat persisted reports as approval across sessions.
 
 ## Shared preflight
 
@@ -39,7 +39,7 @@ Before staging, archiving, committing, pushing or opening a PR:
 
 ## Mode: git
 
-1. Do not validate or archive OpenSpec.
+1. Do not validate or archive OpenSpec. Reading quality evidence for the mandatory gate is allowed.
 2. Run relevant required checks for the changes being shipped. Report unavailable checks as `NOT_RUN`; never claim they passed.
 3. Stage only explicitly intended files, inspect `git diff --cached`, and create one semantic commit.
 4. Push the current branch to its configured remote (set upstream when needed).
