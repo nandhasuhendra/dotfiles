@@ -15,7 +15,11 @@ Supported modes:
 - `archive` — validate and archive the OpenSpec change only. Do not commit, push, or open a pull request.
 - `full` — run the complete release flow: final verification, OpenSpec validation and archive, semantic commit, push, and pull request.
 
-If mode is omitted, use OMP's built-in `ask` tool to ask the user to choose one. Never infer a mode from the current branch, task state, or previous invocation. Reject unknown modes before making changes.
+Argument handling:
+- If the only argument is `git`, `archive`, or `full`, treat it as the mode with no slug.
+- Otherwise, treat the first argument as the OpenSpec slug and the second as the optional mode.
+- If mode is omitted, use OMP's built-in `ask` tool to ask the user to choose one.
+- Never infer a mode from the current branch, task state, or previous invocation. Reject unknown modes before making changes.
 
 ## Shared preflight
 
@@ -27,7 +31,7 @@ If mode is omitted, use OMP's built-in `ask` tool to ask the user to choose one.
 
 1. Do not read, validate, modify, or archive the OpenSpec change.
 2. Run the relevant required checks for the changes being shipped. Report any check that is unavailable as `NOT_RUN`; never claim it passed.
-3. Review the staged diff and create one semantic commit:
+3. Stage only the explicitly intended files, inspect `git diff --cached`, and create one semantic commit:
    - Header: `feat(<slug>): <concise summary>` when a slug is supplied; otherwise use the appropriate conventional commit scope.
    - Body: concise bullets describing the shipped changes.
 4. Push the current branch to its configured remote (set upstream when needed).
@@ -49,7 +53,7 @@ If mode is omitted, use OMP's built-in `ask` tool to ask the user to choose one.
 3. Run `rtk proxy openspec validate <slug>` and fix schema errors.
 4. Archive with `rtk proxy openspec archive <slug> -y` (honours `skip_specs`). Do not manually move directories.
 5. Re-inspect `git status` and `git diff --stat` because archive may update tracked files. Confirm only intended changes remain.
-6. Create one semantic commit:
+6. Stage only the intended files, inspect `git diff --cached`, and create one semantic commit:
    - Header: `feat(<slug>): <concise summary>`
    - Body: bulleted implemented components and the OpenSpec change slug.
 7. Verify the working tree is clean, then push the current branch to its configured remote (set upstream when needed).
