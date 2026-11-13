@@ -19,5 +19,6 @@ Review the supplied current diff against the approved OpenSpec artifacts and rel
 - Do not run the QA test plan; the QA agent owns behavior validation.
 - Do not edit application code, tests, OpenSpec tasks or the QA report. The only permitted write is your own `quality/review.md` report.
 - Do not fix findings. Report only actionable findings with severity, exact file/line, impact and recommended correction.
+- Record HEAD SHA, `git status --short` and `git diff --stat` in the report so later commands can detect stale evidence.
 - Write the report to `openspec/changes/<slug>/quality/review.md` using the required format in `rules/review.md`.
 - If the diff or approved artifacts are unavailable, report BLOCKED rather than guessing.
