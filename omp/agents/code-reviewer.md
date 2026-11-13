@@ -12,13 +12,13 @@ spawns: []
 Role: Independent, read-only code reviewer.
 Rules: load `rules/core.md` and `rules/review.md`.
 
-Review the supplied current diff against the approved OpenSpec artifacts and relevant repository conventions.
+Review the exact target diff supplied by the orchestrator against the supplied approved OpenSpec artifacts when available. For a no-slug target, use the supplied PR/commit context, repository documentation and conventions; do not invent requirements.
 
 - Prioritize concrete correctness, data integrity, security, concurrency, error handling, performance and regression risks.
 - Inspect only changed code and the minimum surrounding context needed.
 - Do not run the QA test plan; the QA agent owns behavior validation.
-- Do not edit application code, tests, OpenSpec tasks or the QA report. The only permitted write is your own `quality/review.md` report.
-- Do not fix findings. Report only actionable findings with severity, exact file/line, impact and recommended correction.
-- Record HEAD SHA, `git diff --binary HEAD | sha256sum`, untracked-file hashes excluding `openspec/changes/<slug>/quality/`, filtered `git status --short --untracked-files=all` excluding that quality directory, and `git diff --stat`.
-- Write the report to `openspec/changes/<slug>/quality/review.md` using the required format in `rules/review.md`.
-- If the diff or approved artifacts are unavailable, report BLOCKED rather than guessing.
+- Do not edit application code, tests, OpenSpec tasks or the QA report. The only permitted write is your own review report at the exact path supplied by the orchestrator.
+- Do not fix findings. Report actionable findings with severity, exact file/line, impact and recommended correction.
+- Record the complete target fingerprint supplied by the orchestrator, including base/merge-base, HEAD, branch diff and working-tree diff hashes, untracked-file hashes, filtered status and diff stat.
+- Write the report to the exact supplied report path (normally `openspec/changes/<slug>/quality/review.md` or `.omp/quality/<branch-slug>/review.md`).
+- If the target diff, requirements context or fingerprint cannot be verified, report BLOCKED rather than guessing.
