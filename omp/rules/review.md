@@ -20,6 +20,7 @@
 ## Report
 Write a concise report to `openspec/changes/<slug>/quality/review.md` with:
 - Status: `PASS`, `FAIL` or `BLOCKED`.
+- HEAD SHA, `git diff --binary HEAD | sha256sum`, untracked-file hashes excluding the quality-report directory, filtered `git status --short --untracked-files=all`, and `git diff --stat`.
 - Diff/base reviewed and review scope.
 - Findings with severity, file/line, impact and recommendation.
 - Explicit statement when no blocking findings were found.
