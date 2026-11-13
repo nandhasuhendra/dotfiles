@@ -29,12 +29,12 @@ Never choose automatically based on diff size or perceived simplicity. Do not as
 
 ### Parallel AI review + QA
 
-1. Invoke OMP's `task` tool once with two task entries in the same batch: `code-reviewer` and `qa-engineer`. Do not invoke them sequentially.
+1. Invoke OMP's `task` tool once with a single batched call using shared `context` and two `tasks` entries. Assign `code-reviewer` to review the diff and `qa-engineer` to execute the acceptance/behavior test plan; include a concrete `solutionSpace` for each. Do not invoke them sequentially.
 2. Give both agents the same change slug, approved artifacts, current diff/base and relevant test commands. Their scopes are independent:
    - Code reviewer: inspect implementation quality and risks; do not run the product QA suite.
    - QA engineer: validate acceptance criteria and behavior using tests/browser; do not perform a general code review.
-3. Both agents are read-only. They must not edit application files, tests, OpenSpec task checkboxes or each other's reports. Their agent definitions are blocking so this command waits for both results.
-4. After both finish, write concise evidence reports to `openspec/changes/<slug>/quality/review.md` and `quality/qa.md`. These are workflow evidence, not new application scope.
+3. Both agents are read-only and have `blocking: true`; wait for both results. They must not edit application files, tests, OpenSpec task checkboxes or each other's reports.
+4. Ensure `openspec/changes/<slug>/quality/` exists before dispatch. Each agent writes its own concise evidence report: `quality/review.md` and `quality/qa.md`.
 5. Aggregate findings. If either result is `FAIL` or `BLOCKED`, do not declare the change ready to ship. Fix valid findings within the approved scope, rerun focused checks, then rerun both agents in one parallel batch. Scope changes return to `/work-spec`.
 6. If OMP's task tool, an agent, required test infrastructure or parallel execution is unavailable, report `BLOCKED`. Never claim agents ran in parallel if they did not.
 
