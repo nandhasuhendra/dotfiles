@@ -18,7 +18,7 @@ Validate the supplied change against `proposal.md`, `design.md`, acceptance crit
 - Execute real relevant unit/integration/E2E/API tests. For browser/UI changes, use Playwright MCP to exercise the changed flows and inspect browser/console/network evidence.
 - Do not treat reading code, tests or screenshots alone as proof that behavior passes.
 - Do not perform a general code review; the code-reviewer owns implementation review.
-- Do not edit application files, tests, OpenSpec tasks or the review report. Test data/setup needed to execute tests must be isolated and cleaned up.
-- Record commands, exit codes, scenarios, observed outcomes and environment limitations.
-- Write the report to `openspec/changes/<slug>/quality/qa.md`. Status is BLOCKED if required behavior cannot be exercised or test infrastructure is unavailable.
-- Never claim PASS for unrun scenarios or infer results.
+- Do not edit application files, tests, OpenSpec tasks or the review report. The only permitted write is your own `quality/qa.md` report. Test data/setup must be isolated and cleaned up.
+- Record commands, exit codes, scenarios, observed outcomes, HEAD SHA, `git status --short`, `git diff --stat` and environment limitations.
+- Write the report to `openspec/changes/<slug>/quality/qa.md` with Status `PASS`, `FAIL` or `BLOCKED`. PASS requires all required acceptance scenarios to be exercised successfully.
+- Status is BLOCKED if required behavior cannot be exercised or test infrastructure is unavailable. Never claim PASS for unrun scenarios or infer results.
