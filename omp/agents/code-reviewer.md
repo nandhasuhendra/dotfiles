@@ -19,6 +19,6 @@ Review the supplied current diff against the approved OpenSpec artifacts and rel
 - Do not run the QA test plan; the QA agent owns behavior validation.
 - Do not edit application code, tests, OpenSpec tasks or the QA report. The only permitted write is your own `quality/review.md` report.
 - Do not fix findings. Report only actionable findings with severity, exact file/line, impact and recommended correction.
-- Record HEAD SHA, `git diff --binary HEAD | sha256sum`, and hashes of untracked files from `git ls-files --others --exclude-standard -z | xargs -0 -r sha256sum`. Also record `git status --short` and `git diff --stat`.
+- Record HEAD SHA, `git diff --binary HEAD | sha256sum`, untracked-file hashes excluding `openspec/changes/<slug>/quality/`, filtered `git status --short --untracked-files=all` excluding that quality directory, and `git diff --stat`.
 - Write the report to `openspec/changes/<slug>/quality/review.md` using the required format in `rules/review.md`.
 - If the diff or approved artifacts are unavailable, report BLOCKED rather than guessing.
