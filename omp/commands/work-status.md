@@ -8,23 +8,23 @@ Read-only inspection of an active change. Do not edit artifacts, run implementat
 
 ## Rule loading
 
-Read installed shared `RULES.md` and apply its activation check there. Read `rules/core.md`; load `rules/gates.md` when interpreting gate state. Resolve paths under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`; stop if required policy is unreadable.
+Read installed shared `RULES.md` and apply its activation check there. Read `rules/core.md`; load `rules/gates.md` and `rules/review.md` when interpreting quality state. Resolve paths under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`; stop if required policy is unreadable.
 
 ## Inspect
 
 - Change slug: `$1`. If the change is missing, report that fact; do not initialize a replacement.
-- Read `openspec/changes/<slug>/proposal.md`, `design.md` and `tasks.md` when present.
+- Read `proposal.md`, `design.md`, `tasks.md` and any existing `quality/review.md` / `quality/qa.md`.
 - Run `rtk proxy openspec status --change $1` and `rtk proxy openspec validate $1` to report schema status.
-- Count completed tasks from the `- [x]` checkboxes in `tasks.md`. A checked box is not proof that tests passed.
-- Gate 1 and Gate 2 confirmations are session-local and are not persisted in the change. Never infer them from files, silence, a prior decision or a command invocation. If gate state is unknown, recommend `/work-resume`.
+- Count completed tasks from `- [x]` checkboxes. A checked box is not proof that tests passed.
+- Report review and QA artifacts independently: PASS, FAIL, BLOCKED, missing, or stale relative to the current diff.
+- Gate 1, Gate 2 and final quality approval are session-local. Never infer approval from files, reports, silence, a prior decision or a command invocation. If approval state is unknown, recommend `/work-resume`.
 
 ## Report
 
-- Present `Stage | Evidence | Blocker | Next command` across spec, build and ship.
+- Present `Stage | Evidence | Blocker | Next command` across spec, build, quality and ship.
 - Cite artifact paths and observed evidence; distinguish missing, stale, failed and unrun checks.
 - Recommend exactly one next action:
   - `/work-spec <feature>` when no approved specification exists.
-  - `/work-build <slug>` when Gate 2 approval is known in the current session and tasks are incomplete.
-  - `/work-resume <slug>` when Gate 2 state is unknown, including after a session change.
-  - `/work-ship <slug>` when all tasks are complete and unshipped.
-  - `/work-resume <slug>` when the session was interrupted.
+  - `/work-build <slug>` when Gate 2 is known in this session and tasks or quality checks remain.
+  - `/work-resume <slug>` when gate/quality state is unknown or the session was interrupted.
+  - `/work-ship <slug>` only when all tasks are complete and the quality gate is approved in this session.
