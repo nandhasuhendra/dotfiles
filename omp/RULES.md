@@ -13,6 +13,7 @@
 | Human planning | `/work-human <slug>` | `core.md`, `planning.md`, `gates.md` |
 | Build + quality | `/work-build [slug] [review-and-qa\|qa-only]` | `core.md`, `gates.md`, `execution.md`, `verification.md`, `review.md` |
 | Ship | `/work-ship [slug] [mode]` | `core.md`, `gates.md`, `execution.md`, `verification.md` |
+| Model diagnostics | `/work-models` | `MODEL-ROUTING.md` |
 
 1. `/work-spec` — resolve ambiguity, present Alignment Summary (Gate 1), create `proposal.md`/`design.md`/`tasks.md`, and obtain Gate 2 approval.
 2. `/work-human` — optional post-Gate-2 human planning bundle. Documentation only; adds no gate.
@@ -23,9 +24,17 @@
 7. `/work-ship` — final regression and selected commit/archive/push/PR workflow. Never bypass the quality gate.
 
 ## 3. Standalone Utilities
+- `/work-models` — read-only model catalog, role and fallback diagnostics; load `MODEL-ROUTING.md` only for this command.
 - `/work-status` — read-only inspection of active changes, task progress and quality evidence.
 - `/work-resume` — resume at the earliest incomplete step without inferring approvals.
 
-## 4. Two-Speed Execution Model
+## 4. Model Routing & Context Budget
+- Model assignments and fallback order are centralized in `config.yml`; custom agents should use role aliases through `task.agentModelOverrides`, not hard-code provider/model IDs in frontmatter.
+- Load `MODEL-ROUTING.md` only when changing model assignments, debugging provider fallback, or running `/work-models`.
+- Keep routine execution, review and QA on low-cost/low-thinking routes. Reserve Codex for security-sensitive or explicitly escalated work.
+- Do not spawn a second agent for a task that can be completed in the current role. Batch only independent review + QA after implementation.
+- Fallback chains recover from provider/quota failures; they do not assess output quality or automatically escalate reasoning. Escalate explicitly when evidence shows the task needs it.
+
+## 5. Two-Speed Execution Model
 - **Fast-Track (default):** concise spec → build → optional automated quality → ship.
 - **Full-Spec Mode:** deeper exploration and optional specialist review for large multi-system audits. The post-build quality choice remains explicit.

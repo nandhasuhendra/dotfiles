@@ -20,7 +20,7 @@ Purpose: turn an approved `/work-spec` change into a readable human planning bun
    - `Not sure — stop; run /work-status.`
 
    Continue only on the first option. This precondition is the only ordering guard: `/work-human` is runnable only after a completed, approved `/work-spec`.
-5. Read the installed templates from `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/templates/`: `PRD.md`, `TECH-DOC.md` and `HUMAN-TASK-BREAKDOWN.md`. Stop if they are unreadable.
+5. Read `PRD.md`, `TECH-DOC.md` and `HUMAN-TASK-BREAKDOWN.md` from `$PI_CODING_AGENT_DIR/templates` when `PI_CODING_AGENT_DIR` is set; otherwise read them from `$HOME/.omp/agent/templates`. Stop if they are unreadable.
 
 ## Phase 1 — Reuse the approved change (read-only)
 
@@ -40,7 +40,7 @@ Create `openspec/changes/<slug>/human/` and generate exactly these files from th
 Template fidelity rules:
 
 - Preserve each template's frontmatter fields and heading structure. Fill `title`, `created`, `updated`, `status: draft` and `tags`; replace or delete every authoring-guidance paragraph with real content.
-- Replace every `{{placeholder}}` and angle-bracket placeholder. Use `TBD` only for genuinely unknown names or owners; never invent people, metrics, customers, incidents or verification results.
+- Replace every double-curly placeholder (for example, the title and date placeholders) and every angle-bracket placeholder. Use `TBD` only for genuinely unknown names or owners; never invent people, metrics, customers, incidents or verification results.
 - Mark inapplicable sections `N/A — reason` instead of inventing stack details. Keep template sections that apply to this change.
 - Fix the template's gate link (`../rules/gates.md`) so it is not a broken relative link. Reference the installed workflow policy in plain text, or link a real project path when one exists.
 - Templates may mention retired `human-planning` or `execution` approval bundles, `test-plan.md` or `verification.md`. Do not invent those gates or files. Rewrite such references to the current two-gate protocol and only link artifacts that actually exist; describe future evidence paths as future.
@@ -56,7 +56,7 @@ Document-specific mapping:
 ## Phase 3 — Verify and hand off
 
 1. Run `rtk proxy openspec validate <slug>` again. The OpenSpec change must remain valid.
-2. Scan the three files for template residue (`{{`, `Authoring guidance:`, `<relative link>`, `<module>`, `<Name or TBD`) and replace it before finishing.
+2. Scan the three files for unresolved double-curly placeholders, `Authoring guidance:`, `<relative link>`, `<module>` and `<Name or TBD`, and replace the residue before finishing.
 3. Verify the internal relative links resolve within `human/`.
 4. Show the generated paths, a compact REQ-to-task coverage summary and any recorded open decisions.
 5. State clearly that these are human-review documents, not approval or verification evidence. Gate 2 remains the `/work-build` approval; `/work-human` adds no gate and does not authorize implementation, archive, PR or release.
