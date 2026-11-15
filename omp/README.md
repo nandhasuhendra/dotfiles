@@ -1,10 +1,10 @@
 # OMP engineering workflow
 
-Custom agents and slash commands for a streamlined three-stage engineering pipeline: **spec → build → ship**, with an optional human-planning bundle between spec and build. Shared policy lives in [RULES.md](RULES.md).
+Custom agents and slash commands for a six-command engineering workflow: **spec → human planning → build → ship**, with `/work-resume` for recovery and `/work-status` for read-only inspection. Shared policy lives in [RULES.md](RULES.md).
 
 ## Explicit opt-in and scope
 
-The workflow activates only for an explicit `/work-*` command, an explicit request to use this workflow, or an explicit request for a custom agent. Ordinary questions, unrelated work, repository presence, path/tool mentions and internal helper dispatch do not activate it. `/work-status` is read-only and does not start planning.
+The workflow activates only for an explicit `/work-spec`, `/work-human`, `/work-build`, `/work-resume`, `/work-status` or `/work-ship` command, an explicit request to use this workflow, or an explicit request for a custom agent. Ordinary questions, unrelated work, repository presence, path/tool mentions and internal helper dispatch do not activate it. `/work-status` is read-only and does not start planning.
 
 Activation belongs to the requested operation, not the entire session. Explicit invocation is not approval and cannot bypass an active change's gates. See [RULES.md](RULES.md) and the [gate rules](rules/gates.md).
 
@@ -17,10 +17,10 @@ Activation belongs to the requested operation, not the entire session. Explicit 
 | Build | `/work-build [slug]` | Atomic execution of the approved `tasks.md` with strict blast-radius limits, canonical package management, physical tests/LSP checks and the two-attempt Circuit Breaker. |
 | Ship | `/work-ship [slug]` | Final `git status` check, semantic commit, PR summary and OpenSpec archival via `rtk proxy openspec`. |
 
-Standalone utilities:
+Supporting workflow commands:
 
-- `/work-status` — read-only inspection of active changes under `openspec/changes/`.
-- `/work-resume` — resume an interrupted session on an in-progress change.
+- `/work-resume` — resume an interrupted workflow at its earliest incomplete step.
+- `/work-status` — read-only inspection of active changes, task progress and quality evidence.
 
 No application code may be written until the user explicitly selects **Approved** at Gate 2.
 
@@ -37,15 +37,17 @@ Bypassing a gate, or treating an explicit command invocation as approval, is pro
 
 | Agent | Responsibility |
 | --- | --- |
-| tech-lead | Lead the interview and critique, author `design.md` contracts and the atomic `tasks.md` checklist (`@doc_tier`). |
+| tech-lead | Requirements analysis, product/technical trade-offs and technical specification (`@doc_tier`). |
 | software-engineer | Execute approved tasks atomically with tests and LSP feedback (`@execution_tier`). |
-| security-engineer | Optional red-team/blue-team review for security-sensitive changes or credible risk. |
+| code-reviewer | Independent, read-only code review (`@review_tier`). |
+| qa-engineer | Independent, read-only behavior verification (`@qa_tier`). |
+| security-engineer | Risk-triggered red-team/blue-team review (`@security_tier`). |
 
-Routine Git, status and formatting work should be delegated to a lightweight/free tier (`sonic` / `@execution_tier`) to preserve primary-model quota.
+File-based commands run in the active parent session; `task.agentModelOverrides` routes only spawned agents. `/work-spec` and `/work-human` delegate planning to `tech-lead`, `/work-build` delegates implementation to `software-engineer`, and bounded mechanical work may use `sonic` when delegation saves more than it costs.
 
 ## Context and token efficiency
 
-- Rules load on demand. Read only the active command/agent prompt, `RULES.md`, `rules/core.md` and the stage/gate rules needed now.
+- Top-level `RULES.md` is a deliberately small always-available activation contract. Read only the active command/agent prompt, `rules/core.md` and the stage/gate rules needed now.
 - Never enumerate every agent, command, skill, template or rule as a ritual. Avoid recursive directory scans or repository-tree dumps unless requested.
 - Use paths, IDs and diffs to reference artifacts; read full bodies only for the decision at hand.
 - Keep handoffs compact: slug, paths, decisions, blockers and the next action.
@@ -69,7 +71,7 @@ CLI packages go into `${NPM_CONFIG_PREFIX:-$HOME/.local}`; keep its `bin/` direc
 
 Start a new OMP session after installation. Shared `RULES.md` and `rules/*.md` resolve under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}`, not the working directory.
 
-`omp/config.yml` is user-managed. This workflow does not change model roles, fallback chains or provider settings; edit it directly when your active roles or quotas change.
+`omp/config.yml` is the single source of truth for role assignments and provider fallback chains. The adaptive role map is documented in [MODEL-ROUTING.md](MODEL-ROUTING.md). Verify model selectors against the installed catalog with `omp models --kind chat`; provider availability and quota can change.
 
 ## Dependencies
 

@@ -19,21 +19,22 @@ fail() { printf 'FAIL %s\n' "$1"; fail=1; }
 command -v python3 >/dev/null || { echo "FAIL python3 is required"; exit 1; }
 [ -x "$OMP_BIN" ] || { echo "FAIL omp binary not found: $OMP_BIN"; exit 1; }
 
-review_selector=$(python3 - "$CONFIG" <<'PY'
+security_selector=$(python3 - "$CONFIG" <<'PY'
 import sys, re
 txt = open(sys.argv[1]).read()
-m = re.search(r"^\s{2}review_tier:\s*(\S+)", txt, re.M)
+m = re.search(r"^\s{2}security_tier:\s*(\S+)", txt, re.M)
 print(m.group(1) if m else "")
 PY
 )
-[ -n "$review_selector" ] || { echo "FAIL modelRoles.review_tier not found in $CONFIG"; exit 1; }
-review_provider=${review_selector%%/*}
-review_model=${review_selector#*/}
+[ -n "$security_selector" ] || { echo "FAIL modelRoles.security_tier not found in $CONFIG"; exit 1; }
+security_provider=${security_selector%%/*}
+security_model=${security_selector#*/}
+security_model=${security_model%%:*}
 parent_provider=${PARENT%%/*}
 parent_model=${PARENT#*/}
-printf '== setup check (parent=%s, review_tier=%s)\n' "$PARENT" "$review_selector"
-if [ "$parent_provider" = "$review_provider" ]; then
-  echo "note: parent and review_tier share provider $parent_provider; the provider dimension is not exercised"
+printf '== setup check (parent=%s, security_tier=%s)\n' "$PARENT" "$security_selector"
+if [ "$parent_provider" = "$security_provider" ]; then
+  echo "note: parent and security_tier share provider $parent_provider; the provider dimension is not exercised"
 fi
 
 # --- A. fresh process: tool registry + effective session state -----------------
@@ -76,13 +77,13 @@ else
     || fail "fresh process provider mismatch (expected $parent_provider)"
 fi
 
-# --- B. fresh process: security-engineer subagent must land on review_tier -------------
+# --- B. fresh process: security-engineer subagent must land on security_tier -------------
 ( cd "$WORKDIR" && timeout 420 "$OMP_BIN" -p --model "$PARENT" \
     "Call the task tool exactly once with context=\"routing check\", tasks=[{agent: \"security-engineer\", task: \"Reply with exactly OK.\", solutionSpace: \"one reply: OK\"}]. After it returns, wait for the spawned agent to finish with the wait tool, then reply DONE." \
     </dev/null > "$WORKDIR/run.out" 2>"$WORKDIR/run.err" )
 run_status=$?
 [ "$run_status" -eq 0 ] || fail "security-engineer dispatch process exited $run_status (see $WORKDIR/run.err)"
-python3 - "$STATS_DB" "$WORKDIR" "$review_provider" "$review_model" "$parent_provider" "$parent_model" <<'PY'
+python3 - "$STATS_DB" "$WORKDIR" "$security_provider" "$security_model" "$parent_provider" "$parent_model" <<'PY'
 import sqlite3, sys, time, os
 db, workdir, want_provider, want_model, parent_provider, parent_model = sys.argv[1:7]
 key = os.path.basename(workdir)
@@ -108,9 +109,9 @@ for provider, model, tin, tout, reason in rows:
     print(f"  subagent request: {provider}/{model} in={tin} out={tout} stop={reason}")
 off_tier = [r for r in rows if (r[0], r[1]) != (want_provider, want_model)]
 if off_tier:
-    print(f"FAIL security-engineer requests did not all use review_tier {want_provider}/{want_model}")
+    print(f"FAIL security-engineer requests did not all use security_tier {want_provider}/{want_model}")
     sys.exit(1)
-print(f"PASS separate security-engineer requests used configured review_tier {want_provider}/{want_model}")
+print(f"PASS separate security-engineer requests used configured security_tier {want_provider}/{want_model}")
 PY
 [ $? -eq 0 ] || fail=1
 

@@ -24,8 +24,26 @@ with tempfile.TemporaryDirectory(prefix="omp-budget-config-") as directory:
         (agent / "config.yml").write_text(
             f"compaction:\n  thresholdTokens: {threshold}\n"
             'find:\n  enabled: "off"\n'
-            "modelRoles:\n  review_tier: openrouter/minimax/minimax-m3.1-flash:free\n"
+            "modelRoles:\n"
+            "  default: openrouter/thinkingmachines/inkling:free\n"
             "  doc_tier: openrouter/thinkingmachines/inkling:free\n"
+            "  execution_tier: openrouter/minimax/minimax-m3.1-flash:free\n"
+            "  review_tier: openrouter/minimax/minimax-m3.1-flash:free\n"
+            "  qa_tier: openrouter/minimax/minimax-m3.1-flash:free\n"
+            "  security_tier: openrouter/thinkingmachines/inkling:free\n"
+            "task:\n  agentModelOverrides:\n"
+            '    tech-lead: "@doc_tier"\n'
+            '    software-engineer: "@execution_tier"\n'
+            '    code-reviewer: "@review_tier"\n'
+            '    qa-engineer: "@qa_tier"\n'
+            '    security-engineer: "@security_tier"\n'
+            "retry:\n  modelFallback: true\n  fallbackOn: any\n  fallbackChains:\n"
+            "    default: [openrouter/minimax/minimax-m3.1-flash:free]\n"
+            "    doc_tier: [openrouter/minimax/minimax-m3.1-flash:free]\n"
+            "    execution_tier: [openrouter/thinkingmachines/inkling:free]\n"
+            "    review_tier: [openrouter/thinkingmachines/inkling:free]\n"
+            "    qa_tier: [openrouter/minimax/minimax-m3.1-flash:free]\n"
+            "    security_tier: [openrouter/minimax/minimax-m3.1-flash:free]\n"
         )
         result = subprocess.run(
             ["bash", sys.argv[1], "1"], text=True, capture_output=True,

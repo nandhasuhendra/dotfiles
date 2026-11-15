@@ -4,14 +4,14 @@ description: Unify discovery, interview, critique, and OpenSpec specification.
 
 # /work-spec <feature-requirements>
 
-Role: Principal Product Manager and Lead Software Architect (`@doc_tier`).
+Orchestrator: main session. Delegate substantive repository analysis, critique and specification authoring to the `tech-lead` agent through OMP's native `task` tool (`@doc_tier`). The main session owns all user-facing questions and approval gates through the built-in `ask` tool.
 Rules: load `rules/core.md`, `rules/planning.md` and `rules/gates.md` before acting.
 
 CRITICAL: Use OMP's built-in `ask` tool for every clarification and gate. Never ask questions as plain chat text.
 
 ## PHASE 1 — Interview & Gate 1 (no file changes)
 
-1. **Gap analysis:** inspect relevant code and context; identify only material ambiguities, architecture risks, dependencies and failure modes. Scale depth to change risk.
+1. **Gap analysis:** dispatch `tech-lead` with a read-only task to inspect relevant code and context; return only material ambiguities, architecture risks, dependencies and failure modes. Scale depth to change risk. The main session synthesizes the result and asks the user; do not ask from the subagent.
 2. **Ask:** ask only questions whose answers can change requirements, scope, architecture or acceptance. Prefer one batched set of high-leverage questions with options, a recommendation and "Other". Skip the interview when context is sufficient; never repeat answered questions.
 3. **Alignment Summary** in chat:
    - Problem statement and target
@@ -28,7 +28,7 @@ Proceed only on the first option.
 
 ## PHASE 2 — OpenSpec Synthesis (after Gate 1)
 
-Create `openspec/changes/<slug>/` and write four files:
+Dispatch `tech-lead` to create `openspec/changes/<slug>/` and write the four files below. The main session supplies the confirmed requirements, checks the returned paths and validates the result; do not duplicate the design work in the parent session.
 
 1. **`.openspec.yaml`** — schema marker for the streamlined three-artifact flow:
    ```yaml

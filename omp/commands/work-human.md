@@ -4,7 +4,7 @@ description: Generate the human planning bundle (PRD, Tech Doc, Task Breakdown) 
 
 # /work-human <slug>
 
-Role: Principal Product Manager and Lead Software Architect (`@doc_tier`).
+Orchestrator: main session. After validating preconditions and Gate 2, delegate document synthesis to the `tech-lead` agent through OMP's native `task` tool (`@doc_tier`). The main session owns approval, scope control and final verification.
 Rules: load `rules/core.md`, `rules/planning.md` and `rules/gates.md` before acting.
 
 Purpose: turn an approved `/work-spec` change into a readable human planning bundle. This command is documentation-only. It never edits application code, installs packages, or rewrites the OpenSpec artifacts.
@@ -20,18 +20,18 @@ Purpose: turn an approved `/work-spec` change into a readable human planning bun
    - `Not sure — stop; run /work-status.`
 
    Continue only on the first option. This precondition is the only ordering guard: `/work-human` is runnable only after a completed, approved `/work-spec`.
-5. Read `PRD.md`, `TECH-DOC.md` and `HUMAN-TASK-BREAKDOWN.md` from `$PI_CODING_AGENT_DIR/templates` when `PI_CODING_AGENT_DIR` is set; otherwise read them from `$HOME/.omp/agent/templates`. Stop if they are unreadable.
+5. Require `PRD.md`, `TECH-DOC.md` and `HUMAN-TASK-BREAKDOWN.md` templates to exist and be readable under `$PI_CODING_AGENT_DIR/templates` when `PI_CODING_AGENT_DIR` is set, otherwise `$HOME/.omp/agent/templates`. Pass their paths to `tech-lead`; do not load their full contents in the parent session.
 
 ## Phase 1 — Reuse the approved change (read-only)
 
-- Read `proposal.md`, `design.md` and `tasks.md`; treat them as the source of truth.
-- Inspect existing source, screenshots, callers or documentation only where the templates need evidence. Use the Context7 MCP for external contracts and never send private code or secrets.
+- Treat `proposal.md`, `design.md` and `tasks.md` as the source of truth. Delegate reading and relevant source inspection to `tech-lead`; pass only the approved change path and necessary repository context. The parent session should not reread full artifacts or templates without a verification need.
+- Use Context7 MCP for external contracts when relevant; never send private code or secrets.
 - Reuse settled decisions. Do not re-interview or restate answered questions. Record non-blocking gaps as open decisions. If a missing fact would change approved scope or design, stop and direct the user back to `/work-spec`; do not resolve it by silently changing the approved artifacts.
 - Build one traceability set and keep it identical across all three documents: stable `REQ-*`/`FR-*` IDs derived from the proposal, `US-*` journeys, the Tech Doc's `CT-*`/`Q-*`/`EV-*` IDs, and the OpenSpec task numbers.
 
 ## Phase 2 — Write the bundle
 
-Create `openspec/changes/<slug>/human/` and generate exactly these files from the installed templates:
+Dispatch `tech-lead` to create `openspec/changes/<slug>/human/` and generate exactly these files from the installed templates. Pass the approved source artifacts and template paths; the agent must not re-interview or change scope. The main session verifies the returned files, traceability and links.
 
 1. `PRD.md` from `templates/PRD.md`
 2. `TECH-DOC.md` from `templates/TECH-DOC.md`
