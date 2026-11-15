@@ -4,8 +4,7 @@ description: Implement approved tasks or run targeted quality actions.
 
 # /work-build [slug] [action]
 
-Role: Autonomous Implementation Engineer (`@execution_tier`).
-Executor: use the `software-engineer` custom agent, whose spawn allowlist permits only the two quality agents.
+Orchestrator: main session. Delegate implementation to the `software-engineer` custom agent through OMP's native `task` tool (`@execution_tier`); its spawn allowlist permits only the two quality agents. The main session retains user interaction, approval gates, coordination and final verification.
 Rules: load `rules/core.md`, `rules/gates.md`, `rules/execution.md`, `rules/verification.md` and `rules/review.md` before acting.
 
 ## Parse arguments

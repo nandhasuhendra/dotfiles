@@ -47,21 +47,40 @@ check("find (dead judge route) is disabled",
       find_enabled == "off", f"got {find_enabled!r}, expected 'off'")
 
 roles = get("modelRoles") or {}
-check("modelRoles defines review_tier and doc_tier",
-      bool(roles.get("review_tier")) and bool(roles.get("doc_tier")),
-      f"got {roles!r}")
+required_roles = ("default", "doc_tier", "execution_tier", "review_tier", "qa_tier", "security_tier")
+missing_roles = [role for role in required_roles if not roles.get(role)]
+check("all workload model roles are configured",
+      not missing_roles, f"missing {missing_roles!r}; got {roles!r}")
 
 overrides = get("task.agentModelOverrides") or {}
+expected_agents = {
+    "tech-lead": "@doc_tier",
+    "software-engineer": "@execution_tier",
+    "code-reviewer": "@review_tier",
+    "qa-engineer": "@qa_tier",
+    "security-engineer": "@security_tier",
+}
+wrong = [f"{agent}: expected {role!r}, got {overrides.get(agent)!r}"
+         for agent, role in expected_agents.items() if overrides.get(agent) != role]
 missing = []
 for agent, value in overrides.items():
     if not isinstance(value, str) or not value.startswith("@"):
         missing.append(f"{agent}={value!r} is not a @role reference")
     elif value[1:] not in roles:
         missing.append(f"{agent} -> {value[1:]!r} has no modelRoles entry")
+check("custom agents resolve to their intended model roles",
+      not wrong, "; ".join(wrong))
 check("every agentModelOverride points at an existing role",
       not missing, "; ".join(missing))
 
+retry_model_fallback = get("retry.modelFallback")
+check("retry model fallback is explicitly enabled",
+      retry_model_fallback is True, f"got {retry_model_fallback!r}")
+
 chains = get("retry.fallbackChains") or {}
+missing_chains = [role for role in required_roles if not chains.get(role)]
+check("every workload role has an explicit fallback chain",
+      not missing_chains, f"missing {missing_chains!r}")
 bad = [f"{role}={chain!r}" for role, chain in chains.items()
        if not isinstance(chain, list) or not chain or not all(isinstance(s, str) for s in chain)]
 check("retry.fallbackChains are non-empty selector lists", not bad, "; ".join(bad))

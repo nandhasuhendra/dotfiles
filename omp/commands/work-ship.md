@@ -4,7 +4,7 @@ description: Ship work through GitHub, archive an OpenSpec change, or run the fu
 
 # /work-ship [slug] [mode]
 
-Role: Release Engineer (`@execution_tier` or `sonic`).
+Role: Release orchestrator in the active parent session. Keep user approvals and irreversible GitHub operations in the main session; use the native `sonic` agent through `task` only for bounded mechanical checks when delegation is useful.
 Rules: load `rules/core.md`, `rules/gates.md`, `rules/execution.md` and `rules/verification.md` before acting.
 
 ## Select a mode

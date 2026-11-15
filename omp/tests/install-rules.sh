@@ -37,7 +37,7 @@ assert_installed() {
     [[ -r "$CONFIG_DIR/$item" ]] || fail "Unreadable installed path: $item"
   done
   cmp "$OMP_DIR/RULES.md" "$CONFIG_DIR/RULES.md"
-  for rule in core.md planning.md gates.md execution.md verification.md; do
+  for rule in core.md planning.md gates.md execution.md review.md verification.md; do
     [[ -r "$CONFIG_DIR/rules/$rule" ]] || fail "Unreadable installed rule: $rule"
     cmp "$OMP_DIR/rules/$rule" "$CONFIG_DIR/rules/$rule"
     printf '  Read installed rules/%s\n' "$rule"

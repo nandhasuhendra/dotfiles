@@ -1,40 +1,39 @@
-# OMP Workflow Governance Rules
+# OMP Workflow Activation
 
-## 1. Activation & Context Budget
-- Load these rules only for an explicit `/work-*` command or an explicit custom-agent request.
-- Guard context: read the active command, this file, `rules/core.md`, and only the stage rules it names. Do not scan unrelated agents, commands, templates or repository trees.
-- Shared rules resolve under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/rules/`.
+This file is intentionally small: OMP keeps top-level `RULES.md` in the system context. Detailed procedures live in the command and stage-specific rule files.
 
-## 2. Pipeline & Rule Map
+## Activation
 
-| Stage | Command | Load |
-| --- | --- | --- |
-| Spec | `/work-spec <feature>` | `core.md`, `planning.md`, `gates.md` |
-| Human planning | `/work-human <slug>` | `core.md`, `planning.md`, `gates.md` |
-| Build + quality | `/work-build [slug] [review-and-qa\|qa-only]` | `core.md`, `gates.md`, `execution.md`, `verification.md`, `review.md` |
-| Ship | `/work-ship [slug] [mode]` | `core.md`, `gates.md`, `execution.md`, `verification.md` |
-| Model diagnostics | `/work-models` | `MODEL-ROUTING.md` |
+Apply this workflow only when the user explicitly invokes one of the six commands below or explicitly requests a custom agent. Do not activate it for ordinary questions, unrelated coding, or incidental mentions of OMP tools.
 
-1. `/work-spec` — resolve ambiguity, present Alignment Summary (Gate 1), create `proposal.md`/`design.md`/`tasks.md`, and obtain Gate 2 approval.
-2. `/work-human` — optional post-Gate-2 human planning bundle. Documentation only; adds no gate.
-3. `/work-build` — implement atomic tasks with focused checks, then ask whether to run independent parallel code review + QA or use human review + QA.
-4. `/work-build <slug> review-and-qa` / `/work-build review-and-qa` — quality-only parallel code review and QA for an OpenSpec change or the current branch/worktree.
-5. `/work-build <slug> qa-only` / `/work-build qa-only` — quality-only QA without code review. This does not satisfy the full ship quality gate by itself.
-6. Quality gate — automated full approval requires both independent reports to PASS; human mode requires explicit user confirmation at ship time. Approvals are session-local.
-7. `/work-ship` — final regression and selected commit/archive/push/PR workflow. Never bypass the quality gate.
+For an activated command, read that command first, then only the shared/stage rules it names. Resolve installed shared rules under `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/rules/`. Do not scan every command, agent, skill, template or rule.
 
-## 3. Standalone Utilities
-- `/work-models` — read-only model catalog, role and fallback diagnostics; load `MODEL-ROUTING.md` only for this command.
-- `/work-status` — read-only inspection of active changes, task progress and quality evidence.
-- `/work-resume` — resume at the earliest incomplete step without inferring approvals.
+## Command ownership
 
-## 4. Model Routing & Context Budget
-- Model assignments and fallback order are centralized in `config.yml`; custom agents should use role aliases through `task.agentModelOverrides`, not hard-code provider/model IDs in frontmatter.
-- Load `MODEL-ROUTING.md` only when changing model assignments, debugging provider fallback, or running `/work-models`.
-- Keep routine execution, review and QA on low-cost/low-thinking routes. Reserve Codex for security-sensitive or explicitly escalated work.
-- Do not spawn a second agent for a task that can be completed in the current role. Batch only independent review + QA after implementation.
-- Fallback chains recover from provider/quota failures; they do not assess output quality or automatically escalate reasoning. Escalate explicitly when evidence shows the task needs it.
+| Command | Owns |
+| --- | --- |
+| `/work-spec` | Discovery, interview, alignment, OpenSpec artifacts and specification approval gates. |
+| `/work-human` | Optional human-readable PRD, Tech Doc and task breakdown; documentation only. |
+| `/work-build` | Approved implementation, focused checks, and `review-and-qa` / `qa-only` actions. |
+| `/work-resume` | Recover the earliest incomplete workflow step without assuming prior approval. |
+| `/work-status` | Read-only workflow, task, gate and quality-evidence status. |
+| `/work-ship` | Final verification, Git/PR operations and/or OpenSpec archival according to the selected mode. |
 
-## 5. Two-Speed Execution Model
-- **Fast-Track (default):** concise spec → build → optional automated quality → ship.
-- **Full-Spec Mode:** deeper exploration and optional specialist review for large multi-system audits. The post-build quality choice remains explicit.
+Do not create alternate entry-point commands for these stages. Keep their existing names and argument contracts.
+
+## Non-negotiable constraints
+
+- Gate 1 and Gate 2 use OMP's built-in `ask`; invoking a command is not approval.
+- No application implementation before explicit Gate 2 approval.
+- Gate and final quality approval are session-local; never infer approval from files or prior sessions.
+- Quality-only review/QA is read-only for application code and tests.
+- Never claim a check, browser action, MCP call, agent delegation or provider fallback that did not actually occur.
+- Preserve user changes and stop on ambiguous scope, stale evidence or a failed quality gate.
+
+## Context and tooling
+
+- Use OMP native file, search, edit, terminal, LSP and task capabilities instead of recreating them.
+- Load skills only when relevant; keep their complete references intact and follow their own instructions.
+- Use configured MCP servers only when the task requires their external capability. Never duplicate MCP tool schemas in rules.
+- Model assignments and retry fallback chains live only in `config.yml`; see `MODEL-ROUTING.md` when diagnosing or changing routing.
+- Detailed engineering policy belongs in `rules/core.md`, `planning.md`, `gates.md`, `execution.md`, `review.md` and `verification.md`.

@@ -55,13 +55,13 @@ if ! command -v gh >/dev/null 2>&1; then
 fi
 node -e 'const [major, minor] = process.versions.node.split(".").map(Number); process.exit(major > 20 || (major === 20 && minor >= 19) ? 0 : 1)' \
   || die 'Node.js 20.19 or newer is required. Select a supported Node version and rerun.'
-for item in mcp.json agents commands RULES.md rules templates skills; do
+for item in config.yml mcp.json agents commands RULES.md rules templates skills; do
   [[ -e "$OMP_DIR/$item" ]] || die "Missing $OMP_DIR/$item"
 done
 for template in PRD.md TECH-DOC.md HUMAN-TASK-BREAKDOWN.md QA-TEST-CASES.md TASK-BREAKDOWN.md; do
   [[ -f "$OMP_DIR/templates/$template" ]] || die "Missing $OMP_DIR/templates/$template"
 done
-for rule in core.md planning.md gates.md execution.md verification.md; do
+for rule in core.md planning.md gates.md execution.md review.md verification.md; do
   [[ -f "$OMP_DIR/rules/$rule" ]] || die "Missing $OMP_DIR/rules/$rule"
 done
 [[ -f "$OMP_DIR/skills/caveman/SKILL.md" ]] || die 'Missing bundled Caveman skill at omp/skills/caveman/SKILL.md'
