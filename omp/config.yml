@@ -18,45 +18,36 @@ task:
     qa-engineer: "@qa_tier"
     security-engineer: "@security_tier"
 modelRoles:
-  doc_tier: openai-codex/gpt-5.6-sol:medium
-  execution_tier: opencode-zen/deepseek-v4.1-flash-free:low
-  review_tier: google-antigravity/gemini-3.8-flash:low
-  qa_tier: opencode-zen/deepseek-v4.1-flash-free:low
-  security_tier: openai-codex/gpt-5.6-sol:medium
-  default: openai-codex/gpt-5.6-sol:low
+  default: opencode-go/glm-5.3-flash:low
+  doc_tier: zai/glm-5.2:medium
+  execution_tier: opencode-go/glm-5.3-flash:low
+  review_tier: opencode-go/glm-5.3:low
+  qa_tier: opencode-go/glm-5.3-flash:low
+  security_tier: zai/glm-5.2:medium
+  commit: openrouter/nvidia/nemotron-3.5-lightning:free
 retry:
   modelFallback: true
   fallbackOn: any
   fallbackChains:
     default:
-      - google-antigravity/gemini-3.8-flash:low
-      - opencode-zen/deepseek-v4.1-flash-free:low
-      - openrouter/nvidia/nemotron-3.5-lightning:free:medium
-      - openrouter/thinkingmachines/inkling:free
+      - openrouter/nvidia/nemotron-3.5-lightning:free
+      - opencode-go/glm-5.3:low
     doc_tier:
-      - google-antigravity/gemini-3.8-flash:low
-      - opencode-zen/deepseek-v4.1-flash-free:low
-      - openrouter/nvidia/nemotron-3.5-lightning:free:medium
-      - openrouter/thinkingmachines/inkling:free
+      - opencode-go/glm-5.3:medium
+      - openrouter/nvidia/nemotron-3.5-lightning:free
     execution_tier:
-      - google-antigravity/gemini-3.8-flash:low
-      - openai-codex/gpt-5.6-sol:low
-      - openrouter/nvidia/nemotron-3.5-lightning:free:medium
-      - openrouter/thinkingmachines/inkling:free
+      - openrouter/nvidia/nemotron-3.5-lightning:free
+      - opencode-go/glm-5.3:low
     review_tier:
-      - openai-codex/gpt-5.6-sol:low
-      - opencode-zen/deepseek-v4.1-flash-free:low
-      - openrouter/nvidia/nemotron-3.5-lightning:free:medium
-      - openrouter/thinkingmachines/inkling:free
+      - zai/glm-5.2:medium
+      - openrouter/nvidia/nemotron-3.5-lightning:free
     qa_tier:
-      - google-antigravity/gemini-3.8-flash:low
-      - openai-codex/gpt-5.6-sol:low
-      - openrouter/nvidia/nemotron-3.5-lightning:free:medium
-      - openrouter/thinkingmachines/inkling:free
+      - openrouter/nvidia/nemotron-3.5-lightning:free
+      - opencode-go/glm-5.3:low
     security_tier:
-      - google-antigravity/gemini-3.8-flash:low
-      - opencode-zen/deepseek-v4.1-flash-free:low
-      - openrouter/nvidia/nemotron-3.5-lightning:free:medium
+      - opencode-go/glm-5.3:medium
+      - openrouter/nvidia/nemotron-3.5-lightning:free
+    commit:
       - openrouter/thinkingmachines/inkling:free
 compaction:
   thresholdTokens: 60000
