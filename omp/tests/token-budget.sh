@@ -47,10 +47,15 @@ check("find (dead judge route) is disabled",
       find_enabled == "off", f"got {find_enabled!r}, expected 'off'")
 
 roles = get("modelRoles") or {}
-required_roles = ("default", "doc_tier", "execution_tier", "review_tier", "qa_tier", "security_tier")
+required_roles = ("default", "doc_tier", "execution_tier", "review_tier", "qa_tier", "security_tier", "commit")
 missing_roles = [role for role in required_roles if not roles.get(role)]
-check("all workload model roles are configured",
+check("all workload and built-in commit model roles are configured",
       not missing_roles, f"missing {missing_roles!r}; got {roles!r}")
+
+commit_model = roles.get("commit", "")
+check("commit role uses an OpenRouter free model",
+      isinstance(commit_model, str) and commit_model.startswith("openrouter/") and ":free" in commit_model,
+      f"got {commit_model!r}")
 
 overrides = get("task.agentModelOverrides") or {}
 expected_agents = {
@@ -138,7 +143,7 @@ for prov, r, i, o, c in cur.execute("""
     print(f"    {prov:<20} {r:>6} req  prompt {i or 0:>14,}  cache {c or 0:>14,}")
 
 print("\n  peak requests in any 5h window (the rate-limit driver):")
-for prov in ("openai-codex", "google-antigravity", "opencode-zen", "opencode-go", "openrouter"):
+for prov in ("zai", "opencode-go", "openrouter"):
     buckets = {}
     for ts, in cur.execute(
             "select timestamp from messages where timestamp >= ? and provider = ?", (since, prov)):
