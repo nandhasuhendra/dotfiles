@@ -89,7 +89,19 @@ Record confirmed facts, assumptions and selected decision rationale from the int
 - **AC-S09**: Record actor and time through structured audit; redact sensitive data from logs.
 - **AC-S10**: Distinct loading, empty, zero-match and failure states.
 
-### 5.5 Out of Scope
+### 5.5 Data Flow Diagram (DFD)
+
+<Describe how data moves through the feature/change: external entities/actors, processes, data stores, and data flows. Use a Mermaid `flowchart` (preferred) or clearly labeled diagram. Show key inputs/outputs, transformations, storage/read points, and trust or system boundaries where relevant. Keep it consistent with the journeys, requirements, and technical boundaries; mark `N/A — reason` only when the change has no meaningful data movement.>
+
+```mermaid
+flowchart LR
+    A[<External entity / actor>] -->|<Data/input>| B(<Process>)
+    B -->|<Data/output>| C[(<Data store>)]
+    C -->|<Data/read>| D(<Process>)
+    D -->|<Data/output>| E[<External entity / actor>]
+```
+
+### 5.6 Out of Scope
 
 - <Explicit non-goal or deferred capability>
 - <Prohibited action, e.g. physical deletion>

@@ -44,6 +44,7 @@ For both forms:
 - Exclude the report directory itself from target diff/fingerprints to prevent self-invalidating evidence.
 - Capture a stable fingerprint containing base ref and merge-base SHA (when applicable), HEAD SHA, branch diff hash, working-tree diff hash, hashes of untracked files outside the report directory, filtered status and diff stat. Give the exact same target and fingerprint procedure to every agent.
 - If there are no meaningful code changes, report BLOCKED/NOTHING_TO_REVIEW rather than claiming PASS.
+- Scope regression tests with `rtk codegraph affected <changed files>` when available; graph output guides selection but is not test evidence.
 - Create the report directory before dispatch. Agents may write only their own report there.
 
 ## Action: review-and-qa
@@ -66,13 +67,13 @@ For both forms:
 ## Normal implementation workflow
 
 1. Resolve the slug from the argument or ask the user if absent; never infer an arbitrary change. Read `openspec/changes/<slug>/tasks.md` and `design.md`. Require Gate 2 `Approved` in the current session. If approval is unavailable (including a new/resumed session), re-confirm through `ask` before any application edit; never infer it from files or task checkboxes.
-2. Execute one discrete subtask at a time. Before editing, confirm its declared target files.
+2. Execute one discrete subtask at a time. Before editing, confirm its declared target files and use Codegraph (`rtk codegraph impact <symbol>` / `affected <files...>`) when available to confirm callers and affected tests; verify findings in source.
 3. **Blast radius:** modify only the declared application target files; everything else is READ-ONLY.
 4. **Dependencies:** install only packages approved in `design.md`, using the canonical package manager, and update the matching lockfile.
 5. **Verify:** run the narrow relevant test, linter or typecheck through RTK. For browser/UI subtasks, exercise the changed flow with Playwright MCP and record observed results. Preserve exit codes and raw failures.
 6. **Circuit breaker:** after two failed repair attempts for the same check, stop and report the blocker.
 7. On pass, mark only that subtask `- [x]` in `tasks.md` and continue.
-8. When all tasks are checked, run `rtk proxy openspec validate <slug>` and report a concise `git diff --stat`. Do not run the full regression suite here; `/work-ship` owns final regression.
+8. When all tasks are checked, run `rtk openspec validate <slug>` and report a concise `git diff --stat`. Do not run the full regression suite here; `/work-ship` owns final regression.
 
 ## Post-build quality choice
 

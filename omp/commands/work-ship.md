@@ -27,7 +27,7 @@ Before staging, archiving, committing, pushing or opening a PR:
 
 1. Require Quality Gate approval from the current session.
 2. Resolve evidence path: `openspec/changes/<slug>/quality/` when a slug is supplied; without a slug, resolve the current branch's `.omp/quality/<sanitized-branch>/` report directory. If no matching evidence exists, stop and direct the user to `/work-build review-and-qa` (or `/work-build <slug> review-and-qa`).
-3. Automated review + QA requires both reports to be `PASS`. A `qa-only` report is never sufficient by itself for the full ship gate. Compare the full recorded target fingerprint (base ref/merge-base, HEAD SHA, branch diff hash, working-tree diff hash, untracked-file hashes, filtered status and diff stat) against the current workspace. Any mismatch means evidence is stale; stop and direct the user to rerun the relevant quality action.
+3. Automated review + QA requires both reports to be `PASS`. A `qa-only` report is never sufficient by itself for the full ship gate. Compare the full recorded target fingerprint (base ref/merge-base, HEAD SHA, branch diff hash, working-tree diff hash, untracked-file hashes, filtered status and diff stat) against the current workspace. Any mismatch means evidence is stale; stop and direct the user to rerun the relevant quality action. For UI changes, require the QA report to cite real Playwright MCP evidence (navigate, snapshot, console and network); static reasoning is not evidence.
 4. If human review + QA was selected during normal build, use `ask` to obtain explicit confirmation that the user reviewed the current code diff and verified required behavior/acceptance criteria.
 5. If quality choice/approval is unknown (including a resumed/new session), ask the user to confirm manual review + QA for the current diff. If they have not completed it, stop and direct them to run `/work-build review-and-qa` or return after manual verification.
 6. Any changed application diff invalidates previous review/QA results. Never silently reuse stale reports or treat persisted reports as approval across sessions.
@@ -37,6 +37,16 @@ Before staging, archiving, committing, pushing or opening a PR:
 1. Inspect `git status` and `git diff --stat`.
 2. Identify the exact files and changes in scope. Stop if unrelated changes, scratch files, debug logs or build artifacts would be included; never silently discard or stage unrelated work.
 3. Confirm the current branch and intended base branch before any GitHub operation.
+
+## Resolve spec effect before archive
+
+A bare `openspec archive <slug> -y` merges delta specs into `openspec/specs/`. Resolve this explicitly before every archive:
+
+1. If `openspec/changes/<slug>/.openspec.yaml` has `skip_specs: true`, use `rtk openspec archive <slug> -y`.
+2. Otherwise inspect `openspec/changes/<slug>/specs/` for delta specs:
+   - No deltas → use `rtk openspec archive <slug> -y --skip-specs` so the active baseline stays untouched.
+   - Deltas present → use `ask` to choose: merge deltas into active specs (normal OpenSpec), or archive with `--skip-specs` to keep the active spec set unchanged. Recommend `--skip-specs` while the active spec set is intentionally empty; merge only when the user explicitly wants a baseline spec updated.
+3. Never run a bare `archive -y` on a delta-bearing change without that choice. Never move directories manually.
 
 ## Mode: git
 
@@ -50,20 +60,20 @@ Before staging, archiving, committing, pushing or opening a PR:
 ## Mode: archive
 
 1. Require every task in `tasks.md` to be checked.
-2. Run `rtk proxy openspec validate <slug>` and fix schema errors.
-3. Archive with `rtk proxy openspec archive <slug> -y` (honours `skip_specs`). Do not manually move directories.
-4. Re-inspect `git status` and `git diff --stat`.
-5. Stop without committing, pushing or opening a PR. Report archive path and remaining working-tree changes.
+2. Run `rtk openspec validate <slug>` and fix schema errors.
+3. Apply "Resolve spec effect before archive" and archive with the chosen command.
+4. Re-inspect `git status`, `git diff --stat` and `rtk openspec list --specs`.
+5. Stop without committing, pushing or opening a PR. Report archive path, active spec count and remaining working-tree changes.
 
 ## Mode: full
 
 1. Require every task in `tasks.md` to be checked.
 2. Run required regression tests, linters and typechecks. `git diff --stat` is not a test.
-3. Run `rtk proxy openspec validate <slug>` and fix schema errors.
-4. Archive with `rtk proxy openspec archive <slug> -y` (honours `skip_specs`).
-5. Re-inspect the diff and confirm only intended changes remain.
+3. Run `rtk openspec validate <slug>` and fix schema errors.
+4. Apply "Resolve spec effect before archive" and archive with the chosen command.
+5. Re-inspect the diff, `rtk openspec list --specs` and confirm only intended changes remain.
 6. Stage only intended files, inspect `git diff --cached`, and create one semantic commit.
 7. Verify the working tree is clean, then push the current branch and open a PR against the confirmed base branch.
-8. Report commit hash, archive path, pushed branch, PR URL and checks not run.
+8. Report commit hash, archive path, active spec count, pushed branch, PR URL and checks not run.
 
 Do not merge, deploy or release without a separate explicit request.

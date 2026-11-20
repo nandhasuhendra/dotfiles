@@ -13,7 +13,7 @@
 
 ## 3. Regression & Clean Workspace
 - `/work-build` runs focused checks for each task and the selected quality path. `/work-ship` runs the project's required regression suites, linters and typecheckers.
-- Before `/work-ship`, run `rtk proxy openspec validate <slug>` when an OpenSpec slug exists, and inspect `git diff --stat`; archive only when every task is complete and the quality gate is approved.
+- Before `/work-ship`, run `rtk openspec validate <slug>` when an OpenSpec slug exists, and inspect `git diff --stat`; archive only when every task is complete and the quality gate is approved.
 
 ## 4. Evidence
 - Missing, stale, blocked or unrun checks are not PASS.

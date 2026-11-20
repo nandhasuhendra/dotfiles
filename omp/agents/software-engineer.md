@@ -19,3 +19,4 @@ Responsibilities:
 3. Update only the completed task checkbox in `tasks.md`.
 4. When explicitly requested by `/work-build`, dispatch `code-reviewer` and `qa-engineer` together in one OMP task batch. Do not let either agent modify code.
 5. Report concise implementation evidence, quality-gate state, blockers and the next action.
+6. Use Codegraph via `rtk codegraph` (impact/callers/affected) when available to confirm blast radius before editing; confirm findings in source.

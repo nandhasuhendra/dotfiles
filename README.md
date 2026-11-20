@@ -13,6 +13,7 @@ The repository is organized by application so each configuration can be installe
 | `nvim/` | Neovim editor and development environment | [README](nvim/README.md) |
 | `herdr/` | Herdr terminal workspace manager | [README](herdr/README.md) |
 | `opencode/` | OpenCode settings, MCP servers, plugins, and skills | [README](opencode/README.md) |
+| `rtk/` | Global RTK token-compression config and custom filters | [README](rtk/README.md) |
 | `antigravity/` | Antigravity custom security agent | [README](antigravity/README.md) |
 | `omp/` | OMP coding assistant settings, MCP servers, agents, and skills | [README](omp/README.md) |
 | `claude/` | Claude Code subagents, slash commands, skills, and templates | [README](claude/README.md) |

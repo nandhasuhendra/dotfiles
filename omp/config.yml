@@ -18,13 +18,14 @@ task:
     qa-engineer: "@qa_tier"
     security-engineer: "@security_tier"
 modelRoles:
-  default: opencode-go/glm-5.3-flash:low
   doc_tier: zai/glm-5.2:medium
+  human_tier: zai/glm-5.3-flash:low
   execution_tier: opencode-go/glm-5.3-flash:low
   review_tier: opencode-go/glm-5.3:low
   qa_tier: opencode-go/glm-5.3-flash:low
   security_tier: zai/glm-5.2:medium
   commit: openrouter/nvidia/nemotron-3.5-lightning:free
+  default: opencode-zen/big-pickle
 retry:
   modelFallback: true
   fallbackOn: any

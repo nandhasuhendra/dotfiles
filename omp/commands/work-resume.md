@@ -13,7 +13,8 @@ Read installed shared `RULES.md` and apply the activation check there. Read `rul
 ## Reconstruct
 
 - Read available change artifacts, existing quality reports and current repository diff.
-- Run `rtk proxy openspec status --change <slug>` and `rtk proxy openspec validate <slug>` only when a slug is supplied.
+- Run `rtk openspec status --change <slug>` and `rtk openspec validate <slug>` only when a slug is supplied.
+- Run `rtk openspec list` and `rtk openspec list --specs` to report the active spec count and flag any active change outside the approved scope for this repository (currently the work-schedule family). This is read-only state reconstruction, not a cleanup step.
 - Without a slug, inspect current branch-scoped evidence under `.omp/quality/<sanitized-branch>/` and resolve the comparison base using `/work-build` rules.
 - Identify the earliest incomplete or invalidated step: specification, pending gate, incomplete tasks, failing checks, missing/stale review or QA evidence, or unshipped change.
 - Gate confirmations and final quality approval are session-local. Never infer them from prior approvals, checked boxes or persisted reports.

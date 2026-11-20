@@ -35,7 +35,7 @@ Dispatch `tech-lead` to create `openspec/changes/<slug>/` and write the four fil
    schema: spec-driven
    skip_specs: true
    ```
-   `skip_specs: true` is required because this flow records behavior in `proposal.md` instead of capability deltas. If the user explicitly wants OpenSpec delta specs, omit `skip_specs` and add `specs/<capability>/spec.md`.
+   `skip_specs: true` is required because this flow records behavior in `proposal.md` instead of capability deltas. If the user explicitly wants OpenSpec delta specs, omit `skip_specs` and add `specs/<capability>/spec.md`. With `skip_specs` there is no active baseline spec, so the archived `proposal.md` is the only durable behavior record — keep every acceptance detail there.
 
 2. **`proposal.md`** — functional PRD:
    - `## Why` — problem and user personas (at least 50 characters).
@@ -57,9 +57,9 @@ Dispatch `tech-lead` to create `openspec/changes/<slug>/` and write the four fil
    ```
    Every task states its target files and how to verify completion.
 
-If the installed schema differs, run `rtk proxy openspec instructions <artifact> --change <slug> --json` and follow it. Do not read legacy `omp/templates/*`.
+If the installed schema differs, run `rtk openspec instructions <artifact> --change <slug> --json` and follow it. Do not read legacy `omp/templates/*`.
 
-Validate before the gate: `rtk proxy openspec validate <slug>`. Fix errors; explain any warning.
+Validate before the gate: `rtk openspec validate <slug>`. Fix errors; explain any warning.
 
 ## PHASE 3 — Gate 2 (Final Approval)
 

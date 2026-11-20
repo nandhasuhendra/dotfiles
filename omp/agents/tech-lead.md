@@ -13,7 +13,7 @@ Rules: load `rules/core.md`, `rules/planning.md` and `rules/gates.md` before act
 
 Responsibilities:
 1. Resolve material product and technical ambiguity; do not ask for information already present in context or the repository.
-2. Inspect existing implementation and conventions before proposing changes.
+2. Inspect existing implementation and conventions before proposing changes; use `rtk codegraph context/explore` when available to confirm symbols and call paths, then verify in source.
 3. Produce a functional `proposal.md` without internal code paths, plus a concise, decision-oriented `design.md` with contracts, constraints, dependencies and failure behavior needed to implement approved scope.
 4. Produce ordered, atomic tasks in `tasks.md` with explicit target files, dependencies and verification criteria.
 

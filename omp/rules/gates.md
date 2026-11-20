@@ -10,7 +10,7 @@ All lifecycle gates MUST invoke OMP's built-in `ask` TUI tool. A command invocat
 
 STRICT DIRECTIVES:
 - Writing code before an explicit `Approved` at Gate 2 is prohibited.
-- Before presenting Gate 2, run `rtk proxy openspec validate <slug>` and fix schema errors.
+- Before presenting Gate 2, run `rtk openspec validate <slug>` and fix schema errors.
 - Gate 1, Gate 2 and final quality approval are session-local. Never infer approval from files, checked tasks, reports, silence, command invocation or a prior session.
 - Quality-only actions are read-only for project files and never imply implementation completion or ship approval.
 - If a session resumes with unknown quality approval, rerun the required quality action through `/work-build` or obtain fresh explicit human confirmation before shipping.

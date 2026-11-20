@@ -1,0 +1,65 @@
+# User-global RTK filters — apply to all your projects.
+# Project-local .rtk/filters.toml takes precedence over these.
+# Docs: https://github.com/rtk-ai/rtk#custom-filters
+schema_version = 1
+
+# OpenSpec validation: drop repeated skip_specs INFO lines; keep ✓, ✗ and Totals.
+[filters.openspec-validate]
+description = "OpenSpec validation: merge stderr, drop PASS/INFO noise, keep failures and totals"
+match_command = "^(?:rtk\\s+)?(?:proxy\\s+)?openspec\\s+validate\\b"
+strip_ansi = true
+filter_stderr = true
+strip_lines_matching = ["^\\s*$", "^\\s*✓", "^\\s*ℹ\\s", "^\\s*i\\s+\\[INFO\\]"]
+truncate_lines_at = 240
+max_lines = 80
+on_empty = "openspec validate: clean"
+
+[[tests.openspec-validate]]
+name = "drops PASS and INFO, keeps failures and totals"
+input = "✓ change/foo\n  ℹ [INFO] file: skip_specs is set\n✗ change/bar\n  missing artifact\nTotals: 9 passed, 1 failed"
+expected = "✗ change/bar\n  missing artifact\nTotals: 9 passed, 1 failed"
+
+# OpenSpec inventory: short lists only; recall has the full output.
+[filters.openspec-list]
+description = "OpenSpec change/spec inventory"
+match_command = "^(?:rtk\\s+)?(?:proxy\\s+)?openspec\\s+list\\b"
+strip_ansi = true
+strip_lines_matching = ["^\\s*$"]
+truncate_lines_at = 160
+max_lines = 40
+on_empty = "openspec list: no items"
+
+[[tests.openspec-list]]
+name = "keeps items, drops blank lines"
+input = "Changes:\n  foo  0/3 tasks\n\nSpecs:\n  No specs found."
+expected = "Changes:\n  foo  0/3 tasks\nSpecs:\n  No specs found."
+
+# Codegraph status: keep index statistics, cut the long language/kind breakdown.
+[filters.codegraph-status]
+description = "Codegraph index status: stats only"
+match_command = "^(?:rtk\\s+)?(?:proxy\\s+)?codegraph\\s+status\\b"
+strip_ansi = true
+strip_lines_matching = ["^\\s*$"]
+truncate_lines_at = 160
+max_lines = 12
+on_empty = "codegraph status: no index"
+
+[[tests.codegraph-status]]
+name = "keeps index stats, drops blanks"
+input = "CodeGraph Status\n\nProject: /x\n  Files: 10\n  Nodes: 20"
+expected = "CodeGraph Status\nProject: /x\n  Files: 10\n  Nodes: 20"
+
+# Codegraph queries: keep relationships, trim blank lines and overlong lines.
+[filters.codegraph-query]
+description = "Codegraph context/impact/affected/explore/node output"
+match_command = "^(?:rtk\\s+)?(?:proxy\\s+)?codegraph\\s+(?:context|impact|affected|explore|node|callers|callees)\\b"
+strip_ansi = true
+strip_lines_matching = ["^\\s*$"]
+truncate_lines_at = 240
+max_lines = 150
+on_empty = "codegraph: no results"
+
+[[tests.codegraph-query]]
+name = "drops blank lines, keeps symbols"
+input = "symbol A\n\ncaller B\nsymbol C"
+expected = "symbol A\ncaller B\nsymbol C"

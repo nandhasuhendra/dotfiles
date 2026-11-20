@@ -15,7 +15,7 @@ Activation belongs to the requested operation, not the entire session. Explicit 
 | Spec | `/work-spec <feature-requirements>` | Socratic interview, Devil's Advocate critique, Alignment Summary, Gate 1, then `.openspec.yaml`, `proposal.md`, `design.md` and `tasks.md` under `openspec/changes/<slug>/`, schema validation and Gate 2. |
 | Human planning | `/work-human <slug>` | Post-Gate-2, documentation-only bundle under `openspec/changes/<slug>/human/`: `PRD.md`, `TECH-DOC.md` and `HUMAN-TASK-BREAKDOWN.md`, generated from the installed templates. Adds no gate. |
 | Build | `/work-build [slug]` | Atomic execution of the approved `tasks.md` with strict blast-radius limits, canonical package management, physical tests/LSP checks and the two-attempt Circuit Breaker. |
-| Ship | `/work-ship [slug]` | Final `git status` check, semantic commit, PR summary and OpenSpec archival via `rtk proxy openspec`. |
+| Ship | `/work-ship [slug]` | Final `git status` check, semantic commit, PR summary and OpenSpec archival via `rtk openspec`. |
 
 Supporting workflow commands:
 
@@ -108,8 +108,8 @@ bash omp/tests/mcp-check.sh
 Check actual invocations before starting:
 
 ```bash
-rtk proxy openspec --help
-rtk proxy codegraph --help
+rtk openspec --help
+rtk codegraph --help
 rtk --help
 ```
 
@@ -119,15 +119,17 @@ Every shell tool invocation goes through `rtk`:
 
 | Route | Use |
 | --- | --- |
-| `rtk <subcommand>` | Preferred for supported tools: `rtk git status`, `rtk grep`, `rtk test`, `rtk playwright`. |
-| `rtk proxy <command> [args]` | Specialized route rejects required flags, hides needed failure detail, or the command is unsupported. |
+| `rtk <subcommand>` | Preferred for supported tools: `rtk git status`, `rtk grep/rg`, `rtk test`, `rtk diff`, `rtk err`, `rtk json --keys-only`, `rtk summary`, `rtk ls/find`, `rtk playwright`. |
+| `rtk <command> [args]` | Run an unspecialized CLI through its custom filter: `rtk openspec validate`, `rtk codegraph impact`. |
+| `rtk proxy <command> [args]` | Only when a specialized route rejects required flags or hides needed failure detail. |
+| `rtk recall <hash>` | Retrieve elided output from a `[+N hidden]` / `[full output: ...]` hint instead of rerunning the command. |
 | `rtk run '<shell command>'` | Pipelines, redirection or compound shell syntax. |
 
 File read/search/edit tools remain preferred over shell. Preserve exit status and raw failure output; RTK compression is not verification. If RTK is unavailable, shell execution is blocked rather than run natively.
 
 ### Documentation and impact tools
 
-Use the `context7` MCP for external documentation as described above. Read installed Ponytail before implementation for the smallest complete solution. Prefer language-server symbol intelligence and the Codegraph CLI for nontrivial impact, confirming callers and regression scope in source. Caveman applies to agent conversation, not human documents.
+Use the `context7` MCP for external documentation as described above. Read installed Ponytail before implementation for the smallest complete solution. For nontrivial impact, use `rtk codegraph context/impact/affected` (or plain `codegraph`) plus language-server feedback, confirming callers and regression scope in source. Caveman applies to active agent conversation only, not human documents, gates or reports.
 
 ### Hallmark
 

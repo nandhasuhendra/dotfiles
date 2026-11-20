@@ -1,0 +1,1 @@
+/home/nanda-suhendra/dotfiles/opencode/../omp/templates/TECH-DOC.md
