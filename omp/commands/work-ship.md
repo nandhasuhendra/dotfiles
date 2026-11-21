@@ -28,9 +28,13 @@ Before staging, archiving, committing, pushing or opening a PR:
 1. Require Quality Gate approval from the current session.
 2. Resolve evidence path: `openspec/changes/<slug>/quality/` when a slug is supplied; without a slug, resolve the current branch's `.omp/quality/<sanitized-branch>/` report directory. If no matching evidence exists, stop and direct the user to `/work-build review-and-qa` (or `/work-build <slug> review-and-qa`).
 3. Automated review + QA requires both reports to be `PASS`. A `qa-only` report is never sufficient by itself for the full ship gate. Compare the full recorded target fingerprint (base ref/merge-base, HEAD SHA, branch diff hash, working-tree diff hash, untracked-file hashes, filtered status and diff stat) against the current workspace. Any mismatch means evidence is stale; stop and direct the user to rerun the relevant quality action. For UI changes, require the QA report to cite real Playwright MCP evidence (navigate, snapshot, console and network); static reasoning is not evidence.
-4. If human review + QA was selected during normal build, use `ask` to obtain explicit confirmation that the user reviewed the current code diff and verified required behavior/acceptance criteria.
-5. If quality choice/approval is unknown (including a resumed/new session), ask the user to confirm manual review + QA for the current diff. If they have not completed it, stop and direct them to run `/work-build review-and-qa` or return after manual verification.
-6. Any changed application diff invalidates previous review/QA results. Never silently reuse stale reports or treat persisted reports as approval across sessions.
+4. Read `security.md` from the same evidence path and apply the risk-trigger result:
+   - `status: PASS` with a fingerprint matching the current workspace satisfies the security gate. Summarize confirmed medium/low/informational findings and every needs-validation lead in the PR/commit summary.
+   - `status: not_triggered` is valid only when the current diff really crosses no trigger; if it does, treat the evidence as stale.
+   - `FAIL`, `BLOCKED`, missing, mismatched fingerprint or an unevaluated diff stops the ship and directs the user to `/work-build [slug] review-and-qa` (or the branch form). Never describe a `quick` audit as a complete security review.
+5. If human review + QA was selected during normal build, use `ask` to obtain explicit confirmation that the user reviewed the current code diff and verified required behavior/acceptance criteria.
+6. If quality choice/approval is unknown (including a resumed/new session), ask the user to confirm manual review + QA for the current diff. If they have not completed it, stop and direct them to run `/work-build review-and-qa` or return after manual verification.
+7. Any changed application diff invalidates previous review/QA/security results. Never silently reuse stale reports or treat persisted reports as approval across sessions.
 
 ## Shared preflight
 

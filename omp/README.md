@@ -12,7 +12,7 @@ Activation belongs to the requested operation, not the entire session. Explicit 
 
 | Stage | Command | Output and boundary |
 | --- | --- | --- |
-| Spec | `/work-spec <feature-requirements>` | Socratic interview, Devil's Advocate critique, Alignment Summary, Gate 1, then `.openspec.yaml`, `proposal.md`, `design.md` and `tasks.md` under `openspec/changes/<slug>/`, schema validation and Gate 2. |
+| Spec | `/work-spec <feature-requirements>` | Socratic interview, Devil's Advocate critique, Alignment Summary, Gate 1, then `.openspec.yaml`, `proposal.md`, `design.md` and `tasks.md` under `openspec/changes/<slug>/`, schema validation, independent `security-engineer` + `principal-engineer` design review and Gate 2. |
 | Human planning | `/work-human <slug>` | Post-Gate-2, documentation-only bundle under `openspec/changes/<slug>/human/`: `PRD.md`, `TECH-DOC.md` and `HUMAN-TASK-BREAKDOWN.md`, generated from the installed templates. Adds no gate. |
 | Build | `/work-build [slug]` | Atomic execution of the approved `tasks.md` with strict blast-radius limits, canonical package management, physical tests/LSP checks and the two-attempt Circuit Breaker. |
 | Ship | `/work-ship [slug]` | Final `git status` check, semantic commit, PR summary and OpenSpec archival via `rtk openspec`. |
@@ -29,7 +29,7 @@ No application code may be written until the user explicitly selects **Approved*
 All gates use OMP's built-in `ask` tool so the human-in-the-loop decision is blocking and recorded:
 
 1. **Gate 1 — Alignment:** confirms the Alignment Summary before any specification files are written.
-2. **Gate 2 — Final Approval:** confirms the complete `proposal.md`, `design.md` and `tasks.md` before `/work-build`.
+2. **Gate 2 — Final Approval:** confirms the complete `proposal.md`, `design.md` and `tasks.md` plus a `PASS` security review and a `PASS` senior-engineering review before `/work-build`.
 
 Bypassing a gate, or treating an explicit command invocation as approval, is prohibited. `/work-human` is documentation-only: it re-confirms Gate 2 through `ask`, runs only after an approved `/work-spec`, and adds no new gate.
 
@@ -41,9 +41,50 @@ Bypassing a gate, or treating an explicit command invocation as approval, is pro
 | software-engineer | Execute approved tasks atomically with tests and LSP feedback (`@execution_tier`). |
 | code-reviewer | Independent, read-only code review (`@review_tier`). |
 | qa-engineer | Independent, read-only behavior verification (`@qa_tier`). |
-| security-engineer | Risk-triggered red-team/blue-team review (`@security_tier`). |
+| security-engineer | Risk-triggered diff review, `/review-security`, and mandatory `/work-spec` / `/review-docs` design review (`@security_tier`). |
+| principal-engineer | Independent senior design review: durability, reliability, SOLID/KISS/YAGNI, data access and complexity (`@doc_tier`). |
+| pattern-reviewer | Read-only structural review for `/review-patterns` and `/review-all` (`@review_tier`). |
+| performance-engineer | Read-only performance and scalability review for `/review-performance` and `/review-all` (`@review_tier`). |
+| security-audit-recon | Read-only reconnaissance and coverage critic for `/security-audit` (`@review_tier`). |
+| security-audit-hunter | Read-only coverage-led vulnerability hunter (`@security_tier`). |
+| security-audit-verifier | Independent adversarial candidate and record verifier (`@security_tier`). |
 
 File-based commands run in the active parent session; `task.agentModelOverrides` routes only spawned agents. `/work-spec` and `/work-human` delegate planning to `tech-lead`, `/work-build` delegates implementation to `software-engineer`, and bounded mechanical work may use `sonic` when delegation saves more than it costs.
+
+## Security audit
+
+`/security-audit [target] [quick|standard|deep] [output-dir]` runs the vendored [Cloudflare security-audit skill](https://github.com/cloudflare/security-audit-skill) as an explicit, non-gated workflow. The parent session owns `run-metadata.json`, `architecture.md`, `coverage-ledger.json`, `findings.json`, `REPORT.md`, `FINDINGS-DETAIL.md` and `NEEDS-VALIDATION.md`; workers are fresh, context-isolated subagents:
+
+| Agent | Responsibility |
+| --- | --- |
+| security-audit-recon | Reconnaissance 1a–1d and post-wave coverage critics; source facts only. |
+| security-audit-hunter | One coverage-led hunter per assignment; returns exactly one structured JSON result. |
+| security-audit-verifier | Phase 3 candidate validation and Phase 5 final record verification; returns one decision JSON. |
+
+- Full audit mode only for explicit audit, pen-test, full/comprehensive review or report-artifact requests. Security questions stay in the skill's guidance mode with no artifacts.
+- Default output is `~/security-audit-skill/<repo>/run-<N>`. The target repository is written only when the user selects an ignored directory inside it.
+- Verdicts are `confirmed`, `needs_validation` and `rejected`; only `confirmed` records receive severity. Both validators must pass before a run is complete: `node <skill-dir>/validate-findings.cjs <output-dir>/findings.json` and `node <skill-dir>/validate-coverage-ledger.cjs <output-dir>/coverage-ledger.json`.
+- Target-controlled execution requires the OS-enforced sandbox described in `SKILL.md`. Without it, decisive leads stay `needs_validation` with the exact blocker.
+- The vendored skill lives in [skills/security-audit](skills/security-audit); see [UPSTREAM.md](skills/security-audit/UPSTREAM.md). Do not edit vendored files. A project-local install such as `.agents/skills/security-audit` duplicates the skill name; remove it so this copy stays the single source.
+
+**Workflow integration.** `/work-build … review-and-qa` evaluates a deterministic risk trigger on the target diff and, when it fires, runs this skill as a scoped `quick` audit (budget 12) with a fresh recon → hunter → critic → verifier chain. Run artifacts stay outside the repository; the gate evidence is a compact `quality/security.md` carrying the trigger reasons, fingerprint, verdict, severity counts and validator results. `/work-ship` requires a `PASS` with a matching fingerprint when triggered, and `/work-status` / `/work-resume` report missing or stale security evidence. No manual call is needed; use `/security-audit` only for a broader or user-directed audit.
+
+## Review commands
+
+Standalone, read-only reviews for work that already exists. They write only under their output directory (default `.omp/reviews/<timestamp>-<dimension>/`) and never edit the reviewed code or documents.
+
+| Command | Target | Reviewers | Focus |
+| --- | --- | --- | --- |
+| `/review-docs [scope] [output-dir]` | `active`, `archive`, `specs`, `openspec`, slug, or path/glob | `security-engineer` + `principal-engineer` per unit | threats and controls named in the design, unsafe defaults, missing authz/validation boundaries, durability, migrations, contracts, task completeness |
+| `/review-security [target] [output-dir]` | diff, path, glob or slug | `security-engineer` | fast static exploitability review: injection/RCE, XSS, authz/tenant scope, secrets, SSRF, uploads, rate limits |
+| `/review-patterns [target] [output-dir]` | diff, path, glob, slug or design doc | `pattern-reviewer` | SOLID/KISS/YAGNI, boundaries, coupling, duplication, dead code, change risk |
+| `/review-performance [target] [output-dir]` | diff, path, glob or slug | `performance-engineer` | N+1, indexes, scans, pagination, complexity, memory, I/O, caching, concurrency (static by default) |
+| `/review-all [target] [output-dir]` | code → 4 reviewers in parallel; docs → security + engineering | `code-reviewer`, `security-engineer`, `pattern-reviewer`, `performance-engineer` | one consolidated `SUMMARY.md` with a deduplicated P0/P1 backlog |
+
+- `/review-docs` is the documentation reviewer: it fingerprints each unit (`sha256sum proposal.md design.md tasks.md`, or the sorted selected files) and keeps Gate 2 closed for an active change with unresolved P0/P1 findings.
+- A `PASS` means no confirmed P0/P1 in the stated scope; it is not proof of completeness. Reviewers return `BLOCKED` with the exact missing fact instead of guessing.
+- Confirmed P0/P1 findings block `/work-ship` for the same diff until fixed and re-reviewed.
+- `/review-security` is deliberately fast and partial. Use `/security-audit` for a coverage-led, independently verified audit with `findings.json` and validators.
 
 ## Context and token efficiency
 
@@ -148,6 +189,8 @@ All change artifacts live under `openspec/changes/<slug>/`:
 | `human/PRD.md` | Optional human PRD from `templates/PRD.md`, generated by `/work-human` after Gate 2. |
 | `human/TECH-DOC.md` | Optional human technical specification from `templates/TECH-DOC.md`. |
 | `human/HUMAN-TASK-BREAKDOWN.md` | Optional human milestone plan from `templates/HUMAN-TASK-BREAKDOWN.md`. |
+| `review/security.md` | Mandatory design-time security review with Status, finding IDs, severities and the artifact fingerprint. |
+| `review/engineering.md` | Mandatory senior-engineering design review (durability, reliability, SOLID/KISS/YAGNI, data access) with the same fingerprint. |
 
 `skip_specs: true` trades OpenSpec capability deltas for a smaller three-artifact flow. If you want spec-level tracking, omit it and add `specs/<capability>/spec.md`. Templates remain installed under `templates/` for `/work-human`; the spec/build/ship commands use their compact schema headings instead.
 

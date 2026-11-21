@@ -17,6 +17,12 @@ task:
     code-reviewer: "@review_tier"
     qa-engineer: "@qa_tier"
     security-engineer: "@security_tier"
+    security-audit-recon: "@review_tier"
+    security-audit-hunter: "@security_tier"
+    security-audit-verifier: "@security_tier"
+    principal-engineer: "@doc_tier"
+    pattern-reviewer: "@review_tier"
+    performance-engineer: "@review_tier"
 modelRoles:
   doc_tier: zai/glm-5.2:medium
   human_tier: zai/glm-5.3-flash:low

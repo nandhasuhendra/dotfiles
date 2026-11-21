@@ -17,10 +17,10 @@ Reconstruct state without overwriting existing work or skipping a gate. Approval
 ## Resume only permitted work
 
 - Spec incomplete or Gate 1 pending → continue `/work-spec`; present the Alignment Summary via `question`.
-- Documents written, Gate 2 pending → present readiness + Gate 2 via `question`.
+- Documents written, Gate 2 pending → verify `review/security.md` and `review/engineering.md` exist, match the current artifact fingerprint and are `PASS` (or only P2/P3 open); otherwise do not present Gate 2 and resume the review step in `/work-spec`. With that evidence, present readiness + Gate 2 via `question`.
 - Tasks incomplete → if Gate 2 is Approved in this session, continue `/work-build <slug>`; otherwise re-confirm via `question`.
 - Tasks complete, quality gate pending/unknown → continue `/work-build <slug>`; ask whether to run parallel AI review + QA or human review. Old reports are not current approval.
-- Full review + QA missing/stale for an existing branch diff → `/work-build [slug] review-and-qa` (or branch form without slug).
+- Full review + QA, or triggered security evidence, missing/stale for an existing branch diff → `/work-build [slug] review-and-qa` (or branch form without slug).
 - Only QA evidence requested → `/work-build [slug] qa-only`; this never completes the full ship gate.
 - Quality gate approved in this session but unshipped → `/work-ship [slug]`.
 - Material scope changes → return to `/work-spec`; never silently expand approved scope.

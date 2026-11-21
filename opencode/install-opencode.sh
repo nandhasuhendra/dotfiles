@@ -24,10 +24,11 @@ status OK "opencode $(opencode --version 2>/dev/null || echo 'unknown')"
 mkdir -p "$SRC_DIR/skills" "$SRC_DIR/templates"
 [[ -e "$SRC_DIR/skills/caveman" ]] || ln -s "$SRC_DIR/../omp/skills/caveman" "$SRC_DIR/skills/caveman"
 [[ -e "$SRC_DIR/skills/hallmark" ]] || ln -s "$SRC_DIR/../omp/skills/hallmark" "$SRC_DIR/skills/hallmark"
+[[ -e "$SRC_DIR/skills/security-audit" ]] || ln -s "$SRC_DIR/../omp/skills/security-audit" "$SRC_DIR/skills/security-audit"
 for t in PRD.md TECH-DOC.md HUMAN-TASK-BREAKDOWN.md; do
   [[ -e "$SRC_DIR/templates/$t" ]] || ln -s "$SRC_DIR/../omp/templates/$t" "$SRC_DIR/templates/$t"
 done
-for s in caveman hallmark; do
+for s in caveman hallmark security-audit; do
   [[ -d "$SRC_DIR/skills/$s" ]] || { status ERROR "Missing bundled skill $s; run next to omp/." >&2; exit 1; }
 done
 

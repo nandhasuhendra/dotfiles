@@ -27,8 +27,29 @@ Dispatch `tech-lead` to create `openspec/changes/<slug>/` (slug: short kebab-cas
    - [ ] 1.1 <Task> (files: ...; verify: ...)
    ```
 
-## Phase 3 — Gate 2
+## Phase 3 — Validate and run the independent design review
 
-Validate: `openspec validate <slug>` (via `rtk openspec` when rtk exists; if the installed schema differs, `openspec instructions <artifact> --change <slug> --json` is authoritative). Fix errors. Show the generated paths and the `tasks.md` checklist.
+Validate: `openspec validate <slug>` (via `rtk openspec` when rtk exists; if the installed schema differs, `openspec instructions <artifact> --change <slug> --json` is authoritative). Fix errors.
 
-Gate 2 via `question`: `[Recommended] Approved — specifications locked, ready for /work-build` / `Needs revision` / `Cancel`. **No implementation before the explicit Approved answer.** Report only the outcome and next action.
+Compute the artifact fingerprint: `sha256sum proposal.md design.md tasks.md` inside `openspec/changes/<slug>/`, in that fixed order. Then dispatch two fresh read-only reviewers in one batched `task` call — `security-engineer` and `principal-engineer` — with the confirmed requirements, the three artifacts and the fingerprint. Neither reviewer wrote the documents. Reports go to `openspec/changes/<slug>/review/security.md` and `openspec/changes/<slug>/review/engineering.md`; each reviewer writes only its own report and includes:
+
+- `Status: PASS | CHANGES_REQUESTED | BLOCKED`, the change slug and the artifact fingerprint.
+- Findings with stable IDs (`SEC-SPEC-nnn`, `ENG-SPEC-nnn`), severity P0–P3 (P0/P1 block Gate 2), the affected requirement or design section, the concrete consequence or attack path, the smallest required design change and the acceptance/verification case.
+- A `Reviewed scope` line and an explicit "no findings in this scope" statement when nothing is found; absence of findings is not proof of completeness.
+
+**Security scope:** assets, lower-trust principals and trust boundaries; authentication, authorization and tenant/object scoping; input validation at every entry point; injection sinks (SQL/NoSQL, OS command, template, deserialization, LDAP/XPath, logs); RCE vectors (eval/dynamic code, unsafe deserialization, shell execution, template evaluation, plugin loading, user-controlled file writes); XSS, output encoding and CSP; session, CSRF, cookies and tokens; secrets and cryptography; SSRF and URL fetch; uploads/downloads, path traversal and archive extraction; rate limiting and abuse; error-message leakage; dependency and supply-chain exposure; LLM prompt-injection and tool authorization when applicable.
+
+**Engineering scope:** requirement coverage and the smallest complete design (KISS; no speculative abstraction or unused extension points — YAGNI); module boundaries, dependency direction and SOLID where variation is real; data model, query strategy (N+1, missing indexes, unbounded scans, pagination), transaction boundaries, idempotency and concurrency; durability, migrations/backfill, rollback and backward compatibility; timeouts, retries/backoff, partial failure, recovery and compensation; API contracts and error matrix; observability without sensitive data; testability and verifiable acceptance criteria; task atomicity, order, target files and verify steps; missing non-functional tasks.
+
+**Gate 2 entry rules:**
+
+- Both reports must exist with `Status: PASS` and a fingerprint matching the current artifacts, or every open item must be P2/P3 and listed in the Gate 2 summary.
+- `CHANGES_REQUESTED` with any P0/P1 item → have `tech-lead` revise the documents, then re-run only the reviewer that raised the blocking item with a fresh agent. Repeat until PASS. Do not edit the review reports yourself.
+- `BLOCKED`, missing or stale review evidence → do not present Gate 2.
+- If the user explicitly accepts a P0/P1 risk via `question`, record the accepted risk and rationale in `design.md` §Risks / Trade-offs, then re-run that reviewer with the updated fingerprint; it may return PASS only after confirming the acceptance is documented and the residual risk is bounded.
+
+## Phase 4 — Gate 2
+
+Show the generated paths under `openspec/changes/<slug>/`, the `tasks.md` checklist, both review statuses, any accepted risks and every open P2/P3 finding.
+
+Gate 2 via `question`: `[Recommended] Approved — specifications locked, ready for /work-build` / `Needs revision` / `Cancel`. **No implementation before the explicit Approved answer.** `Approved` is only offered when the Gate 2 entry rules above hold; a security or engineering review that is missing, stale, `BLOCKED` or `CHANGES_REQUESTED` on a P0/P1 item forbids the gate. Report only the outcome and next action.

@@ -35,6 +35,12 @@ This configuration deliberately uses zai/glm-5.2 for Z.ai reasoning. The OMP bun
 | code-reviewer | @review_tier | Independent, read-only review. |
 | qa-engineer | @qa_tier | Independent, read-only behavior verification. |
 | security-engineer | @security_tier | Explicitly dispatched for security-sensitive changes or credible risks. |
+| principal-engineer | @doc_tier | Independent senior design review of `/work-spec` artifacts before Gate 2 and of existing docs for `/review-docs`. |
+| pattern-reviewer | @review_tier | Read-only structural review for `/review-patterns` and `/review-all`. |
+| performance-engineer | @review_tier | Read-only performance and scalability review for `/review-performance` and `/review-all`. |
+| security-audit-recon | @review_tier | Read-only reconnaissance and coverage critics for `/security-audit`. |
+| security-audit-hunter | @security_tier | Read-only coverage-led hunting; one structured result per assignment. |
+| security-audit-verifier | @security_tier | Independent candidate and final-record verification. |
 
 The built-in sonic agent remains on @execution_tier. Do not configure overrides for custom agents that do not exist in omp/agents/.
 
@@ -81,7 +87,7 @@ Verify:
 - Every configured selector resolves in the installed model catalog and has credentials.
 - Z.ai resolves zai/glm-5.2; OpenCode Go resolves both opencode-go/glm-5.3-flash and opencode-go/glm-5.3.
 - OpenRouter free selectors resolve and are actually marked free in the catalog.
-- All five custom agents resolve to the intended role.
+- Every custom agent in omp/agents/ resolves to the intended role.
 - The built-in commit role resolves to an OpenRouter free model.
 - Fallback chains are accepted by the installed OMP version.
 - Provider fallback is tested only when safe and available; never paste credentials into diagnostics.

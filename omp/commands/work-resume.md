@@ -22,10 +22,10 @@ Read installed shared `RULES.md` and apply the activation check there. Read `rul
 ## Resume only permitted work
 
 - **Spec incomplete or Gate 1 pending:** continue `/work-spec` and present the Alignment Summary through `ask`.
-- **Documents written but Gate 2 pending:** present readiness and Gate 2 through `ask`.
+- **Documents written but Gate 2 pending:** verify `review/security.md` and `review/engineering.md` exist, match the current artifact fingerprint and are `PASS` (or only P2/P3 open); otherwise do not present Gate 2 and resume the review step in `/work-spec`. With that evidence, present readiness and Gate 2 through `ask`.
 - **Tasks incomplete:** if Gate 2 approval is available in this session, continue `/work-build <slug>`; otherwise re-confirm through `ask`.
 - **Tasks complete but quality gate pending/unknown:** continue `/work-build <slug>` and ask whether to run parallel AI review + QA or use human review + QA. Do not treat old reports as current approval.
-- **Full review + QA missing/stale for an existing branch diff:** run `/work-build <slug> review-and-qa` or `/work-build review-and-qa` when no slug applies.
+- **Full review + QA, or triggered security evidence, missing/stale for an existing branch diff:** run `/work-build <slug> review-and-qa` or `/work-build review-and-qa` when no slug applies.
 - **Only QA evidence requested:** run `/work-build <slug> qa-only` or `/work-build qa-only`. This does not complete the full ship gate.
 - **Quality gate approved in this session but unshipped:** continue `/work-ship [slug]`.
 - Material scope changes return to `/work-spec`; never silently expand approved scope.

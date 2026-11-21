@@ -18,7 +18,8 @@ Read installed shared `RULES.md` and apply the activation check there. Read `rul
 - Run `rtk openspec status --change <slug>` and `rtk openspec validate <slug>` only when a slug exists.
 - Read-only scope check: run `rtk openspec list` and `rtk openspec list --specs`. Report the active spec count and flag any active change outside the approved scope for this repository (currently the work-schedule family). Diagnose only — do not edit, create or archive anything.
 - Count completed tasks from `- [x]` checkboxes. A checked box is not proof that tests passed.
-- Report review and QA artifacts independently: PASS, FAIL, BLOCKED, missing, or stale relative to the full branch + working-tree fingerprint.
+- When the change is in the spec stage, report `review/security.md` and `review/engineering.md` status, open P0/P1 findings and fingerprint freshness alongside the artifacts; missing, stale, `BLOCKED` or `CHANGES_REQUESTED` review evidence means Gate 2 is not ready.
+- Report review, QA and security artifacts independently: PASS, FAIL, BLOCKED, not_triggered, missing, or stale relative to the full branch + working-tree fingerprint. For `security.md`, report the trigger decision, profile, verdict, confirmed severity counts, needs-validation count, validator results and run directory.
 - Gate 1, Gate 2 and final quality approval are session-local. Never infer approval from files, reports, silence, a prior decision or a command invocation. If approval state is unknown, recommend `/work-resume`.
 
 ## Report
@@ -28,7 +29,7 @@ Read installed shared `RULES.md` and apply the activation check there. Read `rul
 - Recommend exactly one next action:
   - `/work-spec <feature>` when no approved specification exists.
   - `/work-build <slug>` when Gate 2 is known in this session and tasks remain.
-  - `/work-build <slug> review-and-qa` or `/work-build review-and-qa` when full automated quality evidence is missing/stale.
+  - `/work-build <slug> review-and-qa` or `/work-build review-and-qa` when full automated quality evidence, including triggered security evidence, is missing/stale.
   - `/work-build <slug> qa-only` or `/work-build qa-only` when only QA evidence is missing/stale and the user explicitly wants QA alone.
   - `/work-resume <slug>` when gate/quality state is unknown or the session was interrupted.
   - `/work-ship <slug>` or `/work-ship` only when all required work is complete and the quality gate is approved in this session.

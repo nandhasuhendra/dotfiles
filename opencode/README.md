@@ -17,7 +17,7 @@ Model tiers (verify against `opencode models`; the omp `opencode-zen/...` prefix
 
 | Agent | Model |
 | --- | --- |
-| tech-lead, security-engineer | `openai/gpt-5.6-sol:medium` |
+| tech-lead, security-engineer, principal-engineer, pattern-reviewer, performance-engineer | `openai/gpt-5.6-sol:medium` |
 | software-engineer, qa-engineer | `opencode/deepseek-v4.1-flash-free` |
 | code-reviewer | `google/gemini-3.8-flash:low` |
 
@@ -27,13 +27,38 @@ OpenCode has no native model-fallback chain; rerun or switch the agent's `model:
 
 - Each command is self-contained: read only the invoked command plus change artifacts. Never scan agents, skills or templates.
 - `AGENTS.md` is the only always-in-context workflow file and is kept deliberately small.
-- Skills (caveman, hallmark) are symlinked from `omp/skills/` and cost only their description until invoked.
+- Skills (caveman, hallmark, security-audit) are symlinked from `omp/skills/` and cost only their description until invoked.
 - Agents are lean prompts; review/QA/security agents have `write`/`edit` tools disabled in frontmatter, so blast-radius limits are tool-level, not just prompt-level.
 - OMP-only installers are dropped: no forced RTK/Codegraph installs and no installer-run npm installs. Both are used opportunistically when present — RTK for shell/CLI compression, Codegraph for source-confirmed impact (`codegraph context/impact/affected`). OpenSpec CLI is still required for the artifact lifecycle — commands use `rtk openspec` when `rtk` exists, else plain `openspec`. `rtk` installs a global hook/plugin so matching commands are rewritten automatically; filtered CLIs and `rtk recall <hash>` recover elided output.
 
 ## Commands
 
-`/work-spec`, `/work-human`, `/work-build`, `/work-resume`, `/work-status`, `/work-ship` — semantics identical to the OMP versions (interview → Gate 1 → artifacts → validate → Gate 2 → build → quality choice → ship). Quality reports live in `openspec/changes/<slug>/quality/` (slug targets) or `.omp-quality/<branch>/` (branch targets).
+`/work-spec`, `/work-human`, `/work-build`, `/work-resume`, `/work-status`, `/work-ship` — semantics identical to the OMP versions (interview → Gate 1 → artifacts → validate → independent security + principal-engineer design review → Gate 2 → build → quality choice → ship). Quality reports live in `openspec/changes/<slug>/quality/` (slug targets) or `.omp-quality/<branch>/` (branch targets) and include `review.md`, `qa.md` and, when the risk trigger fires, `security.md`. Spec-stage design reviews live in `openspec/changes/<slug>/review/security.md` and `review/engineering.md`.
+
+`/security-audit [target] [quick|standard|deep] [output-dir]` — standalone, non-gated audit of the [Cloudflare security-audit skill](https://github.com/cloudflare/security-audit-skill). This session is the parent: it owns `run-metadata.json`, `architecture.md`, `coverage-ledger.json`, `findings.json`, `REPORT.md`, `FINDINGS-DETAIL.md` and `NEEDS-VALIDATION.md`, runs both validators and dispatches three read-only subagents:
+
+| Agent | Responsibility |
+| --- | --- |
+| `security-audit-recon` | Reconnaissance 1a–1d and post-wave coverage critics. |
+| `security-audit-hunter` | Coverage-led hunting; exactly one structured JSON result per assignment. |
+| `security-audit-verifier` | Adversarial candidate validation (Phase 3) and final record verification (Phase 5). |
+
+Full audit mode requires an explicit audit/pen-test/full-review request; security questions stay in guidance mode. Output defaults to `~/security-audit-skill/<repo>/run-<N>` and is written inside the target only when the user selects an ignored directory. Target-controlled execution needs the OS-enforced sandbox from `SKILL.md`; otherwise decisive leads stay `needs_validation`. The vendored skill is `skills/security-audit` (symlinked from `omp/skills/security-audit`); see its `UPSTREAM.md`. Remove any project-local `.agents/skills/security-audit` so the bundled copy remains the single source.
+
+The workflow calls it automatically: `/work-build … review-and-qa` evaluates a deterministic risk trigger on the target diff and, when it fires, runs a scoped `quick` audit (budget 12) with a fresh recon → hunter → critic → verifier chain. Run artifacts stay outside the repository; the gate evidence is a compact `security.md` next to `review.md`/`qa.md` with the trigger reasons, fingerprint, verdict, severity counts and validator results. `/work-ship` requires a `PASS` with a matching fingerprint when triggered, and `/work-status` / `/work-resume` report missing or stale security evidence.
+
+`/review-docs [active|archive|specs|openspec|<slug>|<path-or-glob>] [output-dir]` applies the security + `principal-engineer` design-review contract to documents that already exist — active and archived OpenSpec changes, `openspec/specs/**/spec.md` baseline capabilities, ADRs, RFCs, threat models and runbooks. It fingerprints each unit, writes `<output-dir>/security/<unit>.md`, `<output-dir>/engineering/<unit>.md` and a consolidated `SUMMARY.md` (default `.omp/reviews/<timestamp>-docs/`), stays read-only, and keeps Gate 2 closed for active changes with unresolved P0/P1 findings.
+
+`/review-security`, `/review-patterns`, `/review-performance` and `/review-all` are read-only code reviews over a branch diff, path, glob or OpenSpec slug:
+
+| Command | Reviewer(s) | Focus |
+| --- | --- | --- |
+| `/review-security` | `security-engineer` | static exploitability: injection/RCE, XSS, authz/tenant scope, secrets, SSRF, uploads, rate limits |
+| `/review-patterns` | `pattern-reviewer` | SOLID/KISS/YAGNI, boundaries, coupling, duplication, dead code, change risk |
+| `/review-performance` | `performance-engineer` | N+1, indexes, scans, pagination, complexity, memory, I/O, caching, concurrency |
+| `/review-all` | `code-reviewer` + 3 above (docs: security + principal) | correctness, security, patterns and performance with one deduplicated `SUMMARY.md` |
+
+They default to `.omp/reviews/<timestamp>-<dimension>/`, never edit the reviewed code, and block `/work-ship` on confirmed P0/P1 for the same diff. Use `/security-audit` when a finding needs a coverage-led, independently verified audit.
 
 ## Install
 

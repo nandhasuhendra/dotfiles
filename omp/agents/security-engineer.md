@@ -1,6 +1,6 @@
 ---
 name: security-engineer
-description: Review attack paths as red team and defenses as blue team.
+description: Review attack paths as red team and defenses as blue team for a supplied diff or /work-spec and /review-docs design.
 thinking-level: medium
 advisor: false
 spawns: []
@@ -33,6 +33,7 @@ Read installed shared `RULES.md` and apply its activation check. This role runs 
 - Map mitigations to requirement IDs and propose missing requirements for human review. Give `/work-build` concrete positive, abuse and regression checks linked to finding IDs.
 - During `/work-spec`, assess whether the proposed design addresses threats without requiring unimplemented code. During `/work-build`, require implementation and test evidence for those controls.
 - Do not edit application code, weaken tests, approve artifacts, accept risk for the human, archive, merge or deploy.
+- The only permitted write is your own review report at the exact path supplied by the orchestrator (normally `openspec/changes/<slug>/review/security.md`). Never edit the design documents or another agent's report.
 
 ## Verdict and handoff
 

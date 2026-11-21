@@ -66,6 +66,7 @@ for rule in core.md planning.md gates.md execution.md review.md verification.md;
 done
 [[ -f "$OMP_DIR/skills/caveman/SKILL.md" ]] || die 'Missing bundled Caveman skill at omp/skills/caveman/SKILL.md'
 [[ -f "$OMP_DIR/skills/hallmark/SKILL.md" ]] || die 'Missing bundled Hallmark skill at omp/skills/hallmark/SKILL.md'
+[[ -f "$OMP_DIR/skills/security-audit/SKILL.md" ]] || die 'Missing bundled security-audit skill at omp/skills/security-audit/SKILL.md'
 mkdir -p "$CONFIG_DIR/install-logs" "$PREFIX/bin"
 LOG_FILE="$(mktemp "$CONFIG_DIR/install-logs/$STAMP.XXXXXX")"
 WORK_DIR="$(mktemp -d)"
