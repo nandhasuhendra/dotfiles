@@ -35,7 +35,7 @@ Do not create alternate entry-point commands for these stages. Keep their existi
 - Quality-only review/QA is read-only for application code and tests.
 - `review-and-qa` runs a scoped `quick` security audit when the diff crosses a risk trigger and writes `security.md`; `/work-ship` requires current security evidence when triggered and never treats a quick audit as a complete review.
 - `/work-spec` requires independent `security-engineer` and `principal-engineer` design reviews before Gate 2; P0/P1 findings block approval until fixed or explicitly accepted and recorded in `design.md`.
-- `/review-*` commands are read-only for project files and write only under their output directory; they supplement, never replace, the `/work-ship` evidence gate.
+- `/review-*` commands create a plan first (`PLAN.md`) and execute step by step sequentially without subagents (using cheaper Z.ai GLM Flash for review steps and higher Z.ai GLM for summary file synthesis). They are read-only for project files and write only under their output directory; they supplement, never replace, the `/work-ship` evidence gate.
 - Never claim a check, browser action, MCP call, agent delegation or provider fallback that did not actually occur.
 - Preserve user changes and stop on ambiguous scope, stale evidence or a failed quality gate.
 

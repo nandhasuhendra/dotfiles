@@ -20,12 +20,26 @@ Role: read-only performance reviewer. You dispatch `performance-engineer` and ow
 
 Compute and record the fingerprint: for diffs, base/merge-base SHA, HEAD SHA, branch-diff hash, working-tree diff hash and filtered diff stat; for paths, the sorted `sha256sum` of the selected files.
 
-## Dispatch
+## Review Strategy: Step-by-Step Plan (No Subagents)
 
-Send `performance-engineer` one task with the exact scope, fingerprint, known traffic assumptions or expected input sizes (state "unknown" when they are not in the repository), the read-only boundary and the report path `<output-dir>/REPORT.md`.
+Do not spawn background subagents. Instead of running the review all at once, create a step-by-step review plan first in `<output-dir>/PLAN.md`, then execute each review step sequentially in session using the cheaper Z.ai GLM model (`zai/glm-5.3-flash#low`) to write `<output-dir>/REPORT.md`. After the detailed report is written, review and synthesize the summary files using the higher Z.ai GLM model (`zai/glm-5.3#high`).
 
-The reviewer must:
+### Step 1: Create Review Plan (`<output-dir>/PLAN.md`)
 
+Write `<output-dir>/PLAN.md` before inspecting code or writing reports:
+- Target, base ref, scope, and fingerprint.
+- Ordered review steps:
+  1. Data access: N+1 queries, missing or unused indexes, full scans, wide tables, pagination, lock duration.
+  2. Algorithms & memory: accidental O(n²)+ complexity, loops, redundant allocations, unbounded caches.
+  3. I/O & concurrency: blocking calls, timeouts, retries, pool sizing, contention.
+  4. Frontend performance (when in scope): bundle weight, render storms, caching headers.
+  5. Summary review, cost model synthesis and verdict determination.
+- Model tiers: Steps 1-4 cheaper Z.ai GLM Flash (`zai/glm-5.3-flash#low`), Step 5 higher Z.ai GLM (`zai/glm-5.3#high`).
+
+### Step 2: Sequential Step-by-Step Review (Cheaper Model)
+
+Execute each step sequentially in session without dispatching subagents via the `task` tool.
+- Apply the cheaper Z.ai GLM model (`zai/glm-5.3-flash#low`).
 - Trace data access: N+1 queries, missing or unused indexes, full scans, `SELECT *` on wide tables, unbounded result sets, missing pagination, eager/lazy loading mistakes, repeated identical queries, chatty round trips and transaction/lock duration.
 - Trace algorithms: accidental O(n²) or worse, repeated work inside loops, redundant sorting/parsing/serialization, large allocations or copies, string concatenation in loops and unbounded caches.
 - Trace I/O and network: unbatched calls, blocking work on hot paths, missing timeouts, retries without backoff, payload bloat, compression and streaming versus buffering.
@@ -34,10 +48,14 @@ The reviewer must:
 - Give a concrete cost model per finding — why it grows and under which input — plus the smallest effective fix and a measurement plan (query plan, benchmark, load profile) with the expected signal.
 - Separate **measured** from **inferred** claims and mark decisive-but-unknown facts `needs_measurement`. Never claim a benchmark, profile or query plan that was not actually run.
 - Use `Status: PASS | FAIL | BLOCKED`, stable IDs (`PERF-001`, …), severity P0–P3.
+- Write findings to `<output-dir>/REPORT.md`.
 
-## Summary
+### Step 3: Review Summary Files & Consolidate (Higher Model)
 
-Write `<output-dir>/SUMMARY.md`: target, fingerprint, verdict (`PASS` / `FAIL` / `BLOCKED`), findings by severity with their cost models, the measurements still needed, reviewed scope, and the single next action.
+Review `<output-dir>/REPORT.md` and write `<output-dir>/SUMMARY.md` using the higher Z.ai GLM model (`zai/glm-5.3#high`):
+- Target, fingerprint, verdict (`PASS` / `FAIL` / `BLOCKED`).
+- Findings by severity with their cost models and measurements still needed.
+- Reviewed scope and the single next action.
 
 `PASS` means no credible P0/P1 performance risk was found statically in the stated scope; it is not a capacity guarantee. Confirmed P0/P1 blocks `/work-ship` for the same diff until fixed or explicitly accepted.
 

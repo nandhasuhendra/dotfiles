@@ -1,7 +1,7 @@
 ---
 description: Read-only reviewer for performance and scalability risks: N+1, indexes, complexity, memory, I/O, caching and concurrency.
 mode: subagent
-model: openai/gpt-5.6-sol#medium
+model: zai/glm-5.3-flash#low
 steps: 35
 permissions:
   - action: edit

@@ -1,7 +1,7 @@
 ---
 description: Independent, read-only code review of a supplied target diff or branch change set.
 mode: subagent
-model: google/gemini-3.8-flash#low
+model: zai/glm-5.3-flash#low
 steps: 30
 permissions:
   - action: edit

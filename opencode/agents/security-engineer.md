@@ -1,7 +1,7 @@
 ---
 description: Risk-triggered red-team/blue-team security review of a supplied diff or a /work-spec or /review-docs design. Dispatch for auth, crypto, network, file/system, secrets, injection-relevant or user-input-facing changes, and for every /work-spec and /review-docs design review.
 mode: subagent
-model: openai/gpt-5.6-sol#medium
+model: zai/glm-5.3-flash#low
 steps: 30
 permissions:
   - action: edit

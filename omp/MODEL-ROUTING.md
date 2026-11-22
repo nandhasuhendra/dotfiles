@@ -12,19 +12,20 @@ All selectors and fallback chains live in omp/config.yml. Agent frontmatter desc
 
 | Workload | OMP role | Primary | Thinking | Rationale |
 | --- | --- | --- | --- | --- |
-| Main/default session and routine orchestration | default | OpenCode Go GLM-5.3-Flash | low | High-volume routine work without spending Z.ai quota. |
+| Main/default session and routine orchestration | default | Z.ai GLM-5.3-Flash | low | High-volume routine work with fast token throughput. |
 | Product/specification and technical design | doc_tier | Z.ai GLM-5.2 | medium | Reserve Z.ai Coding Plan for high-value reasoning. |
 | Implementation | execution_tier | OpenCode Go GLM-5.3-Flash | low | Cost-efficient coding workhorse. |
-| Independent code review | review_tier | OpenCode Go GLM-5.3 | low | Different model from implementation; Z.ai is the next fallback. |
+| Step-by-step review execution | review_tier | Z.ai GLM-5.3-Flash | low | Cheaper Z.ai GLM model for step-by-step review tasks. |
+| Summary file review & synthesis | summary_tier | Z.ai GLM-5.3 | high | Higher Z.ai GLM model for reviewing and consolidating summary files. |
 | QA execution | qa_tier | OpenCode Go GLM-5.3-Flash | low | Efficient test planning and verification. |
 | Security assessment | security_tier | Z.ai GLM-5.2 | medium | Reserve stronger reasoning for threat and control analysis. |
 | Commit message / changelog generation | commit | OpenRouter NVIDIA Nemotron 3.5 Lightning (free) | provider default | Uses OMP built-in commit role; keeps commit text generation off paid coding-plan quota. |
 
 ### Model availability note
 
-OMP provider ID for OpenCode Go is opencode-go; for Z.ai Coding Plan it is zai. Selected OpenCode Go model IDs are glm-5.3-flash and glm-5.3.
+OMP provider ID for OpenCode Go is opencode-go; for Z.ai Coding Plan it is zai. Selected OpenCode Go model IDs are glm-5.3-flash and glm-5.3; selected Z.ai model IDs are glm-5.3-flash, glm-5.3, and glm-5.2.
 
-This configuration deliberately uses zai/glm-5.2 for Z.ai reasoning. The OMP bundled catalog has had a GLM-5.3 catalog gap for zai; do not switch to zai/glm-5.3 or assume a Z.ai Flash variant is selectable until omp models --kind chat on the target installation confirms it. Once the bundled catalog exposes GLM-5.3, update the selector and this note in a separate change.
+This configuration uses zai/glm-5.3-flash for cheaper step-by-step review passes, zai/glm-5.3 for high-rigor summary review and consolidation, and zai/glm-5.2 for specification and deep security tasks.
 
 ## Agent assignments
 
@@ -32,12 +33,13 @@ This configuration deliberately uses zai/glm-5.2 for Z.ai reasoning. The OMP bun
 | --- | --- | --- |
 | tech-lead | @doc_tier | Owns specification and technical design work. |
 | software-engineer | @execution_tier | Implements approved tasks; may dispatch only its allowed quality agents. |
-| code-reviewer | @review_tier | Independent, read-only review. |
+| code-reviewer | @review_tier | Independent, read-only review; executes step-by-step. |
 | qa-engineer | @qa_tier | Independent, read-only behavior verification. |
 | security-engineer | @security_tier | Explicitly dispatched for security-sensitive changes or credible risks. |
 | principal-engineer | @doc_tier | Independent senior design review of `/work-spec` artifacts before Gate 2 and of existing docs for `/review-docs`. |
 | pattern-reviewer | @review_tier | Read-only structural review for `/review-patterns` and `/review-all`. |
 | performance-engineer | @review_tier | Read-only performance and scalability review for `/review-performance` and `/review-all`. |
+| summary-reviewer | @summary_tier | Synthesizes, deduplicates and verifies summary files for `/review-*`. |
 | security-audit-recon | @review_tier | Read-only reconnaissance and coverage critics for `/security-audit`. |
 | security-audit-hunter | @security_tier | Read-only coverage-led hunting; one structured result per assignment. |
 | security-audit-verifier | @security_tier | Independent candidate and final-record verification. |
@@ -51,7 +53,8 @@ Fallback order is defined per role in config.yml and deliberately prioritizes pr
 - Default: OpenRouter free Nemotron → OpenCode Go GLM-5.3.
 - Documentation: OpenCode Go GLM-5.3 → OpenRouter free Nemotron.
 - Execution: OpenRouter free Nemotron → OpenCode Go GLM-5.3.
-- Review: Z.ai GLM-5.2 → OpenRouter free Nemotron.
+- Review: OpenCode Go GLM-5.3-Flash → OpenRouter free Nemotron.
+- Summary: Z.ai GLM-5.2 → OpenCode Go GLM-5.3 → OpenRouter free Nemotron.
 - QA: OpenRouter free Nemotron → OpenCode Go GLM-5.3.
 - Security: OpenCode Go GLM-5.3 → OpenRouter free Nemotron.
 - Commit: OpenRouter free Inkling after OpenRouter free Nemotron.

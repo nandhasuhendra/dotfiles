@@ -1,7 +1,7 @@
 ---
 name: pattern-reviewer
 description: Read-only reviewer for code patterns, architecture, SOLID/KISS/YAGNI, duplication, coupling and maintainability.
-thinking-level: high
+thinking-level: low
 advisor: false
 spawns: []
 ---

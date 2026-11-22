@@ -31,7 +31,7 @@ Apply this workflow only when the user explicitly invokes `/work-spec`, `/work-h
 - Quality-only actions and review/QA agents are read-only for project files.
 - `review-and-qa` runs a scoped `quick` security audit when the diff crosses a risk trigger and writes `security.md`; `/work-ship` requires current security evidence when triggered and never treats a quick audit as a complete review.
 - `/work-spec` requires independent `security-engineer` and `principal-engineer` design reviews before Gate 2; P0/P1 findings block approval until fixed or explicitly accepted and recorded in `design.md`.
-- `/review-*` commands are read-only for project files and write only under their output directory; they supplement, never replace, the `/work-ship` evidence gate.
+- `/review-*` commands create a plan first (`PLAN.md`) and execute step by step sequentially without subagents; review steps use cheaper Z.ai GLM Flash, and summary file review/consolidation uses higher Z.ai GLM. They are read-only for project files and write only under their output directory; they supplement, never replace, the `/work-ship` evidence gate.
 - Never claim a check, browser action, MCP call or agent delegation that did not occur.
 - Preserve user changes; stop on ambiguous scope, stale evidence or a failed quality gate.
 

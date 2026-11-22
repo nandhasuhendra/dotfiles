@@ -79,7 +79,7 @@ Standalone, read-only reviews for work that already exists. They write only unde
 | `/review-security [target] [output-dir]` | diff, path, glob or slug | `security-engineer` | fast static exploitability review: injection/RCE, XSS, authz/tenant scope, secrets, SSRF, uploads, rate limits |
 | `/review-patterns [target] [output-dir]` | diff, path, glob, slug or design doc | `pattern-reviewer` | SOLID/KISS/YAGNI, boundaries, coupling, duplication, dead code, change risk |
 | `/review-performance [target] [output-dir]` | diff, path, glob or slug | `performance-engineer` | N+1, indexes, scans, pagination, complexity, memory, I/O, caching, concurrency (static by default) |
-| `/review-all [target] [output-dir]` | code → 4 reviewers in parallel; docs → security + engineering | `code-reviewer`, `security-engineer`, `pattern-reviewer`, `performance-engineer` | one consolidated `SUMMARY.md` with a deduplicated P0/P1 backlog |
+| `/review-all [target] [output-dir]` | code → 4 review steps sequentially; docs → security + engineering | `code-reviewer`, `security-engineer`, `pattern-reviewer`, `performance-engineer` | plan-first (`PLAN.md`), step-by-step review with cheaper Z.ai GLM Flash, higher Z.ai GLM summary synthesis (`SUMMARY.md`) |
 
 - `/review-docs` is the documentation reviewer: it fingerprints each unit (`sha256sum proposal.md design.md tasks.md`, or the sorted selected files) and keeps Gate 2 closed for an active change with unresolved P0/P1 findings.
 - A `PASS` means no confirmed P0/P1 in the stated scope; it is not proof of completeness. Reviewers return `BLOCKED` with the exact missing fact instead of guessing.

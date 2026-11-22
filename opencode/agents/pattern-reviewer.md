@@ -1,7 +1,7 @@
 ---
 description: Read-only reviewer for code patterns, architecture, SOLID/KISS/YAGNI, duplication, coupling and maintainability.
 mode: subagent
-model: openai/gpt-5.6-sol#medium
+model: zai/glm-5.3-flash#low
 steps: 35
 permissions:
   - action: edit

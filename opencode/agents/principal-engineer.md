@@ -1,7 +1,7 @@
 ---
 description: Senior design reviewer for /work-spec and /review-docs: durability, reliability, maintainability, data access and complexity.
 mode: subagent
-model: openai/gpt-5.6-sol#medium
+model: zai/glm-5.3-flash#low
 steps: 30
 permissions:
   - action: edit

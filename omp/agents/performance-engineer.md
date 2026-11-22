@@ -1,7 +1,7 @@
 ---
 name: performance-engineer
 description: Read-only reviewer for performance and scalability risks: N+1, indexes, complexity, memory, I/O, caching and concurrency.
-thinking-level: high
+thinking-level: low
 advisor: false
 spawns: []
 ---

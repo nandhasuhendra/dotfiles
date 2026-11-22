@@ -17,9 +17,10 @@ Model tiers (verify against `opencode models`; the omp `opencode-zen/...` prefix
 
 | Agent | Model |
 | --- | --- |
-| tech-lead, security-engineer, principal-engineer, pattern-reviewer, performance-engineer | `openai/gpt-5.6-sol:medium` |
+| tech-lead | `openai/gpt-5.6-sol:medium` |
+| summary-reviewer | `zai/glm-5.3#high` |
 | software-engineer, qa-engineer | `opencode/deepseek-v4.1-flash-free` |
-| code-reviewer | `google/gemini-3.8-flash:low` |
+| code-reviewer, pattern-reviewer, performance-engineer, security-engineer, principal-engineer (review) | `zai/glm-5.3-flash#low` |
 
 OpenCode has no native model-fallback chain; rerun or switch the agent's `model:` on provider failure.
 
@@ -49,9 +50,9 @@ The workflow calls it automatically: `/work-build … review-and-qa` evaluates a
 
 `/review-docs [active|archive|specs|openspec|<slug>|<path-or-glob>] [output-dir]` applies the security + `principal-engineer` design-review contract to documents that already exist — active and archived OpenSpec changes, `openspec/specs/**/spec.md` baseline capabilities, ADRs, RFCs, threat models and runbooks. It fingerprints each unit, writes `<output-dir>/security/<unit>.md`, `<output-dir>/engineering/<unit>.md` and a consolidated `SUMMARY.md` (default `.omp/reviews/<timestamp>-docs/`), stays read-only, and keeps Gate 2 closed for active changes with unresolved P0/P1 findings.
 
-`/review-security`, `/review-patterns`, `/review-performance` and `/review-all` are read-only code reviews over a branch diff, path, glob or OpenSpec slug:
+`/review-security`, `/review-patterns`, `/review-performance` and `/review-all` are read-only code reviews over a branch diff, path, glob or OpenSpec slug. Instead of spawning subagents in parallel, each command creates a review plan (`PLAN.md`) first, executes review steps sequentially using cheaper Z.ai GLM Flash (`zai/glm-5.3-flash#low`), and reviews/synthesizes summary files using higher Z.ai GLM (`zai/glm-5.3#high`):
 
-| Command | Reviewer(s) | Focus |
+| Command | Review Step(s) | Focus |
 | --- | --- | --- |
 | `/review-security` | `security-engineer` | static exploitability: injection/RCE, XSS, authz/tenant scope, secrets, SSRF, uploads, rate limits |
 | `/review-patterns` | `pattern-reviewer` | SOLID/KISS/YAGNI, boundaries, coupling, duplication, dead code, change risk |

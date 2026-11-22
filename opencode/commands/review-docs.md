@@ -22,22 +22,36 @@ Resolve review units without guessing:
 
 For each unit record the identifier, stage (`active`, `archive`, `spec`, `doc`), artifacts present, mandatory artifacts missing (only for OpenSpec change units) and the artifact fingerprint: `sha256sum proposal.md design.md tasks.md` in that fixed order for a change, or the sorted selected files otherwise. A change unit missing one of the three documents is `INCOMPLETE` in the summary, not a finding.
 
-## Review
+## Review Strategy: Step-by-Step Plan (No Subagents)
 
-Dispatch `security-engineer` and `principal-engineer` in parallel per unit through the `task` tool (one batched call per unit, or a shared batch when the target accepts it). Give both the same files, the stated intent from `proposal.md` or the document itself, the fingerprint and the exact report path. Never give one reviewer the other's result.
+Do not spawn background subagents. Instead of running all unit reviews in parallel at once, create a step-by-step review plan first in `<output-dir>/PLAN.md`, then execute each review step sequentially in session using the cheaper Z.ai GLM model (`zai/glm-5.3-flash#low`) to write unit reports. After all unit reports are written, review and synthesize the summary files using the higher Z.ai GLM model (`zai/glm-5.3#high`).
 
-Reports: `<output-dir>/security/<unit>.md` and `<output-dir>/engineering/<unit>.md`. Each follows the `/work-spec` Phase 3 contract:
+### Step 1: Create Review Plan (`<output-dir>/PLAN.md`)
 
-- `Status: PASS | CHANGES_REQUESTED | BLOCKED`, the unit identifier and the artifact fingerprint.
-- Findings with stable IDs (`SEC-SPEC-nnn` / `ENG-SPEC-nnn`), severity P0–P3, the affected requirement, decision, task or section, the concrete consequence or attack path, the smallest required document change and the acceptance/verification case.
-- A `Reviewed scope` line and an explicit "no findings in this scope" statement; absence of findings is not proof of completeness.
+Write `<output-dir>/PLAN.md` before inspecting documents:
+- Scope, resolved units, identifiers, stage, and artifact fingerprints.
+- Ordered review sequence:
+  - For each unit:
+    1. Security review (`security/<unit>.md`). Model: cheaper Z.ai GLM Flash (`zai/glm-5.3-flash#low`).
+    2. Engineering review (`engineering/<unit>.md`). Model: cheaper Z.ai GLM Flash (`zai/glm-5.3-flash#low`).
+  - Final: Summary review, cross-cutting themes, backlog and verdict (`SUMMARY.md`). Model: higher Z.ai GLM (`zai/glm-5.3#high`).
+
+### Step 2: Sequential Step-by-Step Review (Cheaper Model)
+
+Execute unit reviews sequentially in session without dispatching subagents via the `task` tool.
+- Apply the cheaper Z.ai GLM model (`zai/glm-5.3-flash#low`).
+- Review each unit's documents independently for security and engineering concerns according to the focus areas below.
+- Write `<output-dir>/security/<unit>.md` and `<output-dir>/engineering/<unit>.md`. Each follows the `/work-spec` Phase 3 contract:
+  - `Status: PASS | CHANGES_REQUESTED | BLOCKED`, the unit identifier and the artifact fingerprint.
+  - Findings with stable IDs (`SEC-SPEC-nnn` / `ENG-SPEC-nnn`), severity P0–P3, the affected requirement, decision, task or section, the concrete consequence or attack path, the smallest required document change and the acceptance/verification case.
+  - A `Reviewed scope` line and an explicit "no findings in this scope" statement; absence of findings is not proof of completeness.
+- Mark unit steps completed in `PLAN.md`.
 
 **Security focus:** trust boundaries, authentication/authorization and tenant/object scoping, input validation, injection (SQL/NoSQL, OS command, template, deserialization, logs), RCE vectors (eval/dynamic code, unsafe deserialization, shell execution, template evaluation, plugin loading, user-controlled file writes), XSS/output encoding/CSP, session/CSRF/tokens, secrets and cryptography, SSRF/URL fetch, uploads/path traversal/archive extraction, rate limiting, error leakage, dependency/supply-chain exposure and LLM prompt injection when applicable.
 
 **Engineering focus:** N+1 queries, missing indexes, unbounded scans and pagination, transaction boundaries, idempotency, concurrency, durability, migrations/backfill/rollback, backward compatibility, timeouts/retries/partial failure, API contracts and error matrix, observability, SOLID/KISS/YAGNI, testability, and task completeness with target files and verification.
 
 **Documentation-specific checks (both reviewers):**
-
 - Requirements with no design decision or acceptance criterion.
 - Contradictions between the proposal, design, tasks and any baseline spec.
 - Tasks that omit a control the design requires, or acceptance criteria that cannot detect the failure.
@@ -48,9 +62,9 @@ Reports: `<output-dir>/security/<unit>.md` and `<output-dir>/engineering/<unit>.
 
 Do not audit implementation here. When a finding needs code evidence, say so and point to `/review-security` or `/security-audit`.
 
-## Summary
+### Step 3: Review Summary Files & Consolidate (Higher Model)
 
-Write `<output-dir>/SUMMARY.md` with:
+Review all unit reports and write `<output-dir>/SUMMARY.md` using the higher Z.ai GLM model (`zai/glm-5.3#high`):
 
 - Scope, units reviewed, fingerprints and the review date.
 - A table: unit | stage | security status | engineering status | P0 | P1 | top blocker.

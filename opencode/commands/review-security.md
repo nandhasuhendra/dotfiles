@@ -20,21 +20,39 @@ Role: read-only security reviewer. You dispatch `security-engineer` and own the 
 
 Compute and record the fingerprint: for diffs, base/merge-base SHA, HEAD SHA, branch-diff hash, working-tree diff hash, untracked-file hashes, filtered status and diff stat; for paths, the sorted `sha256sum` of the selected files.
 
-## Dispatch
+## Review Strategy: Step-by-Step Plan (No Subagents)
 
-Send `security-engineer` one task with the exact scope, base ref, fingerprint, intent context (OpenSpec artifacts when available, otherwise the PR/commit context), the read-only boundary and the report path `<output-dir>/REPORT.md`. If there are two clearly independent areas (for example frontend and backend) you may dispatch one reviewer per area; never split the same file or boundary across two reviewers.
+Do not spawn background subagents. Instead of running the review all at once, create a step-by-step review plan first in `<output-dir>/PLAN.md`, then execute each review step sequentially in session using the cheaper Z.ai GLM model (`zai/glm-5.3-flash#low`) to write `<output-dir>/REPORT.md`. After the detailed report is written, review and synthesize the summary files using the higher Z.ai GLM model (`zai/glm-5.3#high`).
 
-The reviewer must:
+### Step 1: Create Review Plan (`<output-dir>/PLAN.md`)
 
+Write `<output-dir>/PLAN.md` before inspecting code or writing reports:
+- Target, base ref, scope, and fingerprint.
+- Ordered review steps:
+  1. Entry surfaces, trust boundaries, authentication, authorization and tenant/object scoping.
+  2. Input validation and injection vectors (SQL/NoSQL, OS command, template, deserialization, RCE).
+  3. Secrets, cryptography, session/CSRF, cookies/CORS/TLS, XSS/CSP, SSRF, uploads and path traversal.
+  4. Rate limiting, resource exhaustion, log/error leakage, dependency risk, LLM prompt injection.
+  5. Summary review, threat modeling synthesis and verdict determination.
+- Model tiers: Steps 1-4 cheaper Z.ai GLM Flash (`zai/glm-5.3-flash#low`), Step 5 higher Z.ai GLM (`zai/glm-5.3#high`).
+
+### Step 2: Sequential Step-by-Step Review (Cheaper Model)
+
+Execute each step sequentially in session without dispatching subagents via the `task` tool.
+- Apply the cheaper Z.ai GLM model (`zai/glm-5.3-flash#low`).
 - Trace each candidate: lower-trust principal, input or action, intended control, reachable path, and the concrete impact. Cite `file:line`.
 - Check trust boundaries and entry points; authentication, authorization and tenant/object scoping; input validation; SQL/NoSQL, OS command, template and deserialization injection; RCE vectors (eval/dynamic code, unsafe deserialization, shell execution, template evaluation, plugin loading, user-controlled file writes); XSS and output encoding/CSP; session/CSRF/cookies/CORS/TLS; secrets and cryptography; SSRF and URL fetch; uploads, path traversal and archive extraction; rate limiting and resource exhaustion; error/log leakage; dependency risk; LLM prompt injection and tool authorization.
 - Separate confirmed defects from hypotheses. A scanner-style warning or missing best practice without a reachable boundary result is not a confirmed vulnerability.
 - Use `Status: PASS | FAIL | BLOCKED`, stable IDs (`SEC-001`, …), severity P0–P3 (P0 exploitable/data exposure, P1 high-risk weakness, P2 hardening, P3 informational), location, attack path, smallest fix and verification case.
 - State what was reviewed, and state `BLOCKED` with the exact missing fact when a deployment or runtime fact is decisive. Never claim a scan, tool run or check that did not occur.
+- Write findings to `<output-dir>/REPORT.md`.
 
-## Summary
+### Step 3: Review Summary Files & Consolidate (Higher Model)
 
-Write `<output-dir>/SUMMARY.md`: target, base, fingerprint, verdict (`PASS` / `FAIL` / `BLOCKED`), confirmed findings by severity, hypotheses and their missing facts, reviewed scope, and the single next action.
+Review `<output-dir>/REPORT.md` and write `<output-dir>/SUMMARY.md` using the higher Z.ai GLM model (`zai/glm-5.3#high`):
+- Target, base, fingerprint, verdict (`PASS` / `FAIL` / `BLOCKED`).
+- Confirmed findings by severity, hypotheses and their missing facts.
+- Reviewed scope and the single next action.
 
 `PASS` means no confirmed P0/P1 finding in the stated scope, not proof of security. Confirmed P0/P1 blocks `/work-ship` for the same diff until fixed and re-reviewed.
 

@@ -1,8 +1,8 @@
 ---
-description: Read-only combined review: correctness, security, patterns and performance for code; security and engineering for docs. Args: [target] [output-dir]
+description: Read-only combined review: correctness, security, patterns and performance for code; security and engineering for docs. Args: [target] [output-dir] [context]
 ---
 
-# /review-all [target] [output-dir]
+# /review-all [target] [output-dir] [context]
 
 Role: read-only review orchestrator. You dispatch independent reviewers, never let one see another's result, and own the consolidated report. You never edit project files.
 
@@ -10,6 +10,8 @@ Role: read-only review orchestrator. You dispatch independent reviewers, never l
 
 - **target** (`$1`) — `diff` (default), a path, a glob, an OpenSpec slug, or `docs` with a path/scope argument through `/review-docs` semantics.
 - **output-dir** (`$2`) — default `.omp/reviews/<YYYY-MM-DD-HHmm>-all/`; an absolute external path is allowed.
+- **context** (`$3`+, optional) — free-form user instructions: extra focus areas, known facts, or review emphasis. Pass verbatim to every dispatched reviewer; it may narrow or extend the review focus but never overrides the read-only boundary or the report contract.
+- **Flexible parsing** — any argument that is not an existing path/glob and contains whitespace is treated as `context`, wherever it appears. `/review-security "watch tenant scoping"` targets the default `diff` with the default output dir; a slug, path or `diff` keyword still resolves as the target.
 
 ## Resolve the target and classify it
 
@@ -21,31 +23,56 @@ Role: read-only review orchestrator. You dispatch independent reviewers, never l
 
 Compute and record the fingerprint: for diffs, base/merge-base SHA, HEAD SHA, branch-diff hash, working-tree diff hash, untracked-file hashes and filtered diff stat; for docs units, `sha256sum proposal.md design.md tasks.md` in that fixed order, or the sorted selected files.
 
-## Dispatch
+## Review Strategy: Step-by-Step Plan (No Subagents)
 
-Run all reviewers for the chosen track in parallel through the `task` tool, one task each, all with the same scope, fingerprint, intent context and read-only boundary. Never give one reviewer another's report.
+Do not spawn background subagents. Instead of running all reviews in parallel at once, create a step-by-step review plan first in `<output-dir>/PLAN.md`, then execute each review step sequentially in session using the cheaper Z.ai GLM model (`zai/glm-5.3-flash:low`, `@review_tier`). After all step reports are written, review and synthesize the summary files using the higher Z.ai GLM model (`zai/glm-5.3:high`, `@summary_tier`).
+
+### Step 1: Create Review Plan (`<output-dir>/PLAN.md`)
+
+Write `<output-dir>/PLAN.md` before inspecting code or writing reports:
+- Target, base ref, scope classification, and complete fingerprints.
+- Ordered review steps:
+  - **Code track:**
+    1. `code`: Correctness, edge cases, error handling, tests, API compatibility, data integrity, race conditions (`code.md`). Model: cheaper Z.ai GLM Flash (`zai/glm-5.3-flash:low`).
+    2. `security`: Trust boundaries, authz/tenant scope, injection/RCE, XSS, secrets, SSRF, uploads, rate limits, dependencies (`security.md`). Model: cheaper Z.ai GLM Flash (`zai/glm-5.3-flash:low`).
+    3. `patterns`: SOLID/KISS/YAGNI, boundaries, coupling, duplication, dead code, change risk (`patterns.md`). Model: cheaper Z.ai GLM Flash (`zai/glm-5.3-flash:low`).
+    4. `performance`: N+1, indexes, scans, pagination, complexity, memory, I/O, caching, concurrency (`performance.md`). Model: cheaper Z.ai GLM Flash (`zai/glm-5.3-flash:low`).
+    5. `summary`: Review summary files, deduplicate findings, verify evidence, synthesize verdict (`SUMMARY.md`). Model: higher Z.ai GLM (`zai/glm-5.3:high`).
+  - **Docs track:**
+    1. `inventory`: Unit catalog, completeness and document fingerprints.
+    2. `security/<unit>`: Threats, named controls, unsafe defaults, missing boundaries (`security/<unit>.md`). Model: cheaper Z.ai GLM Flash (`zai/glm-5.3-flash:low`).
+    3. `engineering/<unit>`: Durability, reliability, data access, migrations, contracts, SOLID/KISS/YAGNI (`engineering/<unit>.md`). Model: cheaper Z.ai GLM Flash (`zai/glm-5.3-flash:low`).
+    4. `summary`: Review unit reports, cross-cutting themes, backlog and verdict (`SUMMARY.md`). Model: higher Z.ai GLM (`zai/glm-5.3:high`).
+
+### Step 2: Sequential Step-by-Step Review (Cheaper Model)
+
+Execute each step from `PLAN.md` sequentially in session (one at a time, not all at once). Do not dispatch subagents via the `task` tool.
+- Apply the cheaper Z.ai GLM model (`zai/glm-5.3-flash:low`).
+- Inspect target code/docs relevant to the current step plus minimum surrounding context.
+- Adhere to the report contracts below:
 
 **Code track** (`<output-dir>/`):
 
-| Reviewer | Report | IDs | Focus |
+| Step | Report | IDs | Focus |
 | --- | --- | --- | --- |
-| `code-reviewer` | `code.md` | `CR-001` | correctness, edge cases, error handling, tests, API compatibility, data integrity, race conditions |
-| `security-engineer` | `security.md` | `SEC-001` | trust boundaries, authz/tenant scope, injection and RCE, XSS, secrets, SSRF, uploads, rate limits, dependency risk |
-| `pattern-reviewer` | `patterns.md` | `PAT-001` | SOLID/KISS/YAGNI, boundaries, coupling, duplication, dead code, change risk |
-| `performance-engineer` | `performance.md` | `PERF-001` | N+1, indexes, scans, pagination, complexity, memory, I/O, caching, concurrency |
+| Correctness | `code.md` | `CR-001` | correctness, edge cases, error handling, tests, API compatibility, data integrity, race conditions |
+| Security | `security.md` | `SEC-001` | trust boundaries, authz/tenant scope, injection and RCE, XSS, secrets, SSRF, uploads, rate limits, dependency risk |
+| Patterns | `patterns.md` | `PAT-001` | SOLID/KISS/YAGNI, boundaries, coupling, duplication, dead code, change risk |
+| Performance | `performance.md` | `PERF-001` | N+1, indexes, scans, pagination, complexity, memory, I/O, caching, concurrency |
 
 **Docs track** (`<output-dir>/security/<unit>.md`, `<output-dir>/engineering/<unit>.md`):
 
-| Reviewer | IDs | Focus |
-| --- | --- | --- |
-| `security-engineer` | `SEC-SPEC-nnn` | threats and controls named in the design, unsafe defaults, missing authz/validation boundaries |
-| `principal-engineer` | `ENG-SPEC-nnn` | durability, reliability, data access, migrations, contracts, SOLID/KISS/YAGNI, task completeness |
+| Step | Report | IDs | Focus |
+| --- | --- | --- | --- |
+| Security | `security/<unit>.md` | `SEC-SPEC-nnn` | threats and controls named in the design, unsafe defaults, missing authz/validation boundaries |
+| Engineering | `engineering/<unit>.md` | `ENG-SPEC-nnn` | durability, reliability, data access, migrations, contracts, SOLID/KISS/YAGNI, task completeness |
 
-Every reviewer must return `Status: PASS | FAIL | BLOCKED` (docs: `PASS | CHANGES_REQUESTED | BLOCKED`), a stable ID per finding, severity P0–P3, exact location, the concrete consequence, the smallest fix and a verification case; and must state what was actually reviewed. A reviewer that cannot establish scope returns `BLOCKED` with the missing fact. Reviewers never run target code, benchmarks or live probes unless the user explicitly authorizes it and a sandbox exists.
+Every review step must return `Status: PASS | FAIL | BLOCKED` (docs: `PASS | CHANGES_REQUESTED | BLOCKED`), a stable ID per finding, severity P0–P3, exact location, the concrete consequence, the smallest fix and a verification case; and must state what was actually reviewed. If scope cannot be established, report `BLOCKED` with the missing fact. Never run target code, benchmarks or live probes unless the user explicitly authorizes it and a sandbox exists.
+Mark each step completed in `PLAN.md` upon report generation.
 
-## Consolidate
+### Step 3: Review Summary Files & Consolidate (Higher Model)
 
-Write `<output-dir>/SUMMARY.md` with:
+Review all individual report files and write `<output-dir>/SUMMARY.md` using the higher Z.ai GLM model (`zai/glm-5.3:high`, `@summary_tier`):
 
 - Target, base, fingerprints, track(s) and review date.
 - A verdict row per reviewer: reviewer | status | P0 | P1 | P2+P3 | top finding.

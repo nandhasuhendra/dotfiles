@@ -23,15 +23,17 @@ task:
     principal-engineer: "@doc_tier"
     pattern-reviewer: "@review_tier"
     performance-engineer: "@review_tier"
+    summary-reviewer: "@summary_tier"
 modelRoles:
   doc_tier: zai/glm-5.2:medium
   human_tier: zai/glm-5.3-flash:low
   execution_tier: opencode-go/glm-5.3-flash:low
-  review_tier: opencode-go/glm-5.3:low
+  review_tier: zai/glm-5.3-flash:low
+  summary_tier: zai/glm-5.3:high
   qa_tier: opencode-go/glm-5.3-flash:low
   security_tier: zai/glm-5.2:medium
   commit: openrouter/nvidia/nemotron-3.5-lightning:free
-  default: opencode-zen/big-pickle
+  default: zai/glm-5.3-flash:low
 retry:
   modelFallback: true
   fallbackOn: any
@@ -46,7 +48,11 @@ retry:
       - openrouter/nvidia/nemotron-3.5-lightning:free
       - opencode-go/glm-5.3:low
     review_tier:
+      - opencode-go/glm-5.3-flash:low
+      - openrouter/nvidia/nemotron-3.5-lightning:free
+    summary_tier:
       - zai/glm-5.2:medium
+      - opencode-go/glm-5.3:medium
       - openrouter/nvidia/nemotron-3.5-lightning:free
     qa_tier:
       - openrouter/nvidia/nemotron-3.5-lightning:free
