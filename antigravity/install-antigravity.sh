@@ -2,7 +2,6 @@
 set -euo pipefail
 
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SOURCE_DIR/.." && pwd)"
 CONFIG_DIR="${ANTIGRAVITY_CONFIG_DIR:-$HOME/.gemini/config}"
 DRY_RUN=0
 [[ "${1:-}" != "--dry-run" ]] || DRY_RUN=1
@@ -57,7 +56,7 @@ for skill_dir in "$SOURCE_DIR"/skills/*; do
   [[ -f "$skill_dir/SKILL.md" ]] || { echo "Invalid skill: $skill_dir (missing SKILL.md)" >&2; exit 1; }
   backup_and_link "$skill_dir" "$CONFIG_DIR/skills/$name"
 done
-backup_and_link "$REPO_ROOT/omp/skills/security-audit" "$CONFIG_DIR/skills/security-audit"
+backup_and_link "$SOURCE_DIR/skills/security-audit" "$CONFIG_DIR/skills/security-audit"
 for agent_file in "$SOURCE_DIR"/agents/*.md; do
   [[ -f "$agent_file" ]] || continue
   backup_and_link "$agent_file" "$CONFIG_DIR/agents/$(basename "$agent_file")"
