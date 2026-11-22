@@ -5,13 +5,13 @@ TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
 fixture="$TMP/repo"
-mkdir -p "$fixture/antigravity/skills/work-spec" "$fixture/antigravity/agents" "$fixture/omp/skills/security-audit" "$TMP/bin" "$TMP/config"
+mkdir -p "$fixture/antigravity/skills/work-spec" "$fixture/antigravity/skills/security-audit" "$fixture/antigravity/agents" "$TMP/bin" "$TMP/config"
 cp "$ROOT/antigravity/install-antigravity.sh" "$fixture/antigravity/"
 cp "$ROOT/antigravity/AGENTS.md" "$fixture/antigravity/"
 cp "$ROOT/antigravity/mcp_config.json" "$fixture/antigravity/"
 cp "$ROOT/antigravity/skills/work-spec/SKILL.md" "$fixture/antigravity/skills/work-spec/"
+cp -R "$ROOT/antigravity/skills/security-audit/." "$fixture/antigravity/skills/security-audit/"
 cp "$ROOT/antigravity/agents/tech-lead.md" "$fixture/antigravity/agents/"
-printf '# vendored skill\n' > "$fixture/omp/skills/security-audit/SKILL.md"
 printf '#!/usr/bin/env sh\nexit 0\n' > "$TMP/bin/agy"
 chmod +x "$TMP/bin/agy"
 
@@ -23,6 +23,9 @@ PATH="$TMP/bin:$PATH" ANTIGRAVITY_CONFIG_DIR="$TMP/config" bash "$fixture/antigr
 [[ -L "$TMP/config/AGENTS.md" ]]
 [[ -L "$TMP/config/skills/work-spec" ]]
 [[ -L "$TMP/config/skills/security-audit" ]]
+[[ "$(readlink -f "$TMP/config/skills/security-audit")" == "$fixture/antigravity/skills/security-audit" ]]
+[[ -f "$TMP/config/skills/security-audit/validate-findings.cjs" ]]
+[[ ! -e "$fixture/omp" ]]
 [[ -L "$TMP/config/agents/tech-lead.md" ]]
 python3 - "$TMP/config/mcp_config.json" <<'PY'
 import json,sys
@@ -44,4 +47,4 @@ if PATH="$TMP/bin:$PATH" ANTIGRAVITY_CONFIG_DIR="$conflict" bash "$fixture/antig
 fi
 [[ ! -e "$conflict/AGENTS.md" && ! -L "$conflict/AGENTS.md" ]]
 
-echo "PASS: install links, MCP merge, rerun idempotency, and conflict preflight"
+echo "PASS: standalone install without OMP/OpenCode, bundled audit assets, MCP merge, idempotency, and conflict preflight"

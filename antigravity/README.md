@@ -1,6 +1,6 @@
-# Antigravity CLI — OMP workflow port
+# Antigravity CLI workflow
 
-This is a parallel, opt-in port of the repository's OMP engineering workflow to Google's Antigravity CLI. It does not replace or modify `omp/`.
+This is a standalone, opt-in engineering workflow for Google's Antigravity CLI. It is maintained in this directory and does not require OMP or OpenCode to be installed, configured, or checked out. OMP references below describe workflow lineage and parity only.
 
 ## What maps to what
 
@@ -10,7 +10,7 @@ This is a parallel, opt-in port of the repository's OMP engineering workflow to 
 | OMP custom agents | `.agents/agents/*.md` in this source tree; installed globally |
 | OMP RULES/rules | A compact global `AGENTS.md` activation contract |
 | OMP MCP config | Antigravity `mcp_config.json` (Context7 + Playwright) |
-| OMP installer | `install-antigravity.sh` |
+| Installer | `install-antigravity.sh` |
 | OMP native `ask` | Explicit conversational stop-and-wait; Antigravity has no identical OMP gate primitive |
 | OMP native `task` | Antigravity custom subagents via `invoke_subagent`; independence must be checked |
 | OMP model roles/fallback | Not ported as provider routing; choose Antigravity model/effort per session or agent |
@@ -25,7 +25,7 @@ bash antigravity/install-antigravity.sh
 
 The installer targets `~/.gemini/config`, the CLI's shared customization directory. It creates individual symlinks and merges MCP servers without deleting existing entries. Conflicting MCP server names cause a safe failure. Existing destination files are backed up before replacement. Use `--dry-run` to preview.
 
-Requirements: Antigravity CLI (`agy`) already installed and authenticated; Bash, Python 3, Git, and Node.js/npm for the Playwright MCP server. The installer does not install Antigravity, change your shell profile, or store credentials.
+Requirements: Antigravity CLI (`agy`) installed and authenticated; Bash and Python 3 for installation. Node.js/npm is needed only when the Playwright MCP server is first launched. No OMP or OpenCode installation, configuration, checkout, or runtime is required. The installer does not install Antigravity, change your shell profile, or store credentials.
 
 ## Commands
 
@@ -43,9 +43,13 @@ A skill is the native Antigravity CLI equivalent of a reusable command: it is au
 ## MCP
 
 - **Context7**: hosted HTTP MCP for current library/framework documentation.
-- **Playwright**: local stdio MCP using `npx -y @playwright/mcp@latest --headless`.
+- **Playwright**: local stdio MCP using `npx -y @playwright/mcp@0.0.83 --headless`.
 
 The Playwright browser is a testing tool, not a security sandbox. Do not use real credentials or production endpoints during security audits.
+
+## Bundled security audit
+
+The complete Cloudflare `security-audit` skill, companion prompts, JSON schema, validators, tests, and upstream MIT license are vendored under `skills/security-audit/`. The installer links this local directory directly; it never reads from `omp/` or `opencode/`.
 
 ## Important parity gaps
 

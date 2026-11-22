@@ -12,7 +12,7 @@
 | Diff fingerprinting | Ported procedurally | Shell `sha256sum`/Git commands; reports store the fingerprint. |
 | Stale evidence invalidation | Ported procedurally | Recompute before ship; changed fingerprint blocks. |
 | Read-only reviewers | Prompt-enforced | Do not claim OS/tool-level write protection unless permissions actually enforce it. |
-| Security audit validators | Reused | Vendored security-audit skill/scripts are referenced from `omp/skills/security-audit`; installer links it as an Antigravity skill only if explicitly enabled in a later step. |
+| Security audit validators | Bundled standalone | Complete Cloudflare skill, companion docs, schema, validators, tests, and MIT license live under `antigravity/skills/security-audit`; no OMP/OpenCode checkout required. |
 | 60K compaction threshold | Not portable | Antigravity controls compaction internally; preserve durable workflow state in files. |
 | Model role routing/fallback | Not portable | Antigravity model tiers are not equivalent to OMP provider/model selectors or retry chains. |
 | OMP extensions (RTK/Herdr) | Not ported | Tooling-specific extension APIs are not compatible. |

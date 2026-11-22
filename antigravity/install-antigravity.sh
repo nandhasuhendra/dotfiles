@@ -10,7 +10,7 @@ DRY_RUN=0
 
 command -v python3 >/dev/null 2>&1 || { echo "Missing required tool: python3" >&2; exit 1; }
 command -v agy >/dev/null 2>&1 || { echo "Antigravity CLI (agy) not found. Install and authenticate it first." >&2; exit 1; }
-for path in "$SOURCE_DIR/AGENTS.md" "$SOURCE_DIR/mcp_config.json" "$SOURCE_DIR/skills" "$SOURCE_DIR/agents" "$REPO_ROOT/omp/skills/security-audit"; do
+for path in "$SOURCE_DIR/AGENTS.md" "$SOURCE_DIR/mcp_config.json" "$SOURCE_DIR/skills" "$SOURCE_DIR/agents" "$SOURCE_DIR/skills/security-audit"; do
   [[ -e "$path" ]] || { echo "Missing source: $path" >&2; exit 1; }
 done
 python3 -m json.tool "$SOURCE_DIR/mcp_config.json" >/dev/null
@@ -104,5 +104,5 @@ fi
 
 echo
 echo "Install complete. Start a NEW Antigravity CLI session, then run /skills, /agents, and /mcp."
-echo "The vendored security-audit skill is linked from omp/skills/security-audit."
+echo "The standalone security-audit skill is bundled under antigravity/skills/security-audit."
 echo "No credentials were written. MCP servers may need first-run downloads/authentication."
