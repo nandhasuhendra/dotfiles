@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "context7": {
+      "serverUrl": "https://mcp.context7.com/mcp",
+      "timeoutSeconds": 600
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@0.0.83", "--headless", "--browser=chromium"]
+    }
+  }
+}
