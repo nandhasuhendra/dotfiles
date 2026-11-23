@@ -12,7 +12,7 @@ Read installed shared `RULES.md` and apply the activation check there. Read `rul
 
 ## Inspect
 
-- Change slug: `$1`. If supplied, inspect that exact OpenSpec change; if missing, inspect current branch-scoped evidence under `.omp/quality/<sanitized-branch>/`.
+- Change slug: `$1`. If supplied, inspect that exact OpenSpec change; if missing, inspect current branch-scoped evidence under `.reviews/quality/<sanitized-branch>/`.
 - For a no-slug inspection, resolve the current branch and its PR/default comparison base using the same rules as `/work-build review-and-qa`. Do not infer an arbitrary OpenSpec change.
 - Read available `proposal.md`, `design.md`, `tasks.md` and quality reports from the resolved path.
 - Run `rtk openspec status --change <slug>` and `rtk openspec validate <slug>` only when a slug exists.
@@ -32,4 +32,4 @@ Read installed shared `RULES.md` and apply the activation check there. Read `rul
   - `/work-build <slug> review-and-qa` or `/work-build review-and-qa` when full automated quality evidence, including triggered security evidence, is missing/stale.
   - `/work-build <slug> qa-only` or `/work-build qa-only` when only QA evidence is missing/stale and the user explicitly wants QA alone.
   - `/work-resume <slug>` when gate/quality state is unknown or the session was interrupted.
-  - `/work-ship <slug>` or `/work-ship` only when all required work is complete and the quality gate is approved in this session.
+  - `/work-ship <slug>` or `/work-ship` only when all required work is complete and the user explicitly confirms review of the current diff in this session.

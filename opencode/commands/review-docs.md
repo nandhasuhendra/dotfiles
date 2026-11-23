@@ -9,7 +9,7 @@ Role: read-only documentation reviewer. Apply the `/work-spec` design-review con
 ## Arguments
 
 - **scope** — `openspec` (default when `openspec/` exists), `active`, `archive`, `specs`, a change slug, or any path/glob (default `.` when there is no `openspec/`).
-- **output-dir** — writable directory; default `.omp/reviews/<YYYY-MM-DD-HHmm>-docs/`. An absolute external path is allowed and preferred for throwaway reviews.
+- **output-dir** — writable directory; default `.reviews/<YYYY-MM-DD-HHmm>-docs/`. An absolute external path is allowed and preferred for throwaway reviews.
 
 ## Inventory
 
@@ -83,4 +83,4 @@ Review all unit reports and write `<output-dir>/SUMMARY.md` using the higher Z.a
 
 ## Next action
 
-For an active change with P0/P1 findings: revise the documents (tech-lead or manual) and re-run `/review-docs <slug>`; Gate 2 stays closed until both reviews are `PASS` or only P2/P3 items remain. For an archived, baseline or ad-hoc document: treat the findings as follow-up work, not a gate. Otherwise recommend `/work-human` or `/work-build` according to stage.
+For an active change with P0/P1 findings: revise the documents (tech-lead or manual) and re-run `/review-docs <slug>`; findings are advisory input for Gate 2 and the user decides. For an archived, baseline or ad-hoc document: treat the findings as follow-up work, not a gate. Otherwise recommend `/work-human` or `/work-build` according to stage.

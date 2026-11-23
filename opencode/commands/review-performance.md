@@ -9,7 +9,7 @@ Role: read-only performance reviewer. You dispatch `performance-engineer` and ow
 ## Arguments
 
 - **target** — `diff` (default), an absolute/relative path, a glob, or an OpenSpec slug.
-- **output-dir** — default `.omp/reviews/<YYYY-MM-DD-HHmm>-performance/`; an absolute external path is allowed.
+- **output-dir** — default `.reviews/<YYYY-MM-DD-HHmm>-performance/`; an absolute external path is allowed.
 
 ## Resolve the target (read-only)
 
@@ -57,7 +57,7 @@ Review `<output-dir>/REPORT.md` and write `<output-dir>/SUMMARY.md` using the hi
 - Findings by severity with their cost models and measurements still needed.
 - Reviewed scope and the single next action.
 
-`PASS` means no credible P0/P1 performance risk was found statically in the stated scope; it is not a capacity guarantee. Confirmed P0/P1 blocks `/work-ship` for the same diff until fixed or explicitly accepted.
+`PASS` means no credible P0/P1 performance risk was found statically in the stated scope; it is not a capacity guarantee. Confirmed P0/P1 findings are advisory: surface them prominently and summarize them into the reviewed docs; they never block `/work-ship`.
 
 ## Boundaries
 

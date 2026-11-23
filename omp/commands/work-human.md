@@ -1,5 +1,5 @@
 ---
-description: Generate the human planning bundle (PRD, Tech Doc, Task Breakdown) from an approved OpenSpec change.
+description: Generate the human planning bundle (PRD, Tech Doc, Task Breakdown, Test Plan) from an approved OpenSpec change.
 ---
 
 # /work-human <slug>
@@ -21,7 +21,7 @@ Purpose: turn an approved `/work-spec` change into a readable human planning bun
 
    Continue only on the first option. This precondition is the only ordering guard: `/work-human` is runnable only after a completed, approved `/work-spec`.
 
-5. Require `PRD.md`, `TECH-DOC.md` and `HUMAN-TASK-BREAKDOWN.md` templates to exist and be readable under `$PI_CODING_AGENT_DIR/templates` when `PI_CODING_AGENT_DIR` is set, otherwise `$HOME/.omp/agent/templates`. Pass their paths to `tech-lead`; do not load their full contents in the parent session.
+5. Require `PRD.md`, `TECH-DOC.md`, `HUMAN-TASK-BREAKDOWN.md` and `TEST-PLAN.md` templates to exist and be readable under `$PI_CODING_AGENT_DIR/templates` when `PI_CODING_AGENT_DIR` is set, otherwise `$HOME/.omp/agent/templates`. Pass their paths to `tech-lead`; do not load their full contents in the parent session.
 
 ## Phase 1 — Reuse the approved change (read-only)
 
@@ -37,6 +37,7 @@ Dispatch `tech-lead` to create `openspec/changes/<slug>/human/` and generate exa
 1. `PRD.md` from `templates/PRD.md`
 2. `TECH-DOC.md` from `templates/TECH-DOC.md`
 3. `HUMAN-TASK-BREAKDOWN.md` from `templates/HUMAN-TASK-BREAKDOWN.md`
+4. `TEST-PLAN.md` from `templates/TEST-PLAN.md`
 
 Template fidelity rules:
 
@@ -45,7 +46,7 @@ Template fidelity rules:
 - Mark inapplicable sections `N/A — reason` instead of inventing stack details. Keep template sections that apply to this change.
 - Fix the template's gate link (`../rules/gates.md`) so it is not a broken relative link; remove it or replace it with a real project link that exists.
 - Stakeholder-facing rules (non-negotiable): the generated documents must not mention `/work-spec`, `/work-human`, `/work-build`, `/work-resume`, `/work-status`, `/work-ship`, Gate 1/Gate 2, approval gates, the tech-lead/software-engineer agents, `openspec/` paths, `.openspec.yaml`, or any other workflow-internal jargon. Rewrite retired references to `human-planning`/`execution` bundles, `test-plan.md` or `verification.md` into plain forward-looking language (e.g. "verification evidence will be recorded separately once available"). Where a template section depends on workflow concepts, express it as the underlying human concern (problem, goal, decision, risk, deliverable, owner). The documents must read as if written directly for and by the team.
-- Link the bundle internally with relative paths: the PRD links `TECH-DOC.md` and `HUMAN-TASK-BREAKDOWN.md`; the Tech Doc links `PRD.md` and `HUMAN-TASK-BREAKDOWN.md`; the Task Breakdown links both.
+- Link the bundle internally with relative paths: `PRD.md`, `TECH-DOC.md`, `HUMAN-TASK-BREAKDOWN.md`, and `TEST-PLAN.md` cross-link each other within `human/`.
 - Do not modify `proposal.md`, `design.md`, `tasks.md` or any application file. Do not widen the approved scope.
 
 Document-specific mapping:
@@ -53,12 +54,13 @@ Document-specific mapping:
 - **PRD.md:** focus on the problem to solve, goals and non-goals, personas, journeys, requirements, and a Data Flow Diagram (DFD) derived from `proposal.md`; use `design.md` only for dependencies and technical boundaries. The DFD must show how data moves through the change (actors/external entities, processes, data stores, and key data flows/boundaries) and stay consistent with journeys and requirements. Keep requirement IDs stable and functional; no internal file paths or code extensions in requirement statements. Written for business and stakeholder readers.
 - **TECH-DOC.md:** a plain-language technical context for human readers — background, goals/non-goals, decisions and their reasoning, contracts, error matrix, dependencies and risks derived from `design.md`. Mark data, events, backend, frontend or other sections `N/A — reason` when the approved design does not cover them. No workflow or tooling jargon.
 - **HUMAN-TASK-BREAKDOWN.md:** a human-oriented delivery plan — milestones, deliverables, owners and sequencing for people who need to coordinate the work. Each task must state the clear expectation of the code changes it will produce: for backend tasks, the expected HTTP contracts (endpoints, methods, request/response shapes) and the data model changes (ERD — tables, relations, migrations); for frontend tasks, the expected UI/UX changes (screens, components, interactions, states). Keep these expectations concrete and verifiable so reviewers know exactly what to look for, without exposing workflow-internal file paths. Preserve one BE and one FE task per PRD journey when the template requires journey pairs, and link each task to its `REQ-*`/`US-*`/`CT-*` IDs and an internally derived task ID. Keep progress and evidence out of the plan; reference verification as a future step in plain language, without naming where it will be recorded internally.
+- **TEST-PLAN.md:** a simple, business-focused QA test plan with three sections: `1. Background`, `2. Pre-requisites` (business data and configuration dependencies only — companies/organizations, user personas/roles/permissions, feature settings, and upstream data such as holidays or leave; never mention local containers/infra setup, database roles, CLI runners, or unimplemented features), and `3. Test Scenarios` (grouped by functional journey, where every scenario `- [ ] **TC-nn: <title>** — **Result:** NOT_RUN` has a checkbox, a status marker `NOT_RUN` | `SUCCESS` | `FAILED` | `BLOCKED`, and concise **Given / When / Then** business bullets). Keep detailed GWT test cases in `TEST-PLAN.md` rather than duplicating them inside `PRD.md`, `TECH-DOC.md`, or `HUMAN-TASK-BREAKDOWN.md`.
 
 ## Phase 3 — Verify and hand off
 
 1. Run `rtk openspec validate <slug>` again. The OpenSpec change must remain valid.
-2. Scan the three files for unresolved double-curly placeholders, `Authoring guidance:`, `<relative link>`, `<module>` and `<Name or TBD`, and replace the residue before finishing.
+2. Scan the four files for unresolved double-curly placeholders, `Authoring guidance:`, `<relative link>`, `<module>` and `<Name or TBD`, and replace the residue before finishing.
 3. Verify the internal relative links resolve within `human/`.
-4. Confirm the stakeholder-facing rule holds: the three documents contain no mention of the `/work-*` commands, gates, agents or OpenSpec. Fix any residue before finishing.
+4. Confirm the stakeholder-facing rule holds: the four documents contain no mention of the `/work-*` commands, gates, agents or OpenSpec. Fix any residue before finishing.
 5. Show the generated paths, a compact REQ-to-task coverage summary and any recorded open decisions.
 6. State clearly that these are human-review documents, not approval or verification evidence. Gate 2 remains the `/work-build` approval; `/work-human` adds no gate and does not authorize implementation, archive, PR or release.

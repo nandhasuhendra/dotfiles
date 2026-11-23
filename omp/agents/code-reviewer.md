@@ -20,5 +20,5 @@ Review the exact target diff supplied by the orchestrator against the supplied a
 - Do not edit application code, tests, OpenSpec tasks or the QA report. The only permitted write is your own review report at the exact path supplied by the orchestrator.
 - Do not fix findings. Report actionable findings with severity, exact file/line, impact and recommended correction.
 - Record the complete target fingerprint supplied by the orchestrator, including base/merge-base, HEAD, branch diff and working-tree diff hashes, untracked-file hashes, filtered status and diff stat.
-- Write the report to the exact supplied report path (normally `openspec/changes/<slug>/quality/review.md` or `.omp/quality/<branch-slug>/review.md`).
+- Write the report to the exact supplied report path (normally `openspec/changes/<slug>/quality/review.md` or `.reviews/quality/<branch-slug>/review.md`).
 - If the target diff, requirements context or fingerprint cannot be verified, report BLOCKED rather than guessing.

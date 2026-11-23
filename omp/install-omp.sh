@@ -58,7 +58,7 @@ node -e 'const [major, minor] = process.versions.node.split(".").map(Number); pr
 for item in config.yml mcp.json agents commands RULES.md rules templates skills; do
   [[ -e "$OMP_DIR/$item" ]] || die "Missing $OMP_DIR/$item"
 done
-for template in PRD.md TECH-DOC.md HUMAN-TASK-BREAKDOWN.md QA-TEST-CASES.md TASK-BREAKDOWN.md; do
+for template in PRD.md TECH-DOC.md HUMAN-TASK-BREAKDOWN.md TEST-PLAN.md QA-TEST-CASES.md TASK-BREAKDOWN.md; do
   [[ -f "$OMP_DIR/templates/$template" ]] || die "Missing $OMP_DIR/templates/$template"
 done
 for rule in core.md planning.md gates.md execution.md review.md verification.md; do

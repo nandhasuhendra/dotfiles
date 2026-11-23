@@ -9,7 +9,7 @@ Role: read-only documentation reviewer. Apply the `/work-spec` design-review con
 ## Arguments
 
 - **scope** (`$1`) — `openspec` (default when `openspec/` exists), `active`, `archive`, `specs`, a change slug, or any path/glob (default `.` when there is no `openspec/`).
-- **output-dir** (`$2`) — writable directory; default `.omp/reviews/<YYYY-MM-DD-HHmm>-docs/`. An absolute external path is allowed and preferred for throwaway reviews.
+- **output-dir** (`$2`) — writable directory; default `.reviews/<YYYY-MM-DD-HHmm>-docs/`. An absolute external path is allowed and preferred for throwaway reviews.
 - **context** (`$3`+, optional) — free-form user instructions: extra focus areas, known facts, or review emphasis. Pass verbatim to every dispatched reviewer; it may narrow or extend the review focus but never overrides the read-only boundary or the report contract.
 - **Flexible parsing** — any argument that is not an existing path/glob and contains whitespace is treated as `context`, wherever it appears. `/review-security "watch tenant scoping"` targets the default `diff` with the default output dir; a slug, path or `diff` keyword still resolves as the target.
 

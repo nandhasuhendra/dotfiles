@@ -9,7 +9,7 @@ Role: read-only security reviewer. You dispatch `security-engineer` and own the 
 ## Arguments
 
 - **target** — `diff` (default), an absolute/relative path, a glob, or an OpenSpec slug.
-- **output-dir** — default `.omp/reviews/<YYYY-MM-DD-HHmm>-security/`; an absolute external path is allowed.
+- **output-dir** — default `.reviews/<YYYY-MM-DD-HHmm>-security/`; an absolute external path is allowed.
 
 ## Resolve the target (read-only)
 
@@ -54,7 +54,7 @@ Review `<output-dir>/REPORT.md` and write `<output-dir>/SUMMARY.md` using the hi
 - Confirmed findings by severity, hypotheses and their missing facts.
 - Reviewed scope and the single next action.
 
-`PASS` means no confirmed P0/P1 finding in the stated scope, not proof of security. Confirmed P0/P1 blocks `/work-ship` for the same diff until fixed and re-reviewed.
+`PASS` means no confirmed P0/P1 finding in the stated scope, not proof of security. Confirmed P0/P1 findings are advisory: surface them prominently and summarize them into the reviewed docs; they never block `/work-ship` (use `/security-audit` for a coverage-led, verified audit).
 
 ## Boundaries
 

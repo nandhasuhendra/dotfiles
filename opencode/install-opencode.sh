@@ -25,7 +25,7 @@ mkdir -p "$SRC_DIR/skills" "$SRC_DIR/templates"
 [[ -e "$SRC_DIR/skills/caveman" ]] || ln -s "$SRC_DIR/../omp/skills/caveman" "$SRC_DIR/skills/caveman"
 [[ -e "$SRC_DIR/skills/hallmark" ]] || ln -s "$SRC_DIR/../omp/skills/hallmark" "$SRC_DIR/skills/hallmark"
 [[ -e "$SRC_DIR/skills/security-audit" ]] || ln -s "$SRC_DIR/../omp/skills/security-audit" "$SRC_DIR/skills/security-audit"
-for t in PRD.md TECH-DOC.md HUMAN-TASK-BREAKDOWN.md; do
+for t in PRD.md TECH-DOC.md HUMAN-TASK-BREAKDOWN.md TEST-PLAN.md; do
   [[ -e "$SRC_DIR/templates/$t" ]] || ln -s "$SRC_DIR/../omp/templates/$t" "$SRC_DIR/templates/$t"
 done
 for s in caveman hallmark security-audit; do

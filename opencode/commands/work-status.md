@@ -8,7 +8,7 @@ Read-only. Do not edit artifacts, run implementation checks or advance a gate.
 
 ## Inspect
 
-1. Slug from `$ARGUMENTS`. With a slug: inspect exactly that OpenSpec change (`rtk openspec status --change <slug>` and `rtk openspec validate <slug>`; plain `openspec` only when rtk is absent). Without: resolve the current branch and its PR/default comparison base (same rules as `/work-build`), and inspect `.omp-quality/<sanitized-branch>/`. Do not infer an arbitrary OpenSpec change.
+1. Slug from `$ARGUMENTS`. With a slug: inspect exactly that OpenSpec change (`rtk openspec status --change <slug>` and `rtk openspec validate <slug>`; plain `openspec` only when rtk is absent). Without: resolve the current branch and its PR/default comparison base (same rules as `/work-build`), and inspect `.reviews/quality/<sanitized-branch>/`. Do not infer an arbitrary OpenSpec change.
 2. Read available `proposal.md`, `design.md`, `tasks.md` and quality reports at the resolved path.
 3. Count completed tasks from `- [x]` checkboxes — a checked box is not proof tests passed.
 4. When the change is in the spec stage, report `review/security.md` and `review/engineering.md` status, open P0/P1 findings and fingerprint freshness alongside the artifacts; missing, stale, `BLOCKED` or `CHANGES_REQUESTED` review evidence means Gate 2 is not ready.
@@ -25,4 +25,4 @@ Present `Stage | Evidence | Blocker | Next command` across spec, build, quality 
 - `/work-build [slug] review-and-qa` — full automated quality evidence, including triggered security evidence, is missing/stale.
 - `/work-build [slug] qa-only` — only QA evidence missing/stale and the user explicitly wants QA alone.
 - `/work-resume [slug]` — gate/quality state unknown or the session was interrupted.
-- `/work-ship [slug]` — only when all work is complete and the quality gate is Approved in this session.
+- `/work-ship [slug]` — only when all work is complete and the user explicitly confirms review of the current diff in this session.

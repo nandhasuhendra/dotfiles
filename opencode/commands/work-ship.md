@@ -1,5 +1,5 @@
 ---
-description: Ship work through GitHub (git), OpenSpec archival (archive), or the full release flow (full), behind a mandatory quality gate.
+description: Ship work through GitHub (git), OpenSpec archival (archive), or the full release flow (full), after explicit user review confirmation.
 ---
 
 # /work-ship $ARGUMENTS
@@ -10,18 +10,11 @@ Role: release orchestrator in this session. Keep approvals and irreversible GitH
 
 Modes: `git` (verify, semantic commit, push, PR — no OpenSpec), `archive` (validate + archive OpenSpec only), `full` (both). If the only argument is a mode, use it with no slug; otherwise first argument = slug, second = optional mode. Mode omitted → ask via `question`. Never infer a mode from branch/state/prior invocations; reject unknown modes.
 
-## Quality gate — mandatory for every mode
+## Ship gate — human confirmation, not review evidence
 
-1. Require quality-gate approval from the current session.
-2. Evidence path: `openspec/changes/<slug>/quality/` with a slug; else `.omp-quality/<sanitized-branch>/`. No matching evidence → stop and direct the user to `/work-build review-and-qa`.
-3. Automated review + QA requires both `review.md` and `qa.md` PASS; `qa-only` alone is never sufficient for the full ship gate. Compare the recorded fingerprint (base/merge-base, HEAD SHA, diff hashes, untracked hashes, filtered status, diff stat) to the current workspace — any mismatch = stale evidence, stop and rerun the quality action. For UI changes, require the QA report to cite real Playwright MCP evidence (navigate, snapshot, console and network); static reasoning is not evidence.
-4. Read `security.md` from the same evidence path and apply the risk-trigger result:
-   - `status: PASS` with a fingerprint matching the current workspace satisfies the security gate. Summarize confirmed medium/low/informational findings and every needs-validation lead in the PR/commit summary.
-   - `status: not_triggered` is valid only when the current diff really crosses no trigger; if it does, treat the evidence as stale.
-   - `FAIL`, `BLOCKED`, missing, mismatched fingerprint or an unevaluated diff stops the ship and directs the user to `/work-build [slug] review-and-qa` (or the branch form). Never describe a `quick` audit as a complete security review.
-5. If human review was chosen during build, obtain fresh `question` confirmation that the user reviewed the current diff and verified behavior/acceptance criteria.
-6. Unknown quality state (resumed/new session) → ask via `question`; incomplete manual review → stop and direct to `/work-build review-and-qa`.
-7. Any changed application diff invalidates prior review/QA/security evidence; never silently reuse stale reports.
+1. Review/QA/security reports under `openspec/changes/<slug>/quality/` or `.reviews/quality/<sanitized-branch>/` are advisory: summarize their findings into the PR/commit summary and into the OpenSpec change docs and human docs as a dated "Review Summary" entry; their status never blocks shipping.
+2. Obtain fresh `question` confirmation that the user reviewed the current diff and verified behavior/acceptance criteria. Without it, stop. Review reports never substitute for this confirmation.
+3. Report unavailable checks as `NOT_RUN`; never silently reuse stale reports — present them as advisory with their fingerprint noted.
 
 ## Shared preflight
 

@@ -31,6 +31,6 @@ Do not report formatter/style nits, personal preference, or refactors that do no
 Write only your report at the exact path supplied by the orchestrator. Include:
 
 - `Status: PASS | CHANGES_REQUESTED | BLOCKED`, the target identifier and fingerprint.
-- Findings with stable IDs (`PAT-001`, …), severity P0–P3 (P0/P1 block the reviewed change), `file:line` or design section, the concrete risk, the smallest corrective refactor, and how to verify it (test or check).
+- Findings with stable IDs (`PAT-001`, …), severity P0–P3 (P0/P1 surfaced prominently; advisory), `file:line` or design section, the concrete risk, the smallest corrective refactor, and how to verify it (test or check).
 - A `Reviewed scope` line and an explicit "no findings in this scope" statement; absence of findings is not proof of completeness.
 - Evidence only from files actually read. Never claim a tool run, benchmark or inspection that did not occur. If context is insufficient, report `BLOCKED` with the exact gap.

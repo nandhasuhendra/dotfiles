@@ -31,7 +31,7 @@ Read the supplied `proposal.md`, `design.md` and `tasks.md` plus the minimum rep
 Write only your report at the exact path supplied by the orchestrator (normally `openspec/changes/<slug>/review/engineering.md`, or the docs-audit output directory for `/review-docs`). Include:
 
 - `Status: PASS | CHANGES_REQUESTED | BLOCKED`, the change slug and the artifact fingerprint supplied by the orchestrator.
-- Findings with stable IDs (`ENG-SPEC-001`, …), severity P0–P3 (P0/P1 block Gate 2), the affected requirement or design section, the concrete consequence, the smallest required design change and the acceptance/verification case.
+- Findings with stable IDs (`ENG-SPEC-001`, …), severity P0–P3 (P0/P1 surfaced prominently; advisory), the affected requirement or design section, the concrete consequence, the smallest suggested design change and the acceptance/verification case.
 - A `Reviewed scope` line and an explicit "no findings in this scope" statement when nothing is found; absence of findings is not proof of completeness.
 
 Do not edit `proposal.md`, `design.md`, `tasks.md`, application code or another agent's report. Do not invent implementation detail absent from the design; report it as a missing decision. Never claim a check or reading that did not occur.

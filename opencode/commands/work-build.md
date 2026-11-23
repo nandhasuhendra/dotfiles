@@ -17,12 +17,12 @@ Orchestrator: this session. Dispatch implementation to the `software-engineer` s
 ## Quality-only target resolution (read-only for project files)
 
 With slug: require `openspec/changes/<slug>/{proposal.md,design.md,tasks.md}` (missing → BLOCKED, no silent fallback); reports to `openspec/changes/<slug>/quality/`.
-Without slug: resolve current branch; comparison base = open PR's base branch, else the default branch (unambiguous base required, else ask). Target = full branch diff from merge base (`git diff <base>...HEAD`) plus working-tree changes. Attach an OpenSpec change only if exactly one clear match. Reports to `.omp-quality/<sanitized-branch>/`.
+Without slug: resolve current branch; comparison base = open PR's base branch, else the default branch (unambiguous base required, else ask). Target = full branch diff from merge base (`git diff <base>...HEAD`) plus working-tree changes. Attach an OpenSpec change only if exactly one clear match. Reports to `.reviews/quality/<sanitized-branch>/`.
 Both forms: exclude the report directory from fingerprints; fingerprint = base ref/merge-base SHA, HEAD SHA, branch-diff hash, working-tree diff hash, untracked-file hashes, filtered status, diff stat. No meaningful code changes → report BLOCKED/NOTHING_TO_REVIEW, never PASS. Scope regression tests with `rtk codegraph affected <changed files>` when available; graph output guides selection but is not test evidence. Create the report dir before dispatch.
 
 ### review-and-qa
 
-One batched `task` dispatch running `code-reviewer` and `qa-engineer` in parallel (single call with two subagent entries, shared context). Supply target scope, base ref, diff, fingerprint, report paths and available requirements context. Both are read-only and blocking. Reports: `review.md`, `qa.md`. Aggregate: any FAIL → report findings and stop (no silent edits); any BLOCKED → report it, never downgrade to PASS. If parallel dispatch is impossible, report BLOCKED; never claim parallelism. When the security trigger below fires, dispatch `security-audit-recon` in the same parallel round; if the batched call accepts only the review/QA pair, start recon in a second concurrent call.
+One batched `task` dispatch running `code-reviewer` and `qa-engineer` in parallel (single call with two subagent entries, shared context). Supply target scope, base ref, diff, fingerprint, report paths and available requirements context. Both are read-only and blocking. Hard cap: review actions dispatch at most 2 subagents total — never a third reviewer. Reports: `review.md`, `qa.md`. Aggregate: any FAIL → report findings and stop (no silent edits); any BLOCKED → report it, never downgrade to PASS. If parallel dispatch is impossible, report BLOCKED; never claim parallelism. When the security trigger below fires, no extra subagents: write `security.md` with `status: deferred` plus the trigger reasons, fingerprint and a pointer to `/security-audit`; otherwise `status: not_triggered`.
 
 ### qa-only
 
@@ -30,44 +30,12 @@ Dispatch only `qa-engineer` with the same target/fingerprint/report rules. `qa.m
 
 ## Action: review-and-qa — risk-triggered security audit
 
-Automatically run a scoped security audit when the target diff crosses a risk trigger. Do not ask the user; the trigger is deterministic. `/security-audit` remains the manual entry for a full or user-directed audit.
+Evaluate the deterministic risk trigger on the target diff — changed paths or operations touching: authentication/session/identity/tokens/MFA; authorization, roles, policy, tenant/owner scoping or data isolation; crypto/key/signing/secrets/credentials; untrusted input reaching sinks (SQL/NoSQL, shell/process, templates, deserialization, paths, uploads, URL fetch/SSRF, archive extraction); HTTP framing, proxies, headers, cookies, CORS/CSP, TLS or listeners; dependency manifests/lockfiles, CI workflows, release/signing, container, cloud or IaC config; filesystem permissions, local IPC, plugin loading or subprocess control; LLM/agent tool boundaries or prompts built from external content; migrations/exports/deletions/restores of user data. Also trigger when `review.md` or `qa.md` flags a security-relevant concern.
 
-### Trigger
+- Trigger fires → do NOT spawn extra subagents (hard cap: 2). Write `security.md` in the report directory with `status: deferred`, trigger reasons, fingerprint and a pointer to `/security-audit` as the standalone deep audit.
+- No trigger → write `security.md` with `status: not_triggered`, the fingerprint and the evaluated trigger set.
 
-Trigger when changed paths or operations touch any of:
-
-- authentication, session, identity, password, token, OAuth/OIDC/SAML or MFA;
-- authorization, roles, policy, tenant/owner scoping or data isolation;
-- cryptography, key management, signing, secrets or credential handling;
-- untrusted input reaching a sink: SQL/NoSQL, shell or process execution, templates, deserialization, path handling, uploads, URL fetch/SSRF or archive extraction;
-- HTTP framing, proxies, headers, cookies, CORS/CSP, TLS or network listeners;
-- dependency manifests or lockfiles, CI workflows, release/signing, container, cloud or IaC configuration;
-- filesystem permissions, local IPC, plugin/extension loading or subprocess control;
-- LLM/agent tool boundaries, or prompts built from external content;
-- migrations, exports, deletions or restores of user data.
-
-Also trigger when `review.md` or `qa.md` flags a security-relevant concern. When the trigger is uncertain, audit rather than skip and record the reason.
-
-### Scoped quick audit
-
-When triggered:
-
-1. Read `<skill-dir>/SKILL.md` first, then `RECONNAISSANCE.md`, `HUNTING.md`, `ATTACK-CLASSES.md` and `VALIDATION-AND-REPORTING.md` at the phase that needs them. Skill directory: `~/.config/opencode/skills/security-audit` (resolve the real path when it is a symlink).
-2. Use a new `~/security-audit-skill/<repo-name>/run-<N>` directory outside the repository. Never write run files into the quality directory or the target.
-3. Use profile `quick`, scope = the same base and target diff as the quality action, budget = 12 agent invocations, and record them in `run-metadata.json`. Dispatch the scoped reconnaissance to `security-audit-recon` in the same parallel round as `code-reviewer` and `qa-engineer`.
-4. Synthesize a scoped `architecture.md`, seed a scoped `coverage-ledger.json`, and validate it with `node <skill-dir>/validate-coverage-ledger.cjs <output-dir>/coverage-ledger.json`.
-5. Run exactly one `security-audit-hunter` wave with the skill's verbatim hunter prompt, then one fresh `security-audit-recon` coverage critic. In `quick`, critic-accepted discoveries become `deferred`.
-6. Validate each candidate with a fresh `security-audit-verifier`; `quick` merges candidate validation and final record verification into that one verifier. Write and validate `findings.json`, then derive `REPORT.md`, `FINDINGS-DETAIL.md` and `NEEDS-VALIDATION.md`.
-7. Write `security.md` in the quality report directory containing: trigger reasons, profile `quick` and the partial-coverage statement, base/merge-base and HEAD, fingerprint, source ref, run directory, agents spent versus budget, confirmed counts by severity, needs-validation and rejected counts, coverage counts, both validator results, `run_status`, and one verdict.
-
-### Gate
-
-- `FAIL` — any confirmed critical or high finding.
-- `BLOCKED` — validator failure, `run_status: "incomplete"`, budget exhausted before verification, required agent unavailable, or a decisive fact left unresolved by missing sandbox capability.
-- `PASS` — no confirmed critical or high finding. Confirmed medium/low/informational findings and needs-validation leads are reported and carried into the PR summary, never dropped.
-- No trigger — write `security.md` with `status: not_triggered`, the fingerprint and the evaluated trigger set; launch no agents.
-
-Aggregate: review + QA + security must all be `PASS` for the quality gate. A triggered audit that is missing, unrun, incomplete or `BLOCKED` blocks ship. The audit never edits project files, tests or OpenSpec artifacts.
+Review/QA/security results are advisory input for the user, never a ship gate (see Completion). Neither agent edits project files, tests or OpenSpec artifacts.
 
 ## Normal implementation workflow
 
@@ -86,4 +54,4 @@ Via `question`: `Parallel AI review + QA [Recommended]` / `Human review` — nev
 
 ## Completion
 
-Report implementation checks and quality state separately. Only `READY_FOR_SHIP` when all tasks are complete AND the quality gate is approved. Quality-only actions never imply implementation completion or ship approval; a qa-only PASS does not satisfy a code-review gate.
+Report implementation checks and quality state separately. Report `READY_FOR_SHIP` when all tasks are complete and focused checks pass; review/QA/security reports are advisory evidence only and never gate this status. A `qa-only` PASS remains partial evidence and does not substitute for a code-review summary.

@@ -32,6 +32,6 @@ Static review by default. Do not run builds, benchmarks, profilers, load tests o
 Write only your report at the exact path supplied by the orchestrator. Include:
 
 - `Status: PASS | CHANGES_REQUESTED | BLOCKED`, the target identifier and fingerprint.
-- Findings with stable IDs (`PERF-001`, …), severity P0–P3 (P0/P1 block the reviewed change), `file:line` or query/migration location, the concrete cost model (why it grows and under what input), the smallest effective fix, and a measurement plan (query plan, benchmark, load profile) with expected signal.
+- Findings with stable IDs (`PERF-001`, …), severity P0–P3 (P0/P1 surfaced prominently; advisory), `file:line` or query/migration location, the concrete cost model (why it grows and under what input), the smallest effective fix, and a measurement plan (query plan, benchmark, load profile) with expected signal.
 - A `Reviewed scope` line and an explicit "no findings in this scope" statement; absence of findings is not proof of completeness.
 - Separate **measured** from **inferred** claims. If a decisive fact needs a benchmark or production profile, say `needs_measurement` rather than guessing.

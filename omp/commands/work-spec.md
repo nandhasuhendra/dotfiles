@@ -68,7 +68,7 @@ After synthesis and `openspec validate`, dispatch two fresh read-only reviewers 
 Compute the artifact fingerprint first: `sha256sum proposal.md design.md tasks.md` inside `openspec/changes/<slug>/`, in that fixed order, and pass the resulting hash to both reviewers. Reports go to `openspec/changes/<slug>/review/security.md` and `openspec/changes/<slug>/review/engineering.md`; each reviewer writes only its own report and includes:
 
 - `Status: PASS | CHANGES_REQUESTED | BLOCKED`, the change slug and the artifact fingerprint.
-- Findings with stable IDs (`SEC-SPEC-nnn`, `ENG-SPEC-nnn`), severity P0–P3 (P0/P1 block Gate 2), the affected requirement or design section, the concrete consequence or attack path, the smallest required design change and the acceptance/verification case.
+- Findings with stable IDs (`SEC-SPEC-nnn`, `ENG-SPEC-nnn`), severity P0–P3 (P0/P1 surfaced prominently; advisory), the affected requirement or design section, the concrete consequence or attack path, the smallest suggested design change and the acceptance/verification case.
 - A `Reviewed scope` line and an explicit "no findings in this scope" statement when nothing is found; absence of findings is not proof of completeness.
 
 **Security scope:** assets, lower-trust principals and trust boundaries; authentication, authorization and tenant/object scoping; input validation at every entry point; injection sinks (SQL/NoSQL, OS command, template, deserialization, LDAP/XPath, logs); RCE vectors (eval/dynamic code, unsafe deserialization, shell execution, template evaluation, plugin loading, user-controlled file writes); XSS, output encoding and CSP; session, CSRF, cookies and tokens; secrets and cryptography; SSRF and URL fetch; uploads/downloads, path traversal and archive extraction; rate limiting and abuse; error-message leakage; dependency and supply-chain exposure; LLM prompt-injection and tool authorization when applicable.
@@ -77,10 +77,10 @@ Compute the artifact fingerprint first: `sha256sum proposal.md design.md tasks.m
 
 **Gate 2 entry rules:**
 
-- Both reports must exist with `Status: PASS` and a fingerprint matching the current artifacts, or every open item must be P2/P3 and listed in the Gate 2 summary.
-- `CHANGES_REQUESTED` with any P0/P1 item → have `tech-lead` revise the documents, then re-run only the reviewer that raised the blocking item with a fresh agent. Repeat until PASS. Do not edit the review reports yourself.
-- `BLOCKED`, missing or stale review evidence → do not present Gate 2.
-- If the user explicitly accepts a P0/P1 risk through `ask`, record the accepted risk and rationale in `design.md` §Risks / Trade-offs, then re-run that reviewer with the updated fingerprint; it may return PASS only after confirming the acceptance is documented and the residual risk is bounded.
+- Both reviewer reports and their findings are advisory input for the user, never a hard gate.
+- `CHANGES_REQUESTED` with any P0/P1 item → offer (do not force) a `tech-lead` revision pass, then re-run only the reviewer that raised the item with a fresh agent. Do not edit the review reports yourself.
+- `BLOCKED`, missing or stale review evidence → disclose it at Gate 2 and let the user decide; never fabricate or silently wait.
+- Any P0/P1 risk the user explicitly accepts through `ask` is recorded with rationale in `design.md` §Risks / Trade-offs.
 
 ## PHASE 4 — Gate 2 (Final Approval)
 
@@ -91,4 +91,4 @@ Display the generated paths under `openspec/changes/<slug>/`, the `tasks.md` che
 - `Needs revision in documents / task list`
 - `Cancel`
 
-**No implementation until the user explicitly selects `Approved`.** `Approved` is only offered when the Gate 2 entry rules above are satisfied; a security or engineering review that is missing, stale, `BLOCKED` or `CHANGES_REQUESTED` on a P0/P1 item forbids the gate.
+**No implementation until the user explicitly selects `Approved`.** `Approved` is always offered; review status is displayed as advisory context alongside it.

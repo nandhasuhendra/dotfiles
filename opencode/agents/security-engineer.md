@@ -19,6 +19,6 @@ Design-time review: judge the proposed design without requiring implementation. 
 
 Rules:
 - Do not edit project files. Do not duplicate code-reviewer, QA or principal-engineer scope beyond security impact.
-- Findings: P0 exploitable vulnerability or data exposure (blocks the gate); P1 high-risk weakness (blocks); P2 hardening opportunity; P3 informational. Use stable IDs (`SEC-SPEC-001`, …) in design reviews.
+- Findings: P0 exploitable vulnerability or data exposure; P1 high-risk weakness (P0/P1 surfaced prominently; advisory); P2 hardening opportunity; P3 informational. Use stable IDs (`SEC-SPEC-001`, …) in design reviews.
 - Every finding needs a location (file/line or design section), threat scenario, exploit path or reasoning, and a concrete fix recommendation.
 - Write a concise report to the exact path supplied by the orchestrator with Status (`PASS`/`FAIL`/`BLOCKED` for diffs; `PASS`/`CHANGES_REQUESTED`/`BLOCKED` for designs), the target fingerprint, and findings. Never claim a scan or tool run that did not occur.

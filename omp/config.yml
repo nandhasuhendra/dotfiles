@@ -2,7 +2,7 @@ symbolPreset: nerd
 composer:
   shape: claude
 theme:
-  dark: light-github
+  dark: dark-catppuccin
   light: light-github
 setupVersion: 3
 browser:
@@ -25,13 +25,13 @@ task:
     performance-engineer: "@review_tier"
     summary-reviewer: "@summary_tier"
 modelRoles:
-  doc_tier: zai/glm-5.2:medium
+  doc_tier: zai/glm-5.2:low
   human_tier: zai/glm-5.3-flash:low
   execution_tier: opencode-go/glm-5.3-flash:low
   review_tier: zai/glm-5.3-flash:low
   summary_tier: zai/glm-5.3:high
   qa_tier: opencode-go/glm-5.3-flash:low
-  security_tier: zai/glm-5.2:medium
+  security_tier: zai/glm-5.2:low
   commit: openrouter/nvidia/nemotron-3.5-lightning:free
   default: zai/glm-5.3-flash:low
 retry:
@@ -82,3 +82,10 @@ codexResets:
 update:
   auto: true
 hideThinkingBlock: true
+statusLine:
+  separator: ascii
+  preset: ascii
+terminal:
+  showProgress: false
+tui:
+  textSizing: false

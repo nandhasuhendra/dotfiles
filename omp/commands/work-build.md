@@ -37,7 +37,7 @@ Without a slug:
 1. Resolve the current branch. Determine the comparison base from the open PR's base branch when an open PR exists; otherwise use the repository's configured default branch. If the base cannot be identified unambiguously, ask the user; do not guess.
 2. Define the target as the complete branch diff against the merge base (`git diff <base>...HEAD`) plus current tracked/untracked working-tree changes. Include committed changes on the branch, not only `git diff HEAD`.
 3. Look for an OpenSpec change clearly associated with the current branch. Use it only if exactly one match exists. Otherwise proceed without OpenSpec artifacts; do not select an arbitrary change.
-4. Set the report directory to `.omp/quality/<sanitized-current-branch>/`. Create it if needed. This is local branch-scoped evidence, not an OpenSpec change.
+4. Set the report directory to `.reviews/quality/<sanitized-current-branch>/`. Create it if needed. This is local branch-scoped evidence, not an OpenSpec change.
 
 For both forms:
 - Inspect `git status --short --untracked-files=all`, the target diff, changed paths and relevant tests before dispatch.
@@ -49,7 +49,7 @@ For both forms:
 
 ## Action: review-and-qa
 
-1. Invoke OMP's `task` tool once with a single batched call using shared `context` and two `tasks` entries, each with `agent`, `task` and `solutionSpace`. Assign `code-reviewer` to inspect the target diff and `qa-engineer` to execute behavior tests. Do not invoke them sequentially. When the security trigger below fires, include the scoped `security-audit-recon` task in the same round when the batched form accepts it, otherwise dispatch it concurrently right after the batch.
+1. Invoke OMP's `task` tool once with a single batched call using shared `context` and two `tasks` entries, each with `agent`, `task` and `solutionSpace`. Assign `code-reviewer` to inspect the target diff and `qa-engineer` to execute behavior tests. Do not invoke them sequentially. Hard cap: review actions dispatch at most 2 subagents total — never a third reviewer for the same action.
 2. Give both agents the exact target scope, base ref, diff, fingerprint and report paths. Supply OpenSpec artifacts when available; otherwise identify the PR description, commit context, existing docs and tests as the available requirements.
 3. Code reviewer inspects implementation risks; QA validates behavior. Both are read-only and blocking; wait for both results.
 4. Reports: `review.md` and `qa.md` in the resolved report directory.
@@ -67,44 +67,12 @@ For both forms:
 
 ## Action: review-and-qa — risk-triggered security audit
 
-Automatically run a scoped security audit when the target diff crosses a risk trigger. Do not ask the user; the trigger is deterministic. `/security-audit` remains the manual entry for a full or user-directed audit.
+Evaluate the deterministic risk trigger on the target diff (authentication/session/identity, authorization/tenant scoping, secrets/crypto, untrusted input reaching sinks, HTTP/proxy/TLS framing, dependency/CI/container/IaC manifests, filesystem/IPC/plugin/subprocess boundaries, LLM tool boundaries, or user-data migrations/exports/deletions; also when `review.md` or `qa.md` flags a security-relevant concern).
 
-### Trigger
+- Trigger fires → do NOT spawn additional subagents (hard cap: 2). Write `security.md` in the report directory with `status: deferred`, the trigger reasons, the fingerprint and a pointer to `/security-audit` as the standalone deep audit. Summarize the deferred state in the review-and-qa result.
+- No trigger → write `security.md` with `status: not_triggered`, the fingerprint and the evaluated trigger set.
 
-Trigger when changed paths or operations touch any of:
-
-- authentication, session, identity, password, token, OAuth/OIDC/SAML or MFA;
-- authorization, roles, policy, tenant/owner scoping or data isolation;
-- cryptography, key management, signing, secrets or credential handling;
-- untrusted input reaching a sink: SQL/NoSQL, shell or process execution, templates, deserialization, path handling, uploads, URL fetch/SSRF or archive extraction;
-- HTTP framing, proxies, headers, cookies, CORS/CSP, TLS or network listeners;
-- dependency manifests or lockfiles, CI workflows, release/signing, container, cloud or IaC configuration;
-- filesystem permissions, local IPC, plugin/extension loading or subprocess control;
-- LLM/agent tool boundaries, or prompts built from external content;
-- migrations, exports, deletions or restores of user data.
-
-Also trigger when `review.md` or `qa.md` flags a security-relevant concern. When the trigger is uncertain, audit rather than skip and record the reason.
-
-### Scoped quick audit
-
-When triggered:
-
-1. Read `<skill-dir>/SKILL.md` first, then `RECONNAISSANCE.md`, `HUNTING.md`, `ATTACK-CLASSES.md` and `VALIDATION-AND-REPORTING.md` at the phase that needs them. Skill directory: `${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/skills/security-audit`.
-2. Use a new `~/security-audit-skill/<repo-name>/run-<N>` directory outside the repository. Never write run files into the quality directory or the target.
-3. Use profile `quick`, scope = the same base and target diff as the quality action, budget = 12 agent invocations, and record them in `run-metadata.json`. Dispatch the scoped reconnaissance in the same parallel round as `code-reviewer` and `qa-engineer`; add it as a third batch entry when the task tool accepts it, otherwise dispatch it immediately after the batch.
-4. Synthesize a scoped `architecture.md`, seed a scoped `coverage-ledger.json`, and validate it with `node <skill-dir>/validate-coverage-ledger.cjs <output-dir>/coverage-ledger.json`.
-5. Run exactly one `security-audit-hunter` wave with the skill's verbatim hunter prompt, then one fresh `security-audit-recon` coverage critic. In `quick`, critic-accepted discoveries become `deferred`.
-6. Validate each candidate with a fresh `security-audit-verifier`; `quick` merges candidate validation and final record verification into that one verifier. Write and validate `findings.json`, then derive `REPORT.md`, `FINDINGS-DETAIL.md` and `NEEDS-VALIDATION.md`.
-7. Write `security.md` in the quality report directory containing: trigger reasons, profile `quick` and the partial-coverage statement, base/merge-base and HEAD, fingerprint, source ref, run directory, agents spent versus budget, confirmed counts by severity, needs-validation and rejected counts, coverage counts, both validator results, `run_status`, and one verdict.
-
-### Gate
-
-- `FAIL` — any confirmed critical or high finding.
-- `BLOCKED` — validator failure, `run_status: "incomplete"`, budget exhausted before verification, required agent unavailable, or a decisive fact left unresolved by missing sandbox capability.
-- `PASS` — no confirmed critical or high finding. Confirmed medium/low/informational findings and needs-validation leads are reported and carried into the PR summary, never dropped.
-- No trigger — write `security.md` with `status: not_triggered`, the fingerprint and the evaluated trigger set; launch no agents.
-
-Aggregate: review + QA + security must all be `PASS` for the quality gate. A triggered audit that is missing, unrun, incomplete or `BLOCKED` blocks ship. The audit never edits project files, tests or OpenSpec artifacts.
+Review/QA/security results are advisory input for the user, never a ship gate (see Completion). The audit and both agents never edit project files, tests or OpenSpec artifacts.
 
 ## Normal implementation workflow
 
@@ -126,4 +94,4 @@ After implementation and focused checks are complete, use OMP's built-in `ask` t
 
 ## Completion
 
-Report implementation checks and quality state separately. Only report `READY_FOR_SHIP` when all tasks are complete and the quality gate is approved. Quality-only actions never imply implementation completion or ship approval. A `qa-only` PASS does not satisfy a required code-review gate.
+Report implementation checks and quality state separately. Report `READY_FOR_SHIP` when all tasks are complete and focused checks pass; review/QA/security reports are advisory evidence only and never gate this status. A `qa-only` PASS remains partial evidence and does not substitute for a code-review summary.

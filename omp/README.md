@@ -71,7 +71,7 @@ File-based commands run in the active parent session; `task.agentModelOverrides`
 
 ## Review commands
 
-Standalone, read-only reviews for work that already exists. They write only under their output directory (default `.omp/reviews/<timestamp>-<dimension>/`) and never edit the reviewed code or documents.
+Standalone, read-only reviews for work that already exists. They write only under their output directory (default `.reviews/<timestamp>-<dimension>/`) and never edit the reviewed code or documents.
 
 | Command | Target | Reviewers | Focus |
 | --- | --- | --- | --- |
@@ -81,9 +81,9 @@ Standalone, read-only reviews for work that already exists. They write only unde
 | `/review-performance [target] [output-dir]` | diff, path, glob or slug | `performance-engineer` | N+1, indexes, scans, pagination, complexity, memory, I/O, caching, concurrency (static by default) |
 | `/review-all [target] [output-dir]` | code → 4 review steps sequentially; docs → security + engineering | `code-reviewer`, `security-engineer`, `pattern-reviewer`, `performance-engineer` | plan-first (`PLAN.md`), step-by-step review with cheaper Z.ai GLM Flash, higher Z.ai GLM summary synthesis (`SUMMARY.md`) |
 
-- `/review-docs` is the documentation reviewer: it fingerprints each unit (`sha256sum proposal.md design.md tasks.md`, or the sorted selected files) and keeps Gate 2 closed for an active change with unresolved P0/P1 findings.
+- `/review-docs` is the documentation reviewer: it fingerprints each unit (`sha256sum proposal.md design.md tasks.md`, or the sorted selected files) and its findings are advisory input for Gate 2.
 - A `PASS` means no confirmed P0/P1 in the stated scope; it is not proof of completeness. Reviewers return `BLOCKED` with the exact missing fact instead of guessing.
-- Confirmed P0/P1 findings block `/work-ship` for the same diff until fixed and re-reviewed.
+- Confirmed P0/P1 findings are surfaced prominently and summarized into the reviewed docs; they never block `/work-ship`.
 - `/review-security` is deliberately fast and partial. Use `/security-audit` for a coverage-led, independently verified audit with `findings.json` and validators.
 
 ## Context and token efficiency

@@ -13,12 +13,12 @@
 
 ## Findings
 - `P0` Critical: exploitable security issue, data loss/corruption or release-blocking outage.
-- `P1` High: correctness/reliability defect or major violation of an approved contract. P0/P1 block the quality gate.
+- `P1` High: correctness/reliability defect or major violation of an approved contract. P0/P1 must be surfaced prominently to the user; they never block the work pipeline.
 - `P2` Medium: meaningful maintainability, performance or resilience concern. Explain whether it should block this change.
 - `P3` Low: optional cleanup or minor improvement; non-blocking.
 
 ## Report
-Write a concise report to the exact path supplied by the orchestrator (slug-scoped under `openspec/changes/<slug>/quality/`, or branch-scoped under `.omp/quality/<branch-slug>/`) with:
+Write a concise report to the exact path supplied by the orchestrator (slug-scoped under `openspec/changes/<slug>/quality/`, or branch-scoped under `.reviews/quality/<branch-slug>/`) with:
 - Status: `PASS`, `FAIL` or `BLOCKED`.
 - Full target fingerprint: base ref and merge-base SHA where applicable, HEAD SHA, branch diff hash, working-tree diff hash, untracked-file hashes excluding the report directory, filtered status and diff stat.
 - Diff/base reviewed and review scope.

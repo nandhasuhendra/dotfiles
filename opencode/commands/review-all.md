@@ -9,7 +9,7 @@ Role: read-only review orchestrator. You dispatch independent reviewers, never l
 ## Arguments
 
 - **target** — `diff` (default), a path, a glob, an OpenSpec slug, or `docs` with a path/scope argument through `/review-docs` semantics.
-- **output-dir** — default `.omp/reviews/<YYYY-MM-DD-HHmm>-all/`; an absolute external path is allowed.
+- **output-dir** (`$2`) — default `.reviews/<YYYY-MM-DD-HHmm>-all/`; an absolute external path is allowed.
 
 ## Resolve the target and classify it
 
@@ -79,7 +79,7 @@ Review all individual report files and write `<output-dir>/SUMMARY.md` using the
 - Cross-cutting themes and the single next action.
 - A statement of reviewed scope and the limits of a static, non-exhaustive review.
 
-Confirmed P0/P1 blocks `/work-ship` for the same diff until fixed and re-reviewed. This command is not a substitute for `/security-audit` when a coverage-led, independently verified audit with `findings.json` is required.
+Confirmed P0/P1 findings are surfaced prominently to the user and summarized into the reviewed change docs; they never block `/work-ship` (shipping requires only explicit user review confirmation). This command is not a substitute for `/security-audit` when a coverage-led, independently verified audit with `findings.json` is required.
 
 ## Boundaries
 

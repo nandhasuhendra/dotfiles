@@ -20,5 +20,5 @@ Validate the exact target supplied by the orchestrator against OpenSpec acceptan
 - Do not perform a general code review; the code-reviewer owns implementation review.
 - Do not edit application files, tests, OpenSpec tasks or the review report. The only permitted write is your own QA report at the exact path supplied by the orchestrator. Test data/setup must be isolated and cleaned up.
 - Record actual commands, exit codes, scenarios, observed outcomes and the complete target fingerprint supplied by the orchestrator.
-- Write the report to the exact supplied report path (normally `openspec/changes/<slug>/quality/qa.md` or `.omp/quality/<branch-slug>/qa.md`) with Status `PASS`, `FAIL` or `BLOCKED`. PASS requires all required acceptance scenarios to be exercised successfully.
+- Write the report to the exact supplied report path (normally `openspec/changes/<slug>/quality/qa.md` or `.reviews/quality/<branch-slug>/qa.md`) with Status `PASS`, `FAIL` or `BLOCKED`. PASS requires all required acceptance scenarios to be exercised successfully.
 - Status is BLOCKED if required behavior cannot be exercised, requirements are ambiguous, fingerprint cannot be verified or test infrastructure is unavailable. Never claim PASS for unrun scenarios or infer results.

@@ -9,7 +9,7 @@ Role: read-only structural reviewer. You dispatch `pattern-reviewer` and own the
 ## Arguments
 
 - **target** — `diff` (default), an absolute/relative path, a glob, or an OpenSpec slug.
-- **output-dir** — default `.omp/reviews/<YYYY-MM-DD-HHmm>-patterns/`; an absolute external path is allowed.
+- **output-dir** — default `.reviews/<YYYY-MM-DD-HHmm>-patterns/`; an absolute external path is allowed.
 
 ## Resolve the target (read-only)
 
@@ -57,7 +57,7 @@ Review `<output-dir>/REPORT.md` and write `<output-dir>/SUMMARY.md` using the hi
 - Findings by severity grouped by theme (principles, structure, code health, change risk).
 - Reviewed scope and the single next action.
 
-`PASS` means no P0/P1 structural finding in the stated scope, not proof of good design. Confirmed P0/P1 blocks `/work-ship` for the same diff until addressed or explicitly accepted.
+`PASS` means no P0/P1 structural finding in the stated scope, not proof of good design. Confirmed P0/P1 findings are advisory: surface them prominently and summarize them into the reviewed docs; they never block `/work-ship`.
 
 ## Boundaries
 
