@@ -9,7 +9,7 @@ DRY_RUN=0
 
 command -v python3 >/dev/null 2>&1 || { echo "Missing required tool: python3" >&2; exit 1; }
 command -v agy >/dev/null 2>&1 || { echo "Antigravity CLI (agy) not found. Install and authenticate it first." >&2; exit 1; }
-for path in "$SOURCE_DIR/AGENTS.md" "$SOURCE_DIR/mcp_config.json" "$SOURCE_DIR/skills" "$SOURCE_DIR/agents" "$SOURCE_DIR/skills/security-audit"; do
+for path in "$SOURCE_DIR/AGENTS.md" "$SOURCE_DIR/mcp_config.json" "$SOURCE_DIR/skills" "$SOURCE_DIR/agents" "$SOURCE_DIR/templates" "$SOURCE_DIR/skills/security-audit"; do
   [[ -e "$path" ]] || { echo "Missing source: $path" >&2; exit 1; }
 done
 python3 -m json.tool "$SOURCE_DIR/mcp_config.json" >/dev/null
@@ -49,6 +49,7 @@ echo "Target: $CONFIG_DIR"
 (( DRY_RUN == 0 )) || echo "DRY RUN — no files will be changed"
 
 backup_and_link "$SOURCE_DIR/AGENTS.md" "$CONFIG_DIR/AGENTS.md"
+backup_and_link "$SOURCE_DIR/templates" "$CONFIG_DIR/templates"
 for skill_dir in "$SOURCE_DIR"/skills/*; do
   [[ -d "$skill_dir" ]] || continue
   name="$(basename "$skill_dir")"

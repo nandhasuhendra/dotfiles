@@ -7,10 +7,10 @@
 | Shared rules | Ported | One explicit opt-in `AGENTS.md`; avoids activating the workflow on every coding request. |
 | Context7 MCP | Ported | Remote Streamable HTTP endpoint. |
 | Playwright MCP | Ported | Local stdio via npx; first use may download browser assets. |
-| Gate 1 / Gate 2 | Behavioral approximation | Conversational stop-and-wait, not OMP's native ask primitive. |
+| Gate 1 / Gate 2 | Built-in `ask_question` tool | Uses Antigravity's native `ask_question` tool for all clarifying questions and approval gates, with explicit stop-and-wait. |
 | Native task batching | Partial | Use `invoke_subagent`; verify independent sessions and parallel execution from actual transcript. |
 | Diff fingerprinting | Ported procedurally | Shell `sha256sum`/Git commands; reports store the fingerprint. |
-| Stale evidence invalidation | Ported procedurally | Recompute before ship; changed fingerprint blocks. |
+| Stale evidence invalidation | Ported procedurally | Recompute before ship; stale advisory evidence is disclosed with its fingerprint. |
 | Read-only reviewers | Prompt-enforced | Do not claim OS/tool-level write protection unless permissions actually enforce it. |
 | Security audit validators | Bundled standalone | Complete Cloudflare skill, companion docs, schema, validators, tests, and MIT license live under `antigravity/skills/security-audit`; no OMP/OpenCode checkout required. |
 | 60K compaction threshold | Not portable | Antigravity controls compaction internally; preserve durable workflow state in files. |

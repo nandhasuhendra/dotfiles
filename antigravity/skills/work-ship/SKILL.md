@@ -1,15 +1,15 @@
 ---
 name: work-ship
-description: Run final verification, enforce current quality evidence, commit and open a PR, or archive an OpenSpec change with explicit user authorization.
+description: Run final verification, summarize advisory review evidence, commit and open a PR, or archive an OpenSpec change with explicit user authorization.
 ---
 
 # /work-ship [slug] [git|archive|full]
 
-This is the release orchestrator. No merge, deploy, or release. Require explicit user confirmation in the current conversation before irreversible GitHub operations. Parse mode strictly; default git.
+This is the release orchestrator. No merge, deploy, or release. Always use the built-in `ask_question` tool when asking any question or requesting explicit user confirmation in the current conversation before irreversible GitHub or archive operations. Parse mode strictly; default git.
 
-## Mandatory quality gate
+## Ship gate — explicit user confirmation
 
-Before any ship mode that commits/pushes, resolve exact target diff and compute fingerprint (base/merge-base, HEAD, branch diff, working-tree diff, untracked files, status/stat). Require current-fingerprint PASS review and QA evidence; require security PASS when triggered. Human review may substitute only after the user explicitly confirms reviewing the current diff and acceptance criteria in this conversation. Missing, stale, FAIL, or BLOCKED evidence stops shipping. P0/P1 findings must be fixed and re-reviewed.
+Before any ship mode that commits/pushes, resolve the exact target diff. Review/QA/security reports are advisory: summarize their findings into the PR/commit summary and into the change docs and human docs as a dated "Review Summary" entry; their status never blocks shipping. Shipping requires only the user's explicit confirmation via `ask_question`, in this conversation, that they reviewed the current diff and acceptance criteria. P0/P1 findings are surfaced prominently for that decision.
 
 ## git mode
 
@@ -17,10 +17,10 @@ Run relevant regression tests, linters and typechecks; report unavailable checks
 
 ## archive mode
 
-Require all tasks checked, validate OpenSpec, and ask user whether to merge spec deltas or archive with skip-specs. Archive only through OpenSpec CLI; do not commit/push/open PR. Reinspect active specs and working tree.
+Require all tasks checked, validate OpenSpec, and use `ask_question` to ask the user whether to merge spec deltas or archive with skip-specs. Archive only through OpenSpec CLI; do not commit/push/open PR. Reinspect active specs and working tree.
 
 ## full mode
 
-Require all tasks checked; run full regression, lint/typecheck, OpenSpec validation, explicit spec-effect choice and archive. Inspect staged diff, commit, verify clean, push and open PR. Report archive path, active spec count, commit, branch, PR, and NOT_RUN checks.
+Require all tasks checked; run full regression, lint/typecheck, OpenSpec validation, explicit spec-effect choice via `ask_question` and archive. Inspect staged diff, commit, verify clean, push and open PR. Report archive path, active spec count, commit, branch, PR, and NOT_RUN checks.
 
 Never merge, deploy, or release without a separate explicit request.

@@ -5,7 +5,8 @@ This is an opt-in workflow port. Do not activate it for ordinary questions, unre
 ## Non-negotiable constraints
 
 - The primary session owns user interaction, scope, approvals, orchestration, and final verification. Never delegate those responsibilities.
-- Asking a question or invoking a skill is not approval. For each approval gate, state the decision and options, then STOP. Continue only after the user explicitly replies with the approving choice in the current conversation. Never infer approval from files, prior sessions, task checkboxes, or agent output.
+- Always use Antigravity's built-in `ask_question` tool when asking any questions, resolving ambiguity, or requesting approval gates across all `/work-*` and `/review-*` pipelines.
+- Asking a question or invoking a skill is not approval. For each approval gate, call `ask_question` with the decision and options, then STOP. Continue only after the user explicitly replies with the approving choice in the current conversation. Never infer approval from files, prior sessions, task checkboxes, or agent output.
 - No application implementation before explicit Gate 2 approval in the current conversation.
 - Quality-only reviews and QA are read-only for application source, tests, and specifications. Reports may be written only to their designated output directory.
 - Reviewers must not see other reviewers' conclusions before completing their own work. Use fresh subagent sessions where available; if independence cannot be established, disclose it and mark the gate BLOCKED.

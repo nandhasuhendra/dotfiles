@@ -11,7 +11,7 @@ This is a standalone, opt-in engineering workflow for Google's Antigravity CLI. 
 | OMP RULES/rules | A compact global `AGENTS.md` activation contract |
 | OMP MCP config | Antigravity `mcp_config.json` (Context7 + Playwright) |
 | Installer | `install-antigravity.sh` |
-| OMP native `ask` | Explicit conversational stop-and-wait; Antigravity has no identical OMP gate primitive |
+| OMP native `ask` | Built-in `ask_question` tool across `/work-*` and `/review-*`, with explicit stop-and-wait on gates |
 | OMP native `task` | Antigravity custom subagents via `invoke_subagent`; independence must be checked |
 | OMP model roles/fallback | Not ported as provider routing; choose Antigravity model/effort per session or agent |
 

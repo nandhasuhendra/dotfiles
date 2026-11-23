@@ -5,13 +5,14 @@ TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
 fixture="$TMP/repo"
-mkdir -p "$fixture/antigravity/skills/work-spec" "$fixture/antigravity/skills/security-audit" "$fixture/antigravity/agents" "$TMP/bin" "$TMP/config"
+mkdir -p "$fixture/antigravity/skills/work-spec" "$fixture/antigravity/skills/security-audit" "$fixture/antigravity/agents" "$fixture/antigravity/templates" "$TMP/bin" "$TMP/config"
 cp "$ROOT/antigravity/install-antigravity.sh" "$fixture/antigravity/"
 cp "$ROOT/antigravity/AGENTS.md" "$fixture/antigravity/"
 cp "$ROOT/antigravity/mcp_config.json" "$fixture/antigravity/"
 cp "$ROOT/antigravity/skills/work-spec/SKILL.md" "$fixture/antigravity/skills/work-spec/"
 cp -R "$ROOT/antigravity/skills/security-audit/." "$fixture/antigravity/skills/security-audit/"
 cp "$ROOT/antigravity/agents/tech-lead.md" "$fixture/antigravity/agents/"
+cp "$ROOT/antigravity/templates/TEST-PLAN.md" "$fixture/antigravity/templates/"
 printf '#!/usr/bin/env sh\nexit 0\n' > "$TMP/bin/agy"
 chmod +x "$TMP/bin/agy"
 
@@ -21,6 +22,8 @@ JSON
 PATH="$TMP/bin:$PATH" ANTIGRAVITY_CONFIG_DIR="$TMP/config" bash "$fixture/antigravity/install-antigravity.sh" >/dev/null
 
 [[ -L "$TMP/config/AGENTS.md" ]]
+[[ -L "$TMP/config/templates" ]]
+[[ -f "$TMP/config/templates/TEST-PLAN.md" ]]
 [[ -L "$TMP/config/skills/work-spec" ]]
 [[ -L "$TMP/config/skills/security-audit" ]]
 [[ "$(readlink -f "$TMP/config/skills/security-audit")" == "$fixture/antigravity/skills/security-audit" ]]
